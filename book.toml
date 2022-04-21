@@ -1,0 +1,31 @@
+[book]
+authors = ["kuizhiqing"]
+language = "en"
+multilingual = false
+src = "."
+title = "Aller au boulot"
+description = ""
+
+[preprocessor.katex]
+
+
+[output.html]
+no-section-label = false
+git-repository-url = "https://github.com/kuizhiqing/aller-au-boulot"
+site-url = "/aller-au-boulot/"
+cname = "kuizhiqing.cn"
+
+[output.html.playground]
+editable = false
+copy-js = true
+line-numbers = false
+
+[output.html.search]
+enable = false
+
+[output.html.fold]
+enable = true
+level = 0
+
+[output.html.redirect]
+
