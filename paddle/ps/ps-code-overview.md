@@ -603,8 +603,9 @@ class MultiSlotDataFeed : public PrivateQueueDataFeed<std::vector<MultiSlotType>
 
 1. InMemoryDataset 流程分析
 * LoadIntoMemory 把文件读取进 input_channel_，注意 input_channel_ 是全局共享，由 GetReaders() 返回时设定；
-* Start() 从 input_channel_ 读取一份数据进 output_channel_
-* Next() 从 output_channel_ 取数据进 consume_channel_
 
+* Start() 从 input_channel_ 读取一份数据进 output_channel_
+
+* Next() 从 output_channel_ 取数据进 consume_channel_
 2. input_channel_ 在哪里初始化？
    data_set.cc 中 DatasetImpl<T>::CreateChannel()，它是全局的，最终调用在 dataset.py 中 self.dataset.create_channel()，所以 InMemoryDataset 有调用，QueueDataset 没有调用
