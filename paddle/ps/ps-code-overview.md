@@ -1,7 +1,5 @@
 # paddle ps 代码分析
 
-@kuizhiqing
-
 ## python 前端
 
 ### API

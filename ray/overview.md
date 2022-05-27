@@ -1,4 +1,4 @@
-# 代码分析
+# Overview
 
 ## BUILD
 
@@ -159,7 +159,7 @@ Services 提供多种服务启动的封装，包括 redis 服务启动。
 def start_gcs_server(redis_address, ...):
     # 调用 gcs 二进制启动服务，包含 redis 服务
     # GCS_SERVER_EXECUTABLE "core/src/ray/gcs/gcs_server"
-    command = [GCS_SERVER_EXECUTABLE, "--redis_xxxx="", ...]
+    command = [GCS_SERVER_EXECUTABLE, "--redis_xxxx=", ...]
     process_info = start_ray_process(command, ...)
 
 def start_ray_client_server(address, ray_client_server_ip,...):
@@ -300,16 +300,13 @@ class RayletServicer(ray_client_pb2_grpc.RayletDriverServicer):
 `ray start [--head]`, 将启动以下进程
 
 ```shell
-/usr/local/lib/python3.7/dist-packages/ray/core/src/ray/thirdparty/redis/src/redis-server *:6379
-/usr/local/lib/python3.7/dist-packages/ray/core/src/ray/thirdparty/redis/src/redis-server *:64712
-```
-
-```shell
 # 以下进程只在 head 节点运行
+# GCS_SERVER_EXECUTABLE 
 /usr/local/lib/python3.7/dist-packages/ray/core/src/ray/gcs/gcs_server 
 /usr/bin/python3.7 -m ray.util.client.server --host=0.0.0.0 --port=10001 --mode=proxy
 
 # worker 进程
+# RAYLET_EXECUTABLE
 /usr/local/lib/python3.7/dist-packages/ray/core/src/ray/raylet/raylet
 /usr/bin/python3.7 -u /usr/local/lib/python3.7/dist-packages/ray/dashboard/agent.py
 
@@ -318,7 +315,11 @@ class RayletServicer(ray_client_pb2_grpc.RayletDriverServicer):
 /usr/bin/python3.7 -u /usr/local/lib/python3.7/dist-packages/ray/_private/log_monitor.py
 ```
 
-
+```shell
+# 新版本中的以下进程已被移除
+/usr/local/lib/python3.7/dist-packages/ray/core/src/ray/thirdparty/redis/src/redis-server *:6379
+/usr/local/lib/python3.7/dist-packages/ray/core/src/ray/thirdparty/redis/src/redis-server *:64712
+```
 
 ```shell
 # java worker command
@@ -327,9 +328,3 @@ python ray/workers/setup_worker.py java -Dx=x -cp xx RAY_WORKER_DYNAMIC_OPTION_P
 #  cpp worker command
 cpp/default_worker
 ```
-
-
-
-RAYLET_EXECUTABLE
-
-GCS_SERVER_EXECUTABLE 

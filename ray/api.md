@@ -1,5 +1,5 @@
 
-# Demo
+# API
 
 ```python
 import ray
