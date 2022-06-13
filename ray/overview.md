@@ -238,7 +238,7 @@ class RuntimeEnvContext:
 ### client server
 
 ```bash
-python -m ray.util.client.server --address=x.x.x.x:6379 --host=0.0.0.0 --port=10001 --mode=proxy --redis-password=5241590000000000
+python -m ray.util.client.server --address=x.x.x.x:6379 --host=0.0.0.0 --port=10001 --mode=proxy --redis-password=
 ```
 
 ```python
