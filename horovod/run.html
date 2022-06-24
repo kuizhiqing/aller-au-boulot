@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>run - Aller au boulot</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Projects excelling">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item expanded "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../horovod/run.html" class="active"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">Aller au boulot</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/kuizhiqing/aller-au-boulot" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="run"><a class="header" href="#run">Run</a></h1>
+<h3 id="启动"><a class="header" href="#启动">启动</a></h3>
+<pre><code class="language-python">setup(name='horovod',
+      entry_points={
+          'console_scripts': [
+              'horovodrun = horovod.runner.launch:run_commandline'
+          ]
+      })
+</code></pre>
+<pre><code class="language-python"># horovod/runner/launch.py
+
+def run_commandline():
+    args = parse_args()
+    _run(args)
+
+def _run(args):
+    # set args.hosts
+    if _is_elastic(args):
+        return _run_elastic(args)
+    else:
+        return _run_static(args)
+</code></pre>
+<h3 id="非弹性启动"><a class="header" href="#非弹性启动">非弹性启动</a></h3>
+<pre><code class="language-python">def _run_static(args):
+    settings = hvd_settings.Settings(...)
+    nics = driver_service.get_common_interfaces(settings, all_host_names,
+                                                remote_host_names, fn_cache)
+    if args.run_func:
+        executable = args.executable or sys.executable
+        command = [executable, '-m', 'horovod.runner.run_task', str(driver_ip), str(run_func_server_port)]
+    else:
+        command = args.command
+    _launch_job(args, settings, nics, command)
+
+def _launch_job(args, settings, nics, command):
+    def gloo_run_fn():
+        driver_ip = network.get_driver_ip(nics)
+        gloo_run(settings, nics, env, driver_ip, command)
+
+    def mpi_run_fn():
+        mpi_run(settings, nics, env, command)
+
+    def js_run_fn():
+        js_run(settings, nics, env, command)
+
+    run_controller(args.use_gloo, gloo_run_fn,
+                   args.use_mpi, mpi_run_fn,
+                   args.use_jsrun, js_run_fn,
+                   args.verbose)
+
+def run_controller(use_gloo, gloo_run, use_mpi, mpi_run, use_jsrun, js_run, verbosity):
+    if use_gloo:
+        gloo_run()
+    elif use_mpi:
+        mpi_run()
+    elif use_jsrun:
+        js_run()
+
+from horovod.runner.gloo_run import gloo_run, gloo_run_elastic
+from horovod.runner.mpi_run import mpi_run
+from horovod.runner.js_run import js_run, is_jsrun_installed
+</code></pre>
+<pre><code class="language-python"># horovod/runner/gloo_run.py
+
+def gloo_run(settings, nics, env, server_ip, command):
+    # 启动命令通过 ssh 分发，如果出错所有进程将被 kill
+    # 先封装执行函数
+    exec_command = _exec_command_fn(settings)
+    # 再调用执行
+    launch_gloo(command, exec_command, settings, nics, env, server_ip)
+
+def _exec_command_fn(settings):
+    def _exec_command(command, slot_info, events):
+        # 如果是需要分发到 remote 的节点
+        # from horovod.runner.util.remote import get_remote_command
+        # get_remote_command 提供 ssh 封装
+        if host_address not in local_addresses:
+            command = get_remote_command(local_command,...)
+        exit_code = safe_shell_exec.execute(command,...)
+    return _exec_command
+
+def launch_gloo(command, exec_command, settings, nics, env, server_ip):
+    # exec_command 为执行的命令
+    # args_list 是执行的参数，由每个节点所需参数组成的列表
+    # 通过如下方法的调用实现多节点运行
+    res = threads.execute_function_multithreaded(exec_command, args_list, block_until_all_done=True)
+</code></pre>
+<pre><code class="language-python"># horovod/runner/util/threads.py
+
+def execute_function_multithreaded(fn, args_list, block_until_all_done=True, max_concurrent_executions=1000):
+    worker_queue = queue.Queue()
+    result_queue = queue.Queue() # 结果池，用于放置结果，后续忽略
+
+    # 把任务放进任务池
+    for i, arg in enumerate(args_list):
+        worker_queue.put(arg)
+
+    # 只要任务池里还有任务就取出来执行之
+    def fn_execute():
+        while True:
+            arg = worker_queue.get(block=False)
+            exec_index = arg[-1]
+            res = fn(*arg[:-1])
+
+    # 启动多线程分发命令，感觉必要性不大
+    for _ in range(number_of_threads):
+        thread = in_thread(target=fn_execute, daemon=not block_until_all_done)
+
+def in_thread(target, args=(), name=None, daemon=True, silent=False):
+    bg = threading.Thread(target=fn, args=args, name=name)
+    bg.daemon = daemon
+    bg.start()
+</code></pre>
+<pre><code class="language-python"># horovod/runner/common/util/safe_shell_exec.py
+
+# 使用 multiprocessing.Process 启动进程
+# 然后再使用 subprocess 启动进程执行
+
+def execute(command, env=None, stdout=None, stderr=None, index=None, events=None,
+            prefix_output_with_timestamp=False):
+    ctx = multiprocessing.get_context('spawn')
+
+    exit_event = _create_event(ctx)
+
+    # 当 parent process 被 hard kill 时，这个 Pipe 会被关闭，然后 middleman 就会向子进程发送 SIGTERM，避免出现 orphaned process
+    (r, w) = ctx.Pipe(duplex=False)
+
+    middleman = ctx.Process(target=_exec_middleman, args=(command, env, exit_event, ..., (r, w)))
+    middleman.start()
+
+    middleman.join()
+    return middleman.exitcode
+
+def _exec_middleman(command, env, exit_event, stdout, stderr, rw):
+    os.setsid()
+
+    executor_shell = subprocess.Popen(command, shell=True, env=env,
+                                      stdout=stdout_w, stderr=stderr_w)
+
+</code></pre>
+<pre><code class="language-python"># horovod/runner/mpi_run.py
+
+def mpi_run(settings, nics, env, command, stdout=None, stderr=None):
+    mpirun_command = (
+        'mpirun {basic_args} '
+        '-np {num_proc}{ppn_arg}{hosts_arg} '
+        '{binding_args} '
+        '{mpi_args} '
+        '{mpi_ssh_args} '
+        '{tcp_intf_arg} '
+        '{nccl_socket_intf_arg} '
+        '{output_filename_arg} '
+        '{env} {extra_mpi_args} {command}'
+    )
+
+    if settings.run_func_mode:
+        exit_code = safe_shell_exec.execute(mpirun_command, env=env, stdout=stdout, stderr=stderr)
+    else:
+        os.execve('/bin/sh', ['/bin/sh', '-c', mpirun_command], env)
+</code></pre>
+<h3 id="弹性启动"><a class="header" href="#弹性启动">弹性启动</a></h3>
+<pre><code class="language-python">def _run_elastic(args):
+    settings = elastic_settings.ElasticSettings(discovery=discover_hosts,...)
+    return gloo_run_elastic(settings, env, args.run_func if args.run_func else args.command, executable)
+
+from horovod.runner.gloo_run import gloo_run, gloo_run_elastic
+</code></pre>
+<pre><code class="language-python"></code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../horovod/horovod.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../horovod/api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../horovod/horovod.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../horovod/api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

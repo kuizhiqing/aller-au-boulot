@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>paddle - Aller au boulot</title>
+        <title>concurrent execution - Aller au boulot</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Projects excelling">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li></ol></li><li class="chapter-item expanded "><a href="../paddle/paddle.html" class="active"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li></ol></li><li class="chapter-item expanded "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../python/concurrent.html" class="active"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -125,17 +125,89 @@
                 <div id="content" class="content">
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="paddle"><a class="header" href="#paddle">paddle</a></h1>
+<h1 id="concurrent-execution"><a class="header" href="#concurrent-execution">Concurrent Execution</a></h1>
+<p><a href="https://docs.python.org/3/library/concurrency.html">doc</a></p>
+<h3 id="1-subprocess"><a class="header" href="#1-subprocess">1. subprocess</a></h3>
+<ul>
+<li>启动子进程，自定义 excutable</li>
+</ul>
+<pre><code class="language-python">import subprocess
+
+proc = subprocess.Popen([&quot;/usr/bin/git&quot;, &quot;commit&quot;, &quot;-m&quot;, &quot;Fixes a bug.&quot;])
+proc.poll()
+proc.wait()
+proc.communicate()
+proc.terminate()
+proc.kill()
+</code></pre>
+<p><a href="https://docs.python.org/3/library/subprocess.html">doc</a></p>
+<h3 id="2-threading"><a class="header" href="#2-threading">2. threading</a></h3>
+<ul>
+<li>启动线程</li>
+<li>存在 GIL 问题，无法完全利用 CPU</li>
+</ul>
+<pre><code class="language-python">import threading
+
+def serve():
+    pass
+
+thread = threading.Thread(target=serve, daemon=None)
+thread.start()
+thread.join()
+</code></pre>
+<p><a href="https://docs.python.org/3/library/threading.html">doc</a></p>
+<h4 id="pros"><a class="header" href="#pros">Pros</a></h4>
+<ul>
+<li>Lightweight - low memory footprint</li>
+<li>Shared memory - makes access to state from another context easier</li>
+<li>Allows you to easily make responsive UIs</li>
+<li>cPython C extension modules that properly release the GIL will run in parallel</li>
+<li>Great option for I/O-bound applications</li>
+</ul>
+<h4 id="cons"><a class="header" href="#cons">Cons</a></h4>
+<ul>
+<li>cPython - subject to the GIL</li>
+<li>Not interruptible/killable</li>
+<li>If not following a command queue/message pump model (using the Queue module), then manual use of synchronization primitives become a necessity (decisions are needed for the granularity of locking)</li>
+<li>Code is usually harder to understand and to get right - the potential for race conditions increases dramatically</li>
+</ul>
+<h3 id="3-multiprocessing"><a class="header" href="#3-multiprocessing">3. multiprocessing</a></h3>
+<ul>
+<li>启动子进程，使用内置函数</li>
+<li>使用进程，充分利用 CPU 资源</li>
+</ul>
+<pre><code class="language-python">from multiprocessing
+
+proc = multiprocessing.Process(target=serve, daemon=None)
+proc.start()
+proc.join()
+proc.close()
+
+</code></pre>
+<p><a href="https://docs.python.org/3/library/multiprocessing.html">doc</a></p>
+<h4 id="pros-1"><a class="header" href="#pros-1">Pros</a></h4>
+<ul>
+<li>Separate memory space</li>
+<li>Code is usually straightforward</li>
+<li>Takes advantage of multiple CPUs &amp; cores</li>
+<li>Avoids GIL limitations for cPython</li>
+<li>Eliminates most needs for synchronization primitives unless if you use shared memory (instead, it's more of a communication model for IPC)</li>
+<li>Child processes are interruptible/killable</li>
+<li>Python multiprocessing module includes useful abstractions with an interface much like threading.Thread</li>
+<li>A must with cPython for CPU-bound processing</li>
+</ul>
+<h4 id="cons-1"><a class="header" href="#cons-1">Cons</a></h4>
+<ul>
+<li>IPC a little more complicated with more overhead (communication model vs. shared memory/objects)</li>
+<li>Larger memory footprint</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../pytorch/tensor.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../python/python.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a rel="next" href="../paddle/ps/ps-code-overview.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -143,11 +215,8 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../pytorch/tensor.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../python/python.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a rel="next" href="../paddle/ps/ps-code-overview.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 
