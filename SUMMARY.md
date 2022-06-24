@@ -9,3 +9,8 @@
   - [tensor](pytorch/tensor.md)
 - [paddle](paddle/paddle.md)
   - [ps](paddle/ps/ps-code-overview.md)
+- [horovod](horovod/horovod.md)
+  - [run](horovod/run.md)
+  - [api](horovod/api.md)
+- [python](python/python.md)
+  - [concurrent execution](python/concurrent.md)

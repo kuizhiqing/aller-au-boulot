@@ -15,6 +15,19 @@ print(ray.get(futures))
 ```
 
 ```python
+# python/ray/__init__.py
+
+from ray.worker import (  # noqa: E402,F401
+    get,
+    init,
+    put,
+    remote,
+    wait,
+)
+```
+API `ray.init`, `ray.remote`, `ray.get` 都来自 `ray.worker`.
+
+```python
 # python/ray/worker.py
 
 def init(address: Optional[str] = None, ...):
@@ -51,6 +64,11 @@ class CoreWorker : public rpc::CoreWorkerServiceHandler {
 
   std::shared_ptr<TaskManager> task_manager_;
   std::unique_ptr<ActorManager> actor_manager_;
+
+  /// Implements gRPC server handler.
+  void HandleXxxx(const rpc::PushTaskRequest &request,
+                      rpc::PushTaskReply *reply,
+                      rpc::SendReplyCallback send_reply_callback) override;
 }
 
 
