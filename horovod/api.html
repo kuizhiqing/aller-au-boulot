@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item expanded "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item expanded "><a href="../horovod/api.html" class="active"><strong aria-hidden="true">4.2.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item expanded "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item expanded "><a href="../horovod/api.html" class="active"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item "><a href="../horovod/common.html"><strong aria-hidden="true">4.3.</strong> common</a></li><li class="chapter-item "><a href="../horovod/torch_api.html"><strong aria-hidden="true">4.4.</strong> torch api</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -173,6 +173,7 @@ def init(*args, **kwargs):
     _setup_process_sets(_basics)
 
 </code></pre>
+<p>HorovodBasics 提供 mpi lib 的 c 接口封装</p>
 <pre><code class="language-python"># horovod/common/basics.py
 
 class HorovodBasics(object):
@@ -182,9 +183,152 @@ class HorovodBasics(object):
 
     def init(self, comm, process_sets):
         initialization_ok = self.MPI_LIB_CTYPES.horovod_init(...)
-        initialization_ok = self.MPI_LIB_CTYPES.horovod_init_multi_comm(...)
+        # initialization_ok = self.MPI_LIB_CTYPES.horovod_init_multi_comm(...)
 
         _init_process_sets(process_sets)
+
+    def shutdown(self):
+    def is_initialized(self):
+    def start_timeline(self, file_path, mark_cycles=False):
+    def stop_timeline(self):
+    def size(self):
+    def local_size(self):
+    def cross_size(self):
+    def rank(self):
+    def local_rank(self):
+    def cross_rank(self):
+    def is_homogeneous(self):
+    def mpi_threads_supported(self):
+    def mpi_enabled(self):
+    def mpi_built(self):
+    def gloo_enabled(self):
+    def gloo_built(self):
+    def nccl_built(self):
+    def ddl_built(self):
+    def ccl_built(self):
+    def cuda_built(self):
+    def rocm_built(self):
+    def _add_process_set_impl(self, ranks: Sequence[int]) -&gt; Optional[int]:
+    def _remove_process_set_impl(self, process_set_id: int) -&gt; Optional[int]:
+    def _process_set_rank(self, process_set_id: int) -&gt; int:
+    def _process_set_size(self, process_set_id: int) -&gt; int:
+    def _get_process_set_ids_and_ranks(self) -&gt; Dict[int, List[int]]:
+    def _comm_process_set_id(self, comm: MPI.Comm) -&gt; int:
+
+</code></pre>
+<p>HorovodBasics </p>
+<pre><code class="language-c">// horovod/common/operations.h
+
+namespace horovod {
+namespace common {
+
+extern &quot;C&quot; {
+
+bool horovod_init(const int* ranks, int nranks, const int* process_set_ranks,
+                  const int* process_set_sizes, int num_process_sets);
+
+#if HAVE_MPI
+// 使用 MPI communicators 初始化
+bool horovod_init_multi_comm(MPI_Comm* comm, int ncomms,
+                             const int* process_set_ranks_via_ranks,
+                             const int* process_set_sizes_via_ranks,
+                             int num_process_sets_via_ranks);
+#endif
+
+void horovod_shutdown();
+
+int horovod_rank();
+int horovod_local_rank();
+
+int horovod_size();
+int horovod_local_size();
+
+// bool horovod_xxx_enabled();
+// bool horovod_xxx_built();
+
+int horovod_reduce_op_average();
+int horovod_reduce_op_sum();
+int horovod_reduce_op_adasum();
+
+int horovod_add_process_set(const int *ranks, int nranks);
+int horovod_remove_process_set(int process_set_id);
+int horovod_process_set_rank(int process_set_id);
+int horovod_process_set_size(int process_set_id);
+int horovod_process_set_included(int process_set_id);
+int horovod_number_of_process_sets();
+void horovod_process_set_ids(int* ids_prealloc);
+int horovod_process_set_ranks(int id, int* ranks_prealloc);
+
+}
+
+Status EnqueueTensorAllreduce(std::shared_ptr&lt;OpContext&gt; context,
+                              std::shared_ptr&lt;Tensor&gt; tensor,
+                              std::shared_ptr&lt;Tensor&gt; output,
+                              ReadyEventList ready_event_list,
+                              std::string name, int device,
+                              StatusCallback callback,
+                              ReduceOp reduce_op = ReduceOp::SUM,
+                              double prescale_factor = 1.0,
+                              double postscale_factor = 1.0,
+                              int32_t process_set_id = 0);
+
+Status EnqueueTensorAllreduces(std::vector&lt;std::shared_ptr&lt;OpContext&gt;&gt;&amp; contexts,
+                               std::vector&lt;std::shared_ptr&lt;Tensor&gt;&gt;&amp; tensors,
+                               std::vector&lt;std::shared_ptr&lt;Tensor&gt;&gt;&amp; outputs,
+                               std::vector&lt;ReadyEventList&gt;&amp; ready_event_lists,
+                               std::vector&lt;std::string&gt;&amp; names,
+                               int device,
+                               std::vector&lt;StatusCallback&gt;&amp; callbacks,
+                               ReduceOp reduce_op = ReduceOp::SUM,
+                               double prescale_factor = 1.0,
+                               double postscale_factor = 1.0,
+                               int32_t process_set_id = 0);
+
+Status EnqueueTensorAllgather(std::shared_ptr&lt;OpContext&gt; context,
+                              std::shared_ptr&lt;Tensor&gt; tensor,
+                              ReadyEventList ready_event_list,
+                              const std::string&amp; name, int device,
+                              StatusCallback callback,
+                              int32_t process_set_id = 0);
+
+Status EnqueueTensorBroadcast(std::shared_ptr&lt;OpContext&gt; context,
+                              std::shared_ptr&lt;Tensor&gt; tensor,
+                              std::shared_ptr&lt;Tensor&gt; output, int root_rank,
+                              ReadyEventList ready_event_list,
+                              const std::string&amp; name, int device,
+                              StatusCallback callback,
+                              int32_t process_set_id = 0);
+
+Status EnqueueTensorAlltoall(std::shared_ptr&lt;OpContext&gt; context,
+                             std::shared_ptr&lt;Tensor&gt; tensor,
+                             std::shared_ptr&lt;Tensor&gt; splits,
+                             ReadyEventList ready_event_list,
+                             const std::string&amp; name, int device,
+                             StatusCallback callback,
+                             int32_t process_set_id = 0);
+
+Status EnqueueTensorReducescatter(std::shared_ptr&lt;OpContext&gt; context,
+                                  std::shared_ptr&lt;Tensor&gt; tensor,
+                                  ReadyEventList ready_event_list,
+                                  const std::string&amp; name, int device,
+                                  StatusCallback callback,
+                                  ReduceOp reduce_op = ReduceOp::SUM,
+                                  int32_t process_set_id = 0);
+
+Status EnqueueJoin(std::shared_ptr&lt;OpContext&gt; context,
+                   std::shared_ptr&lt;Tensor&gt; output_last_joined_rank,
+                   ReadyEventList ready_event_list,
+                   const std::string&amp; name, int device,
+                   StatusCallback callback,
+                   int32_t process_set_id = 0);
+
+Status EnqueueBarrier(StatusCallback callback,
+                   int32_t process_set_id = 0);
+
+} // namespace common
+} // namespace horovod
+
+#endif // HOROVOD_OPERATIONS_H
 </code></pre>
 
                     </main>
@@ -194,7 +338,7 @@ class HorovodBasics(object):
                             <a rel="prev" href="../horovod/run.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../python/python.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../horovod/common.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -206,7 +350,7 @@ class HorovodBasics(object):
                     <a rel="prev" href="../horovod/run.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../python/python.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../horovod/common.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

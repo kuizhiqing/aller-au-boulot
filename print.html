@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li></ol></li><li class="chapter-item "><a href="paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item "><a href="horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li></ol></li><li class="chapter-item "><a href="python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item "><a href="horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item "><a href="horovod/common.html"><strong aria-hidden="true">4.3.</strong> common</a></li><li class="chapter-item "><a href="horovod/torch_api.html"><strong aria-hidden="true">4.4.</strong> torch api</a></li></ol></li><li class="chapter-item "><a href="python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -777,11 +777,140 @@ CoreWorker::CoreWorker(...) {
 <p>Tensor view explication</p>
 <p><img src="pytorch/tensor-view.png" alt="Tensor View API Dependance" /></p>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="pytorch-profiler"><a class="header" href="#pytorch-profiler">PyTorch Profiler</a></h1>
+<h2 id="demo"><a class="header" href="#demo">Demo</a></h2>
+<p>体现基本流程的示例</p>
+<pre><code class="language-python">import torch
+import torchvision.models as models
+from torch.profiler import profile, record_function, ProfilerActivity
+
+# 创建模型，需要 profile 的对象
+model = models.resnet18()
+inputs = torch.randn(5, 3, 224, 224)
+
+# 配置
+prof = profile(activities=[ProfilerActivity.CPU], record_shapes=True)
+
+prof.start()
+
+model(inputs)
+
+prof.stop()
+
+# 结果分析和输出
+print(prof.key_averages().table(sort_by=&quot;cpu_time_total&quot;, row_limit=10))
+
+prof.export_chrome_trace(&quot;trace.json&quot;)
+</code></pre>
+<p>其中 <code>torch.profiler.profile</code> 可以使用 <code>with</code> 语法</p>
+<pre><code class="language-python">with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+    with record_function(&quot;model_inference&quot;):
+        model(inputs)
+</code></pre>
+<p>输出</p>
+<pre><code class="language-shell">---------------------------------  ------------  ------------  ------------  ------------  ------------  ------------
+                             Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg    # of Calls
+---------------------------------  ------------  ------------  ------------  ------------  ------------  ------------
+                 model_inferencex         0.10%      15.353ms       100.00%       14.951s       14.951s             1
+                 aten::batch_norm         0.00%     292.000us        43.14%        6.449s     322.464ms            20
+     aten::_batch_norm_impl_index         0.00%     567.000us        43.13%        6.449s     322.450ms            20
+          aten::native_batch_norm        32.92%        4.921s        43.13%        6.448s     322.419ms            20
+                     aten::conv2d         0.00%     310.000us        42.00%        6.279s     313.938ms            20
+                aten::convolution         0.00%     350.000us        41.99%        6.278s     313.923ms            20
+               aten::_convolution         0.00%     601.000us        41.99%        6.278s     313.905ms            20
+         aten::mkldnn_convolution        41.98%        6.276s        41.99%        6.278s     313.875ms            20
+                       aten::mean         0.01%       1.209ms        10.54%        1.576s      75.043ms            21
+                        aten::sum        10.45%        1.562s        10.45%        1.562s      74.386ms            21
+---------------------------------  ------------  ------------  ------------  ------------  ------------  ------------
+Self CPU time total: 14.951s
+</code></pre>
+<h3 id="api-1"><a class="header" href="#api-1">API</a></h3>
+<p><code>torch.profiler.profile</code></p>
+<p>参数说明</p>
+<ul>
+<li><code>activities</code> list 类型，profile 的内容，支持 <code>torch.profiler.ProfilerActivity.CPU</code> 和 <code>torch.profiler.ProfilerActivity.CUDA</code>，这里的设置需要和模型使用的 device 一致</li>
+<li><code>schedule</code> 默认会持续记录所有事件，使用 scheduler() 作为帮助函数生成 schedule 函数，自定义记录逻辑</li>
+<li><code>on_trace_ready</code> 配合 <code>schedule</code> 使用，在它返回 <code>ProfilerAction.RECORD_AND_SAVE</code> 后被调用</li>
+<li><code>record_shapes</code> 是否记录 input shapes</li>
+<li><code>profile_memory</code> 是否记录 内存/显存, 和 <code>activities</code> 对应</li>
+<li><code>with_stack</code> 是否开启调用文件信息源的记录，包括代码文件和行号</li>
+<li><code>with_flops</code> 预估FLOPs，主要针对 matrix multiplication and 2D convolution</li>
+<li><code>with_modules</code> 层级记录，暂时只针对 TorchScript</li>
+</ul>
+<p><code>ProfilerAction</code> 用于状态的记录和转换</p>
+<pre><code class="language-python">class ProfilerAction(Enum):
+    NONE = 0
+    WARMUP = 1
+    RECORD = 2
+    RECORD_AND_SAVE = 3
+</code></pre>
+<p><code>profile</code> 对象</p>
+<pre><code class="language-python"># torch/profiler/profiler.py
+
+# Profiler context manager
+class profile(_KinetoProfile):
+
+    def __init__(...):
+        # 记录函数
+        self.step_rec_fn: Optional[prof.record_function] = None
+
+        # 状态转换时会触发一系列操作，action_map 记录里任意两个状态转换时执行的动作
+        self.action_map: Dict[Tuple[ProfilerAction, Optional[ProfilerAction]], List[Any]] = {
+            (ProfilerAction.NONE, ProfilerAction.WARMUP): [self.prepare_trace],
+            (ProfilerAction.NONE, ProfilerAction.RECORD): [self.prepare_trace, self.start_trace],
+            ...
+        }
+
+    def start(self):
+        self._transit_action(ProfilerAction.NONE, self.current_action)
+        if self.record_steps:
+            self.step_rec_fn = prof.record_function(&quot;ProfilerStep#&quot; + str(self.step_num))
+            self.step_rec_fn.__enter__()
+
+    def stop(self):
+        if self.record_steps and self.step_rec_fn:
+            self.step_rec_fn.__exit__(None, None, None)
+        self._transit_action(self.current_action, None)
+
+    def step(self):
+        self.step_num += 1
+        # schedule 接受 step 数，返回当前 action
+        self.current_action = self.schedule(self.step_num)
+
+        # 转换状态，触发 map 中定义的动作
+        self._transit_action(prev_action, self.current_action)
+
+        if self.record_steps:
+            self.step_rec_fn = prof.record_function(&quot;ProfilerStep#&quot; + str(cur_step))
+            self.step_rec_fn.__enter__()
+</code></pre>
+<p><code>schedule</code></p>
+<pre><code class="language-python">def schedule(*, wait: int, warmup: int, active: int, repeat: int = 0, skip_first: int = 0) -&gt; Callable:
+    # skip_fist + ( wait + warmup + active ) * repeat
+    # NONE                 WARMUP   RECORD RECORD_AND_SAVE
+    def schedule_fn(step: int) -&gt; ProfilerAction:
+        # 根据 step 返回 当前的状态
+    return schedule_fn
+</code></pre>
+<p><code>record_function</code></p>
+<pre><code class="language-python"># torch/autograd/profiler.py
+
+class record_function(ContextDecorator):
+    def __init__(self, name: str, args: Optional[str] = None):
+        self.record = torch.jit.annotate(Optional[&quot;torch.classes.profiler._RecordFunction&quot;], None)
+
+    def __enter__(self):
+        self.record = torch.ops.profiler._record_function_enter_new(self.name, self.args)
+
+    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any):
+        torch.ops.profiler._record_function_exit(self.record)
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="paddle"><a class="header" href="#paddle">paddle</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="paddle-ps-代码分析"><a class="header" href="#paddle-ps-代码分析">paddle ps 代码分析</a></h1>
 <h2 id="python-前端"><a class="header" href="#python-前端">python 前端</a></h2>
-<h3 id="api-1"><a class="header" href="#api-1">API</a></h3>
+<h3 id="api-2"><a class="header" href="#api-2">API</a></h3>
 <pre><code class="language-python">import paddle.distributed.fleet as fleet
 
 fleet.init()
@@ -1493,8 +1622,8 @@ from horovod.runner.gloo_run import gloo_run, gloo_run_elastic
 </code></pre>
 <pre><code class="language-python"></code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="api-2"><a class="header" href="#api-2">API</a></h1>
-<h3 id="demo"><a class="header" href="#demo">Demo</a></h3>
+<h1 id="api-3"><a class="header" href="#api-3">API</a></h1>
+<h3 id="demo-1"><a class="header" href="#demo-1">Demo</a></h3>
 <pre><code class="language-python">    import tensorflow as tf
     import horovod.tensorflow as hvd
 
@@ -1541,6 +1670,7 @@ def init(*args, **kwargs):
     _setup_process_sets(_basics)
 
 </code></pre>
+<p>HorovodBasics 提供 mpi lib 的 c 接口封装</p>
 <pre><code class="language-python"># horovod/common/basics.py
 
 class HorovodBasics(object):
@@ -1550,9 +1680,413 @@ class HorovodBasics(object):
 
     def init(self, comm, process_sets):
         initialization_ok = self.MPI_LIB_CTYPES.horovod_init(...)
-        initialization_ok = self.MPI_LIB_CTYPES.horovod_init_multi_comm(...)
+        # initialization_ok = self.MPI_LIB_CTYPES.horovod_init_multi_comm(...)
 
         _init_process_sets(process_sets)
+
+    def shutdown(self):
+    def is_initialized(self):
+    def start_timeline(self, file_path, mark_cycles=False):
+    def stop_timeline(self):
+    def size(self):
+    def local_size(self):
+    def cross_size(self):
+    def rank(self):
+    def local_rank(self):
+    def cross_rank(self):
+    def is_homogeneous(self):
+    def mpi_threads_supported(self):
+    def mpi_enabled(self):
+    def mpi_built(self):
+    def gloo_enabled(self):
+    def gloo_built(self):
+    def nccl_built(self):
+    def ddl_built(self):
+    def ccl_built(self):
+    def cuda_built(self):
+    def rocm_built(self):
+    def _add_process_set_impl(self, ranks: Sequence[int]) -&gt; Optional[int]:
+    def _remove_process_set_impl(self, process_set_id: int) -&gt; Optional[int]:
+    def _process_set_rank(self, process_set_id: int) -&gt; int:
+    def _process_set_size(self, process_set_id: int) -&gt; int:
+    def _get_process_set_ids_and_ranks(self) -&gt; Dict[int, List[int]]:
+    def _comm_process_set_id(self, comm: MPI.Comm) -&gt; int:
+
+</code></pre>
+<p>HorovodBasics </p>
+<pre><code class="language-c">// horovod/common/operations.h
+
+namespace horovod {
+namespace common {
+
+extern &quot;C&quot; {
+
+bool horovod_init(const int* ranks, int nranks, const int* process_set_ranks,
+                  const int* process_set_sizes, int num_process_sets);
+
+#if HAVE_MPI
+// 使用 MPI communicators 初始化
+bool horovod_init_multi_comm(MPI_Comm* comm, int ncomms,
+                             const int* process_set_ranks_via_ranks,
+                             const int* process_set_sizes_via_ranks,
+                             int num_process_sets_via_ranks);
+#endif
+
+void horovod_shutdown();
+
+int horovod_rank();
+int horovod_local_rank();
+
+int horovod_size();
+int horovod_local_size();
+
+// bool horovod_xxx_enabled();
+// bool horovod_xxx_built();
+
+int horovod_reduce_op_average();
+int horovod_reduce_op_sum();
+int horovod_reduce_op_adasum();
+
+int horovod_add_process_set(const int *ranks, int nranks);
+int horovod_remove_process_set(int process_set_id);
+int horovod_process_set_rank(int process_set_id);
+int horovod_process_set_size(int process_set_id);
+int horovod_process_set_included(int process_set_id);
+int horovod_number_of_process_sets();
+void horovod_process_set_ids(int* ids_prealloc);
+int horovod_process_set_ranks(int id, int* ranks_prealloc);
+
+}
+
+Status EnqueueTensorAllreduce(std::shared_ptr&lt;OpContext&gt; context,
+                              std::shared_ptr&lt;Tensor&gt; tensor,
+                              std::shared_ptr&lt;Tensor&gt; output,
+                              ReadyEventList ready_event_list,
+                              std::string name, int device,
+                              StatusCallback callback,
+                              ReduceOp reduce_op = ReduceOp::SUM,
+                              double prescale_factor = 1.0,
+                              double postscale_factor = 1.0,
+                              int32_t process_set_id = 0);
+
+Status EnqueueTensorAllreduces(std::vector&lt;std::shared_ptr&lt;OpContext&gt;&gt;&amp; contexts,
+                               std::vector&lt;std::shared_ptr&lt;Tensor&gt;&gt;&amp; tensors,
+                               std::vector&lt;std::shared_ptr&lt;Tensor&gt;&gt;&amp; outputs,
+                               std::vector&lt;ReadyEventList&gt;&amp; ready_event_lists,
+                               std::vector&lt;std::string&gt;&amp; names,
+                               int device,
+                               std::vector&lt;StatusCallback&gt;&amp; callbacks,
+                               ReduceOp reduce_op = ReduceOp::SUM,
+                               double prescale_factor = 1.0,
+                               double postscale_factor = 1.0,
+                               int32_t process_set_id = 0);
+
+Status EnqueueTensorAllgather(std::shared_ptr&lt;OpContext&gt; context,
+                              std::shared_ptr&lt;Tensor&gt; tensor,
+                              ReadyEventList ready_event_list,
+                              const std::string&amp; name, int device,
+                              StatusCallback callback,
+                              int32_t process_set_id = 0);
+
+Status EnqueueTensorBroadcast(std::shared_ptr&lt;OpContext&gt; context,
+                              std::shared_ptr&lt;Tensor&gt; tensor,
+                              std::shared_ptr&lt;Tensor&gt; output, int root_rank,
+                              ReadyEventList ready_event_list,
+                              const std::string&amp; name, int device,
+                              StatusCallback callback,
+                              int32_t process_set_id = 0);
+
+Status EnqueueTensorAlltoall(std::shared_ptr&lt;OpContext&gt; context,
+                             std::shared_ptr&lt;Tensor&gt; tensor,
+                             std::shared_ptr&lt;Tensor&gt; splits,
+                             ReadyEventList ready_event_list,
+                             const std::string&amp; name, int device,
+                             StatusCallback callback,
+                             int32_t process_set_id = 0);
+
+Status EnqueueTensorReducescatter(std::shared_ptr&lt;OpContext&gt; context,
+                                  std::shared_ptr&lt;Tensor&gt; tensor,
+                                  ReadyEventList ready_event_list,
+                                  const std::string&amp; name, int device,
+                                  StatusCallback callback,
+                                  ReduceOp reduce_op = ReduceOp::SUM,
+                                  int32_t process_set_id = 0);
+
+Status EnqueueJoin(std::shared_ptr&lt;OpContext&gt; context,
+                   std::shared_ptr&lt;Tensor&gt; output_last_joined_rank,
+                   ReadyEventList ready_event_list,
+                   const std::string&amp; name, int device,
+                   StatusCallback callback,
+                   int32_t process_set_id = 0);
+
+Status EnqueueBarrier(StatusCallback callback,
+                   int32_t process_set_id = 0);
+
+} // namespace common
+} // namespace horovod
+
+#endif // HOROVOD_OPERATIONS_H
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="common"><a class="header" href="#common">common</a></h1>
+<p>Horovod 对象</p>
+<pre><code class="language-cpp"># horovod/common/common.h
+
+enum Framework { TENSORFLOW, PYTORCH, MXNET, XLA };
+enum StatusType { OK, UNKNOWN_ERROR, PRECONDITION_ERROR, ABORTED, INVALID_ARGUMENT, IN_PROGRESS };
+enum DeviceType { CPU, GPU };
+
+// for gpu
+struct Event {};
+
+class Status {
+public:
+  Status();
+  static Status OK();
+  static Status UnknownError(const std::string&amp; message);
+  static Status PreconditionError(const std::string&amp; message);
+  static Status Aborted(const std::string&amp; message);
+  static Status InvalidArgument(const std::string&amp; message);
+  static Status InProgress();
+  bool ok() const;
+  bool in_progress() const;
+  StatusType type() const;
+  const std::string&amp; reason() const;
+  Event event;
+
+private:
+  StatusType type_ = StatusType::OK;
+  std::string reason_;
+  Status(StatusType type, std::string reason);
+};
+
+class TensorShape {
+public:
+  TensorShape() : shape_() {}
+  TensorShape(std::vector&lt;int64_t&gt; vec) : shape_(vec) {}
+  void AddDim(int64_t dim);
+  void AppendShape(TensorShape&amp; other);
+
+  std::string DebugString() const;
+  int dims() const;
+  int64_t dim_size(int idx) const;
+  int64_t num_elements() const;
+  const std::vector&lt;int64_t&gt;&amp; to_vector() const;
+
+  inline bool operator==(const TensorShape&amp; rhs) const {
+    return shape_ == rhs.shape_;
+  }
+
+  inline bool operator!=(const TensorShape&amp; rhs) const {
+    return shape_ != rhs.shape_;
+  }
+
+private:
+  std::vector&lt;int64_t&gt; shape_;
+};
+
+class ReadyEvent {};
+class ReadyEventList {};
+
+class PersistentBuffer {
+public:
+  virtual const void* AccessData(std::shared_ptr&lt;OpContext&gt; context) const = 0;
+  virtual ~PersistentBuffer() = default;
+};
+
+class Tensor {
+public:
+  virtual const DataType dtype() const = 0;
+  virtual const TensorShape shape() const = 0;
+  virtual const void* data() const = 0;
+  virtual int64_t size() const = 0;
+  virtual ~Tensor() = default;
+};
+
+class OpContext {
+public:
+  // These allocators are fully synchronous, unlike TensorFlow counterparts.
+  virtual Status
+  AllocatePersistent(int64_t size,
+                     std::shared_ptr&lt;PersistentBuffer&gt;* tensor) = 0;
+  virtual Status AllocateOutput(TensorShape shape,
+                                std::shared_ptr&lt;Tensor&gt;* tensor,
+                                std::shared_ptr&lt;ReadyEvent&gt;* event = nullptr) = 0;
+  virtual Status AllocateOutput(int output_index, TensorShape shape,
+                                std::shared_ptr&lt;Tensor&gt;* tensor,
+                                std::shared_ptr&lt;ReadyEvent&gt;* event = nullptr) {
+    if (output_index == 0) {
+      return AllocateOutput(std::move(shape), tensor);
+    } else {
+      throw std::logic_error(&quot;output_index != 0 not supported&quot;);
+    }
+  }
+  virtual Status AllocateZeros(int64_t num_elements, DataType dtype,
+                                std::shared_ptr&lt;Tensor&gt;* tensor) = 0;
+  virtual Framework framework() const = 0;
+  virtual ~OpContext() = default;
+};
+
+// A callback to call after the communication completes. Since the
+// allreduce and allgather ops are asynchronous, this callback is what resumes
+// computation after the reduction is completed.
+using StatusCallback = std::function&lt;void(const Status&amp;)&gt;;
+
+// Table storing Tensors to be reduced, keyed by unique name.
+// This table contains everything necessary to do the distributed operation.
+struct TensorTableEntry {
+  std::string tensor_name;
+  std::shared_ptr&lt;OpContext&gt; context;
+  std::shared_ptr&lt;Tensor&gt; tensor;
+  std::shared_ptr&lt;Tensor&gt; output;
+  // Identifier for the subset of Horovod processes partaking in this operation.
+  int32_t process_set_id = 0;
+  // Root rank for broadcast operation (relative to process set).
+  int root_rank = 0;
+  // List of events indicating that data is ready.
+  ReadyEventList ready_event_list;
+  // GPU to do reduction on, or CPU_DEVICE_ID in case of CPU.
+  int device = CPU_DEVICE_ID;
+  // A callback to call with the status.
+  StatusCallback callback;
+  // If we build with NVTX support: A range marking the start
+  // and end of the distributed op for this tensor (may be
+  // shared by multiple tensors).
+  SharedNvtxOpRange nvtx_op_range;
+
+  // Alltoall splits (if tensor is for an Alltoall operation)
+  // Note: splits are stored in TensorTableEntry to avoid N^2
+  // storage complexity of collecting all worker split arrays
+  // on coordinator rank.
+  std::vector&lt;int32_t&gt; splits;
+  std::shared_ptr&lt;Tensor&gt; received_splits;
+
+  void FinishWithCallback(const Status&amp; status);
+};
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="torch-api"><a class="header" href="#torch-api">torch api</a></h1>
+<pre><code class="language-python"># horovod/torch/mpi_ops.py
+
+_basics = _HorovodBasics(__file__, 'mpi_lib_v2')
+
+# 重要
+# handle 会被放在 map 中，避免被 gc
+# 在 synchronize 之后被释放
+_handle_map = {}
+
+# inplace allreduce
+# allreduce_ -&gt; allreduce_async_ + synchronize -&gt; _allreduce_async -&gt; mpi_lib.horovod_torch_allreduce_async_
+
+# allreduce
+# allreduce -&gt; HorovodAllreduce.apply -&gt; allreduce_async + synchronize -&gt; _allreduce_async -&gt; mpi_lib.horovod_torch_allreduce_async_
+
+def _allreduce_function_factory(tensor):
+    return 'horovod_torch_allreduce_async_' + tensor.type().replace('.', '_')
+
+
+def _allreduce_async(tensor, output, name, op, prescale_factor, postscale_factor, process_set: ProcessSet):
+    function = _check_function(_allreduce_function_factory, tensor)
+    try:
+        handle = getattr(mpi_lib, function)(tensor, output, divisor,
+                                            name.encode() if name is not None else _NULL, op,
+                                            prescale_factor, postscale_factor, process_set.process_set_id)
+    except RuntimeError as e:
+        raise HorovodInternalError(e)
+    return handle
+
+
+def allreduce_async(tensor, average=None, name=None, op=None,
+                    prescale_factor=1.0, postscale_factor=1.0,
+                    process_set=global_process_set):
+    output = tensor.new(tensor.shape)
+    return _allreduce_async(tensor, output, name, op, prescale_factor, postscale_factor, process_set)
+
+
+class HorovodAllreduce(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, tensor, average, name, op, prescale_factor, postscale_factor, process_set):
+        ctx.average = average
+        ctx.op = op
+        ctx.prescale_factor = prescale_factor
+        ctx.postscale_factor = postscale_factor
+        ctx.process_set = process_set
+        handle = allreduce_async(tensor, average, name, op, prescale_factor, postscale_factor, process_set)
+        return synchronize(handle)
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        return allreduce(grad_output, average=ctx.average, op=ctx.op,
+                         prescale_factor=ctx.prescale_factor,
+                         postscale_factor=ctx.postscale_factor,
+                         process_set=ctx.process_set), None, None, None, None, None, None
+
+
+def allreduce(tensor, average=None, name=None, compression=Compression.none, op=None,
+              prescale_factor=1.0, postscale_factor=1.0, process_set=global_process_set):
+    &quot;&quot;&quot;
+    This acts as a thin wrapper around an autograd function.  If your input
+    tensor requires gradients, then callings this function will allow gradients
+    to be computed and backpropagated.
+    &quot;&quot;&quot;
+    tensor_compressed, ctx = compression.compress(tensor)
+    summed_tensor_compressed = HorovodAllreduce.apply(tensor_compressed, average, name, op,
+                                                      prescale_factor, postscale_factor,
+                                                      process_set)
+    return compression.decompress(summed_tensor_compressed, ctx)
+
+
+def allreduce_async_(tensor, average=None, name=None, op=None,
+                     prescale_factor=1.0, postscale_factor=1.0,
+                     process_set=global_process_set):
+    op = handle_average_backwards_compatibility(op, average)
+    return _allreduce_async(tensor, tensor, name, op, prescale_factor, postscale_factor, process_set)
+
+
+def allreduce_(tensor, average=None, name=None, op=None,
+               prescale_factor=1.0, postscale_factor=1.0,
+               process_set=global_process_set):
+    handle = allreduce_async_(tensor, average, name, op, prescale_factor, postscale_factor, process_set)
+    return synchronize(handle)
+
+</code></pre>
+<pre><code class="language-cpp">// horovod/torch/mpi_ops_v2.cc
+
+PYBIND11_MODULE(mpi_lib_v2, m) {
+  m.def(&quot;horovod_torch_allreduce_async_torch_IntTensor&quot;, &amp;DoAllreduce);
+  ...
+}
+
+int DoAllreduce(::torch::Tensor tensor, ::torch::Tensor output, int divisor,
+                const std::string&amp; name, int reduce_op_int,
+                double prescale_factor, double postscale_factor,
+                int process_set_id) {
+  auto handle = handle_manager.AllocateHandle();
+  common::ReadyEventList ready_event_list;
+  auto hvd_tensor = std::make_shared&lt;TorchTensor&gt;(tensor);
+  auto hvd_context = std::make_shared&lt;TorchOpContext&gt;(device, output);
+  auto hvd_output = std::make_shared&lt;TorchTensor&gt;(output);
+
+  ReduceOp reduce_op = static_cast&lt;ReduceOp&gt;(reduce_op_int);
+  auto enqueue_result = EnqueueTensorAllreduce(hvd_context, hvd_tensor, hvd_output, ready_event_list, ...);
+
+  return handle;
+}
+</code></pre>
+<pre><code class="language-cpp">// horovod/torch/adapter_v2.h
+
+class TorchPersistentBuffer : public PersistentBuffer {
+  AccessData(std::shared_ptr&lt;OpContext&gt; context) const override;
+  ::torch::Tensor tensor_;
+};
+
+class TorchTensor : public Tensor {
+  ::torch::Tensor tensor_;
+};
+
+class TorchOpContext : public OpContext {
+  std::vector&lt;::torch::Tensor&gt; outputs_;
+};
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="python"><a class="header" href="#python">python</a></h1>
