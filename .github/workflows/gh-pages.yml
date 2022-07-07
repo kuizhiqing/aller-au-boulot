@@ -7,7 +7,7 @@ on:
     paths:
       - SUMMARY.md
       - book.toml
-      #- '**.md'
+      - '**.md'
 
 jobs:
   deploy:
