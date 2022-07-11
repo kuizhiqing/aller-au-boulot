@@ -1,0 +1,520 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>object - Aller au boulot</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Projects excelling">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item expanded "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">4.3.</strong> workflow</a></li><li class="chapter-item expanded "><a href="../horovod/object.html" class="active"><strong aria-hidden="true">4.4.</strong> object</a></li><li class="chapter-item "><a href="../horovod/common.html"><strong aria-hidden="true">4.5.</strong> common</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">Aller au boulot</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/kuizhiqing/aller-au-boulot" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="object"><a class="header" href="#object">object</a></h1>
+<h3 id="global-state"><a class="header" href="#global-state">Global State</a></h3>
+<p>全局状态类，用于保存全局信息，同时持有以下几个对象</p>
+<pre><code class="language-cpp">// horovod/common/global_state.h
+
+struct HorovodGlobalState {
+  // Background thread running MPI communication.
+  std::thread background_thread;
+
+  bool elastic_enabled = false;
+
+  ParameterManager parameter_manager;
+
+  // handles resizing and auto-tuning of buffer size.
+  FusionBufferManager fusion_buffer;
+
+  ProcessSetTable process_set_table;
+
+  std::shared_ptr&lt;Controller&gt; global_controller;
+};
+</code></pre>
+<h3 id="parametermanager"><a class="header" href="#parametermanager">ParameterManager</a></h3>
+<p><strong>WHAT</strong>
+ParameterManager 会记录 tunable 的变量，包括时间和 fusion buffer size 等，然后以获得高吞吐为目标对其进程动态调整</p>
+<p>Manager 类主要包含几个部分</p>
+<ul>
+<li>manager 自身的配置包括开关、warmup 信息等等</li>
+<li>API 包括 update、tune 等</li>
+<li>对可调整参数的封装，包括调整对象和调整方法</li>
+<li>调整策略, 基于上述封装，实现怎样调整的策略</li>
+</ul>
+<pre><code class="language-cpp">// horovod/common/parameter_manager.h
+
+class ParameterManager {
+  // 根据 tensor 信息计算 score 和调用 Tune 调整参数
+  // 返回值决定是否将更新后的参数广播出去
+  bool Update(const std::vector&lt;std::string&gt;&amp; tensor_names, int64_t bytes);
+  // 根据 score 调整参数
+  bool Tune(double score);
+
+  // Manager 的配置
+  struct Params {
+    bool hierarchical_allreduce;
+    bool hierarchical_allgather;
+    bool cache_enabled;
+    double tensor_fusion_threshold;
+    double cycle_time;
+    bool active;
+  };
+  Params GetParams();
+
+  // Interface used to represent a parameter (or group of parameters) being tuned.
+  class ITunableParameter {
+  public:
+    virtual bool Tune(double score, double* best_score) = 0;
+    virtual void UpdateBestValue(double score) = 0;
+    virtual double BestScore() const = 0;
+    virtual bool IsTunable() const = 0;
+  };
+
+  // Abstract base class used to implement hierarchical parameter tuning.
+  template &lt;class T&gt;
+  class TunableParameter : public ITunableParameter {
+    TunableParameter(T initial_value);
+    T initial_value_;
+    T value_;
+    T best_value_;
+  };
+  // 需要调整的参数对象
+  std::vector&lt;ITunableParameter*&gt; parameter_chain_;
+
+  // A parameter that optimizes over a finite set of discrete values to be tried sequentially.
+  template &lt;class T&gt;
+  class CategoricalParameter : public TunableParameter&lt;T&gt; {
+    CategoricalParameter(std::vector&lt;T&gt; values);
+    std::vector&lt;T&gt; values_;
+  };
+
+  enum BayesianVariable { fusion_buffer_threshold_mb, cycle_time_ms };
+
+  struct BayesianVariableConfig {
+    BayesianVariable variable;
+    std::pair&lt;double, double&gt; bounds;
+  };
+
+  // A set of numerical parameters optimized jointly using Bayesian Optimization.
+  class BayesianParameter : public TunableParameter&lt;Eigen::VectorXd&gt; {
+    std::unique_ptr&lt;BayesianOptimization&gt; bayes_;
+  };
+
+  CategoricalParameter&lt;bool&gt; hierarchical_allreduce_;
+  CategoricalParameter&lt;bool&gt; hierarchical_allgather_;
+  CategoricalParameter&lt;bool&gt; cache_enabled_;
+  BayesianParameter joint_params_;
+};
+</code></pre>
+<h3 id="fusionbuffermanager"><a class="header" href="#fusionbuffermanager">FusionBufferManager</a></h3>
+<p>这里的 Buffer 会伴随进程的整个生命周期</p>
+<pre><code class="language-cpp">// horovod/common/fusion_buffer_manager.h
+
+class FusionBufferManager {
+public:
+  Status InitializeBuffer(int64_t threshold,
+                          int device, std::shared_ptr&lt;OpContext&gt; context,
+                          int stream_id,
+                          std::function&lt;void()&gt; on_start_init,
+                          std::function&lt;void()&gt; on_end_init);
+  // Status status = context-&gt;AllocatePersistent(threshold, &amp;buffer);
+
+  std::shared_ptr&lt;PersistentBuffer&gt; GetBuffer(int device, Framework framework, int stream_id);
+
+  // map key: device ID, framework, stream_id
+  std::unordered_map&lt;std::tuple&lt;int, Framework, int&gt;,
+      std::pair&lt;std::shared_ptr&lt;PersistentBuffer&gt;, int64_t&gt;&gt; tensor_fusion_buffers_;
+};
+
+</code></pre>
+<h3 id="processset--processsettable"><a class="header" href="#processset--processsettable">ProcessSet &amp; ProcessSetTable</a></h3>
+<p>基本调用流程</p>
+<ul>
+<li>HorovodGlobalState 中的 ProcessSetTable 对象</li>
+<li>ProcessSetTable Ids() 方法获取 ProcessSet 的 id</li>
+<li>ProcessSetTable Get() 方法从 id_to_process_set_ 变量中获取 ProcessSet 对象</li>
+<li>ProcessSet 的 IsCurrentProcessIncluded() 方法判断可见性</li>
+</ul>
+<pre><code class="language-cpp">// horovod/common/process_set.h
+
+struct ProcessSet {
+  std::shared_ptr&lt;Controller&gt; controller;
+
+  TensorQueue tensor_queue;
+
+  // LRU cache of Responses
+  ResponseCache response_cache;
+
+  // Information on registered groups.
+  GroupTable group_table;
+
+  std::vector&lt;int&gt; registered_global_ranks;
+
+  MPIContext mpi_context;
+
+  bool Initialize(const MPIContext&amp; global_mpi_context);
+
+  void Finalize(const Status&amp; status);
+
+  bool IsCurrentProcessIncluded() const;
+
+  explicit ProcessSet(std::vector&lt;int&gt; global_ranks = {});
+};
+
+class ProcessSetTable {
+  ProcessSetTable();
+
+  void Initialize(const MPIContext&amp; global_mpi_context);
+
+  int32_t RegisterProcessSet(std::vector&lt;int&gt; global_ranks = {});
+
+  std::vector&lt;int32_t&gt; Ids() const; // Returns copy to be threadsafe
+
+  bool Contains(int32_t id) const;
+
+  ProcessSet&amp; Get(int32_t id);
+
+  // Returns -1 if no process set with these ranks has been registered.
+  int32_t FindId(const std::vector&lt;int32_t&gt;&amp; ranks);
+
+  void MarkProcessSetForRemoval(int32_t process_set_id);
+
+  void DeregisterProcessSet(int32_t process_set_id);
+
+  // ProcessSet 对象
+  std::unordered_map&lt;int32_t, ProcessSet&gt; id_to_process_set_;
+};
+</code></pre>
+<h3 id="controller"><a class="header" href="#controller">Controller</a></h3>
+<pre><code class="language-cpp">class Controller : public std::enable_shared_from_this&lt;Controller&gt; {
+  void Initialize();
+
+  virtual int GetTypeSize(DataType dtype) = 0;
+
+  virtual void CrossRankBitwiseAnd(std::vector&lt;long long&gt;&amp; bitvector, int count) = 0;
+
+  virtual void CrossRankBitwiseOr(std::vector&lt;long long&gt;&amp; bitvector, int count) = 0;
+
+  virtual void Bcast(void* buffer, size_t size, int root_rank, Communicator communicator) = 0;
+
+  virtual void AlltoallGetRecvSplits(const std::vector&lt;int32_t&gt;&amp; splits, std::vector&lt;int32_t&gt;&amp; recvsplits) = 0;
+
+  virtual void Barrier(Communicator communicator) = 0;
+
+  virtual void Allgather2Ints(std::array&lt;int, 2&gt; values, std::vector&lt;int&gt;&amp; recv_values) = 0;
+
+  void SynchronizeParameters();
+
+  ResponseList ComputeResponseList(bool this_process_requested_shutdown, HorovodGlobalState&amp; state, ProcessSet&amp; process_set);
+
+  virtual void DoInitialization() = 0;
+
+  // For rank 0 to receive other ranks' ready tensors.
+  virtual void RecvReadyTensors(std::vector&lt;std::string&gt;&amp; ready_to_reduce,
+                                std::vector&lt;RequestList&gt;&amp; ready_list) = 0;
+
+  // For other ranks to send their ready tensors to rank 0
+  virtual void SendReadyTensors(RequestList&amp; message_list) = 0;
+
+  // For rank 0 to send final tensors ready to be allreduced/allgathered to other ranks.
+  virtual void SendFinalTensors(ResponseList&amp; response_list) = 0;
+
+  // For other ranks to receive final ready tensors.
+  virtual void RecvFinalTensors(ResponseList&amp; response_list) = 0;
+
+  // Once a tensor is ready to be reduced, the coordinator sends a Response
+  // instructing all ranks to start the reduction to all ranks. The Response
+  // also contains error messages in case the submitted Requests were not
+  // valid (for example, contained mismatched shapes or types).
+  // Constructing the Response, thus, requires a whole lot of error checking.
+  Response ConstructResponse(const std::string&amp; name, int joined_size = 0);
+
+  // Routine to sync cache hit and invalid bit sets across workers.
+  // Also determines global shutdown state and whether uncached requests
+  // exist on any worker.
+  void CoordinateCacheAndState(CacheCoordinator&amp; cache_coordinator);
+
+  void FuseResponses(std::deque&lt;Response&gt;&amp; responses,
+                     HorovodGlobalState&amp; state,
+                     ResponseList&amp; response_list);
+
+  // Return the total byte size of the final allgathered output tensor
+  int64_t
+  TotalByteSizeOfAllgatherOutput(const std::vector&lt;int64_t&gt;&amp; tensor_sizes,
+                                 const TensorTableEntry&amp; entry);
+
+  // Store the Request for a name, and return whether the total count of
+  // Requests for that tensor is now equal to the HOROVOD size (and thus we are
+  // ready to reduce the tensor).
+  bool IncrementTensorCount(const Request&amp; msg, int joined_size = 0);
+
+  bool is_initialized_ = false;
+
+  int rank_ = 0;
+  int local_rank_ = 0;
+  int cross_rank_ = 0;
+  int size_ = 1;
+  int local_size_ = 1;
+  int cross_size_ = 1;
+  bool is_coordinator_ = false;
+  bool is_homogeneous_ = false;
+
+  // Global rank of each process in the set associated to this controller.
+  std::vector&lt;int&gt; global_ranks_;
+
+  // Map (global rank) -&gt; (process set controller rank) for each process in this
+  // set.
+  std::unordered_map&lt;int,int&gt; global_rank_to_controller_rank_;
+
+  // Controller process set ranks of processes running on this node.
+  std::vector&lt;int&gt; local_comm_ranks_;
+
+  StallInspector stall_inspector_;
+
+  // Only exists on the coordinator node (rank zero). Maintains a vector of
+  // requests to allreduce every tensor (keyed by tensor name).
+  MessageTable message_table_;
+
+  // Outside dependencies
+  TensorQueue&amp; tensor_queue_;
+
+  ResponseCache&amp; response_cache_;
+
+  ParameterManager&amp; parameter_manager_;
+
+  GroupTable&amp; group_table_;
+};
+</code></pre>
+<h3 id="grouptable"><a class="header" href="#grouptable">GroupTable</a></h3>
+<p>在 ProcessSet 中持有，</p>
+<ul>
+<li>EnqueueTensorAllreduces 中调用 RegisterGroup</li>
+<li>RunLoopOnce 中 PerformOperation 前会调用 DeregisterGroups</li>
+</ul>
+<pre><code class="language-cpp">// horovod/common/group_table.h
+
+class GroupTable {
+public:
+  GroupTable() = default;
+
+  int32_t GetGroupIDFromTensorName(const std::string&amp; tensor_name) const;
+  const std::vector&lt;std::string&gt;&amp; GetGroupTensorNames(int32_t group_id) const;
+  bool empty(void) const;
+
+  int32_t RegisterGroup(std::vector&lt;std::string&gt;&amp;&amp; tensor_names);
+  void DeregisterGroups(const std::vector&lt;std::string&gt;&amp; tensor_names);
+
+  std::unordered_map&lt;std::string, int32_t&gt; tensor_name_to_id_;
+  std::unordered_map&lt;int32_t, std::vector&lt;std::string&gt;&gt; id_to_tensor_names_;
+
+  // Queue of ids that can be reused
+  std::queue&lt;int32_t&gt; free_ids_;
+
+  // Next available group id (increases each time a group is added)
+  int32_t next_group_id_ = 0;
+};
+</code></pre>
+<h3 id="operationmanager"><a class="header" href="#operationmanager">OperationManager</a></h3>
+<p>对通信 op 的一个封装，基本上通过调用 op-&gt;Excute 实现，为 horovod/common/ops 目录中的各个 op 实现提供了接口。</p>
+<pre><code class="language-cpp">// horovod/common/ops/operation_manager.h
+
+class OperationManager {
+  OperationManager(ParameterManager* param_manager,
+                   std::vector&lt;std::shared_ptr&lt;AllreduceOp&gt;&gt; allreduce_ops,
+                   std::vector&lt;std::shared_ptr&lt;AllgatherOp&gt;&gt; allgather_ops,
+                   std::vector&lt;std::shared_ptr&lt;BroadcastOp&gt;&gt; broadcast_ops,
+                   std::vector&lt;std::shared_ptr&lt;AlltoallOp&gt;&gt; alltoall_ops,
+                   std::vector&lt;std::shared_ptr&lt;ReducescatterOp&gt;&gt; reducescatter_ops,
+                   std::shared_ptr&lt;JoinOp&gt; join_op,
+                   std::vector&lt;std::shared_ptr&lt;AllreduceOp&gt;&gt; adasum_ops,
+                   std::shared_ptr&lt;BarrierOp&gt; barrier_op,
+                   std::shared_ptr&lt;ErrorOp&gt; error_op);
+
+  Status ExecuteAllreduce(std::vector&lt;TensorTableEntry&gt;&amp; entries, const Response&amp; response) const;
+
+  Status ExecuteAllgather(std::vector&lt;TensorTableEntry&gt;&amp; entries, const Response&amp; response) const;
+
+  Status ExecuteBroadcast(std::vector&lt;TensorTableEntry&gt;&amp; entries, const Response&amp; response) const;
+
+  Status ExecuteAlltoall(std::vector&lt;TensorTableEntry&gt;&amp; entries, const Response&amp; response) const;
+
+  Status ExecuteReducescatter(std::vector&lt;TensorTableEntry&gt;&amp; entries, const Response&amp; response) const;
+
+  Status ExecuteError(std::vector&lt;TensorTableEntry&gt;&amp; entries, const Response&amp; response) const;
+
+  Status ExecuteJoin(std::vector&lt;TensorTableEntry&gt;&amp; entries,
+                     const Response&amp; response, ProcessSet&amp; process_set) const;
+
+  Status ExecuteAdasum(std::vector&lt;TensorTableEntry&gt;&amp; entries, const Response&amp; response) const;
+
+  Status ExecuteBarrier(std::vector&lt;TensorTableEntry&gt;&amp; entries, const Response&amp; response) const;
+
+  Status ExecuteOperation(std::vector&lt;TensorTableEntry&gt;&amp; entries,
+                          const Response&amp; response,
+                          ProcessSet&amp; process_set) const;
+
+  ParameterManager* param_manager_;
+
+  std::vector&lt;std::shared_ptr&lt;AllreduceOp&gt;&gt; allreduce_ops_;
+  std::vector&lt;std::shared_ptr&lt;AllgatherOp&gt;&gt; allgather_ops_;
+  std::vector&lt;std::shared_ptr&lt;BroadcastOp&gt;&gt; broadcast_ops_;
+  std::vector&lt;std::shared_ptr&lt;AlltoallOp&gt;&gt; alltoall_ops_;
+  std::vector&lt;std::shared_ptr&lt;ReducescatterOp&gt;&gt; reducescatter_ops_;
+  std::shared_ptr&lt;JoinOp&gt; join_op_;
+  std::vector&lt;std::shared_ptr&lt;AllreduceOp&gt;&gt; adasum_ops_;
+  std::shared_ptr&lt;BarrierOp&gt; barrier_op_;
+  std::shared_ptr&lt;ErrorOp&gt; error_op_;
+};
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../horovod/workflow.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../horovod/common.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../horovod/workflow.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../horovod/common.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

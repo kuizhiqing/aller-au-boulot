@@ -1,0 +1,352 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>workflow - Aller au boulot</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Projects excelling">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item expanded "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item expanded "><a href="../horovod/workflow.html" class="active"><strong aria-hidden="true">4.3.</strong> workflow</a></li><li class="chapter-item "><a href="../horovod/object.html"><strong aria-hidden="true">4.4.</strong> object</a></li><li class="chapter-item "><a href="../horovod/common.html"><strong aria-hidden="true">4.5.</strong> common</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">Aller au boulot</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/kuizhiqing/aller-au-boulot" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="workflow"><a class="header" href="#workflow">workflow</a></h1>
+<h3 id="operation"><a class="header" href="#operation">Operation</a></h3>
+<p>接口的具体实现，初始化会启动一个后台进程，不断执行通信操作</p>
+<pre><code class="language-c">// horovod/common/operations.cc
+
+extern &quot;C&quot; {
+
+bool horovod_init(const int* ranks, int nranks, const int* process_set_ranks,
+                  const int* process_set_sizes, int num_process_sets) {
+  return InitializeHorovodOnce(...);
+}
+
+bool horovod_init_multi_comm(MPI_Comm* comm, int ncomms,
+                             const int* process_set_ranks_via_ranks,
+                             const int* process_set_sizes_via_ranks,
+                             int num_process_sets_via_ranks) {
+  return InitializeHorovodOnce(std::vector&lt;int&gt;(), process_set_ranks_vecs);
+}
+
+// 启动 horovod 后台进程，只执行一次
+bool InitializeHorovodOnce(
+    const std::vector&lt;int&gt;&amp; ranks,
+    const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; process_set_ranks) {
+  if (!horovod_global.initialize_flag.test_and_set()) {
+    horovod_global.initialization_done = false;
+    horovod_global.background_thread =
+        std::thread(BackgroundThreadLoop, std::ref(horovod_global));
+  }
+
+  while (!horovod_global.initialization_done &amp;&amp;
+         !horovod_global.initialization_failed) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  }
+}
+
+void BackgroundThreadLoop(HorovodGlobalState&amp; state) {
+  auto mpi_ctx_manager = MPIContextManager();
+  if (global_mpi_context.IsEnabled()) {
+    global_mpi_context.Initialize(mpi_ctx_manager);
+    if (state.control_operation == LibType::MPI) {
+      // Initializes global controller
+      state.process_set_table.Initialize(global_mpi_context);
+    }
+  }
+
+  bool is_coordinator = state.global_controller-&gt;IsCoordinator();
+  bool is_homogeneous = state.global_controller-&gt;IsHomogeneous();
+  int size = state.global_controller-&gt;GetSize();
+  int local_size = state.global_controller-&gt;GetLocalSize();
+  int local_rank = state.global_controller-&gt;GetLocalRank();
+
+  # 一堆配置
+  state.parameter_manager.SetTensorFusionThresholdBytes(128 * 1024 * 1024);
+  state.parameter_manager.SetTensorFusionThresholdBytes(threshold, true);
+  state.parameter_manager.SetCycleTimeMs(1);
+  state.parameter_manager.SetCacheEnabled(true);
+  state.process_set_table.Get(0).response_cache.set_capacity(...)
+  state.parameter_manager.SetHierarchicalAllgather(false);
+  state.parameter_manager.SetHierarchicalAllreduce(false);
+
+  while (RunLoopOnce(state));
+
+  state.shut_down = true;
+
+  horovod_global.process_set_table.Finalize(global_mpi_context,...)
+}
+
+bool RunLoopOnce(HorovodGlobalState&amp; state) {
+  state.process_set_table.InitializeRegisteredAndRemoveMarkedIfReady(global_mpi_context);
+
+  for (auto process_set_id : state.process_set_table.Ids()) {
+    auto&amp; process_set = state.process_set_table.Get(process_set_id);
+    auto response_list = process_set.IsCurrentProcessIncluded()
+            ? process_set.controller-&gt;ComputeResponseList(this_process_requested_shutdown, state, process_set)
+            : ResponseList();
+
+    if (process_set.IsCurrentProcessIncluded()) {
+      int global_rank = state.global_controller-&gt;GetRank();
+      for (auto&amp; response : response_list.responses()) {
+        PerformOperation(response, process_set);
+      }
+    }
+  }
+}
+</code></pre>
+<p>这里主要包含两个操作</p>
+<ul>
+<li>process_set.controller-&gt;ComputeResponseList</li>
+<li>PerformOperation</li>
+</ul>
+<h3 id="performoperation"><a class="header" href="#performoperation">PerformOperation</a></h3>
+<pre><code class="language-cpp">// 执行通信操作，获取 Response 
+void PerformOperation(Response response, ProcessSet&amp; process_set) {
+  std::vector&lt;TensorTableEntry&gt; entries;
+  process_set.tensor_queue.GetTensorEntriesFromResponse(response, entries, process_set.joined);
+
+  if (response.response_type() != Response::JOIN &amp;&amp;
+      response.response_type() != Response::BARRIER) {
+    if (entries.size() &gt; 1) {
+      auto first_entry = entries[0];
+      // 创建 buffer
+      Status status = horovod_global.fusion_buffer.InitializeBuffer(
+          process_set.controller-&gt;TensorFusionThresholdBytes(),
+          first_entry.device, first_entry.context,
+          horovod_global.current_nccl_stream,
+          [&amp;]() { timeline.ActivityStartAll(entries, INIT_FUSION_BUFFER); },
+          [&amp;]() { timeline.ActivityEndAll(entries); });
+    }
+  }
+
+  // std::unique_ptr&lt;OperationManager&gt; op_manager;
+  Status status = op_manager-&gt;ExecuteOperation(entries, response, process_set);
+}
+</code></pre>
+<p><em>OperationManager-&gt;ExecuteOperation</em> 即调用对应 api 完成 op 的执行</p>
+<h3 id="computeresponselist"><a class="header" href="#computeresponselist">ComputeResponseList</a></h3>
+<p>这是 controller 里最重要的函数，它在 worker 间进行 allreduce/allgather 的协同，返回准备好通信的 tensor 列表，其中</p>
+<ul>
+<li>0 号 worker 作为 coordinator</li>
+<li>每个 worker 都存有一份别的 worker 发送的准备好的 tensor 列表作为 cache</li>
+</ul>
+<p>具体流程如下</p>
+<ul>
+<li>worker 所有计划的通信操作都会先发送给 coordinator，包括 (tensor, reduce/gather, shape, type)</li>
+<li>worker 发送 DONE 消息给 coordinator 当所有计划通信操作都已发送</li>
+<li>coordinator 接受来自 worker 的计划通信请求，存在 request table 中，直到收集到所有节点的 DONE 消息</li>
+<li>coordinator 找到全部准备好的 tensor，向 worker 发送 Response 消息，当发送完毕时发送 DONE 消息</li>
+<li>worker 监听来自 coordinator 的消息，执行对应的 reduce/gather 操作，直到收到 DONE 消息</li>
+</ul>
+<pre><code class="language-cpp">// horovod/common/controller.cc
+
+ResponseList Controller::ComputeResponseList(bool this_process_requested_shutdown,
+                                             HorovodGlobalState&amp; state,
+                                             ProcessSet&amp; process_set) {
+  CacheCoordinator cache_coordinator(response_cache_.num_active_bits());
+  std::deque&lt;Request&gt; message_queue_tmp;
+
+  ResponseList response_list;
+
+  if (!need_communication) {
+    FuseResponses(responses, state, response_list);
+  } else {
+    std::vector&lt;std::string&gt; ready_to_reduce;
+
+    if (is_coordinator_) {
+      // Receive ready tensors from other ranks
+      std::vector&lt;RequestList&gt; ready_list;
+      RecvReadyTensors(ready_to_reduce, ready_list);
+
+      // Process messages.
+      for (int i = 1; i &lt; size_; ++i) {
+        auto received_message_list = ready_list[i];
+        for (auto&amp; received_message : received_message_list.requests()) {
+          auto&amp; received_name = received_message.tensor_name();
+          ready_to_reduce.push_back(received_name);
+        }
+      }
+
+      // 到此，coordinator 过程结束
+      std::deque&lt;Response&gt; responses;
+
+      for (auto&amp; tensor_name : ready_to_reduce) {
+        Response response = ConstructResponse(tensor_name, process_set.joined_size);
+        responses.push_back(std::move(response));
+      }
+      FuseResponses(responses, state, response_list);
+
+      // Broadcast final results to other ranks.
+      SendFinalTensors(response_list);
+
+    } else {
+      RequestList message_list;
+      while (!message_queue_tmp.empty()) {
+        message_list.add_request(message_queue_tmp.front());
+        message_queue_tmp.pop_front();
+      }
+
+      // Send ready tensors to rank zero
+      SendReadyTensors(message_list);
+
+      // Receive final tensors to be processed from rank zero
+      RecvFinalTensors(response_list);
+    }
+  }
+
+  return response_list;
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../horovod/api.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../horovod/object.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../horovod/api.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../horovod/object.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

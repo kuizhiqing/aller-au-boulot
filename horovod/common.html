@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item expanded "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item expanded "><a href="../horovod/common.html" class="active"><strong aria-hidden="true">4.3.</strong> common</a></li><li class="chapter-item "><a href="../horovod/torch_api.html"><strong aria-hidden="true">4.4.</strong> torch api</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item expanded "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">4.3.</strong> workflow</a></li><li class="chapter-item "><a href="../horovod/object.html"><strong aria-hidden="true">4.4.</strong> object</a></li><li class="chapter-item expanded "><a href="../horovod/common.html" class="active"><strong aria-hidden="true">4.5.</strong> common</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -126,7 +126,7 @@
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="common"><a class="header" href="#common">common</a></h1>
-<p>Horovod 对象</p>
+<h2 id="horovod-对象"><a class="header" href="#horovod-对象">Horovod 对象</a></h2>
 <pre><code class="language-cpp"># horovod/common/common.h
 
 enum Framework { TENSORFLOW, PYTORCH, MXNET, XLA };
@@ -261,15 +261,153 @@ struct TensorTableEntry {
   void FinishWithCallback(const Status&amp; status);
 };
 </code></pre>
+<h3 id="message"><a class="header" href="#message">Message</a></h3>
+<h4 id="request"><a class="header" href="#request">Request</a></h4>
+<pre><code class="language-cpp">// horovod/common/message.h
+
+// Request 是非 0 worker 向 0 号 worker 即 coordinator 发送消息的消息体
+class Request {
+  enum RequestType {
+    ALLREDUCE = 0,
+    ALLGATHER = 1,
+    BROADCAST = 2,
+    JOIN = 3,
+    ADASUM = 4,
+    ALLTOALL = 5,
+    BARRIER = 6,
+    REDUCESCATTER = 7
+  };
+
+  static const std::string&amp; RequestType_Name(RequestType value);
+  int32_t request_rank() const;
+  void set_request_rank(int32_t value);
+  RequestType request_type() const;
+  void set_request_type(RequestType value);
+  DataType tensor_type() const;
+  void set_tensor_type(DataType value);
+  const std::string&amp; tensor_name() const;
+  void set_tensor_name(const std::string&amp; value);
+  int32_t root_rank() const;
+  void set_root_rank(int32_t value);
+  int32_t device() const;
+  void set_device(int32_t value);
+  int32_t group_id() const;
+  void set_group_id(int32_t value);
+  const std::vector&lt;int64_t&gt;&amp; tensor_shape() const;
+  void set_tensor_shape(const std::vector&lt;int64_t&gt;&amp; value);
+  void add_tensor_shape(int64_t value);
+  double prescale_factor() const;
+  double postscale_factor() const;
+  void set_prescale_factor(double prescale_factor);
+  void set_postscale_factor(double postscale_factor);
+  static void ParseFromBytes(Request&amp; request, const uint8_t* input);
+  static void SerializeToString(const Request&amp; request, std::string&amp; output);
+
+  int32_t request_rank_ = 0;
+  RequestType request_type_ = RequestType::ALLREDUCE;
+  DataType tensor_type_ = DataType::HOROVOD_UINT8;
+  int32_t root_rank_ = 0;
+  int32_t device_ = 0;
+  int32_t group_id_ = NULL_GROUP_ID;
+  std::string tensor_name_;
+  std::vector&lt;int64_t&gt; tensor_shape_;
+  double prescale_factor_ = 1.0;
+  double postscale_factor_ = 1.0;
+};
+
+class RequestList {
+  const std::vector&lt;Request&gt;&amp; requests() const;
+  void set_requests(const std::vector&lt;Request&gt;&amp; value);
+  void add_request(const Request&amp; value);
+  void emplace_request(Request&amp;&amp; value);
+  bool shutdown() const;
+  void set_shutdown(bool value);
+  static void ParseFromBytes(RequestList&amp; request_list, const uint8_t* input);
+  static void SerializeToString(const RequestList&amp; request_list, std::string&amp; output);
+
+  std::vector&lt;Request&gt; requests_;
+  bool shutdown_ = false;
+};
+</code></pre>
+<h4 id="response"><a class="header" href="#response">Response</a></h4>
+<pre><code class="language-cpp">// Response 是 0 号 worker 即 coordinator 向非 0 worker 发送消息的消息体
+class Response {
+public:
+  enum ResponseType {
+    ALLREDUCE = 0,
+    ALLGATHER = 1,
+    BROADCAST = 2,
+    JOIN = 3,
+    ADASUM = 4,
+    ALLTOALL = 5,
+    BARRIER = 6,
+    REDUCESCATTER = 7,
+    ERROR = 8
+  };
+
+  static const std::string&amp; ResponseType_Name(ResponseType value);
+  ResponseType response_type() const;
+  void set_response_type(ResponseType value);
+  const std::vector&lt;std::string&gt;&amp; tensor_names() const;
+  DataType tensor_type() const;
+  void set_tensor_type(DataType value);
+  const std::string tensor_names_string() const;
+  void set_tensor_names(const std::vector&lt;std::string&gt;&amp; value);
+  void add_tensor_name(const std::string&amp; value);
+  void add_tensor_name(std::string&amp;&amp; value);
+  const std::string&amp; error_message() const;
+  void set_error_message(const std::string&amp; value);
+  const std::vector&lt;int32_t&gt;&amp; devices() const;
+  void set_devices(const std::vector&lt;int32_t&gt;&amp; value);
+  void add_device(int32_t value);
+  const std::vector&lt;int64_t&gt;&amp; tensor_sizes() const;
+  void set_tensor_sizes(const std::vector&lt;int64_t&gt;&amp; value);
+  void add_tensor_size(int64_t value);
+  void add_allgather_response(const Response&amp; response);
+  double prescale_factor() const;
+  double postscale_factor() const;
+  void set_prescale_factor(double prescale_factor);
+  void set_postscale_factor(double postscale_factor);
+  int last_joined_rank() const;
+  void set_last_joined_rank(int value);
+  static void ParseFromBytes(Response&amp; response, const uint8_t* input);
+  static void SerializeToString(const Response&amp; response, std::string&amp; output);
+
+  ResponseType response_type_ = ResponseType::ALLREDUCE;
+  std::vector&lt;std::string&gt; tensor_names_;
+  DataType tensor_type_ = DataType::HOROVOD_UINT8;
+  std::string error_message_;
+  std::vector&lt;int32_t&gt; devices_;
+  std::vector&lt;int64_t&gt; tensor_sizes_;
+  double prescale_factor_ = 1.0;
+  double postscale_factor_ = 1.0;
+  int last_joined_rank_ = -1;
+};
+
+class ResponseList {
+  const std::vector&lt;Response&gt;&amp; responses() const;
+  void set_responses(const std::vector&lt;Response&gt;&amp; value);
+  void add_response(const Response&amp; value);
+  void add_response(Response&amp;&amp; value);
+  void emplace_response(Response&amp;&amp; value);
+  bool shutdown() const;
+  void set_shutdown(bool value);
+  static void ParseFromBytes(ResponseList&amp; response_list, const uint8_t* input);
+  static void SerializeToString(const ResponseList&amp; response_list, std::string&amp; output);
+
+  std::vector&lt;Response&gt; responses_;
+  bool shutdown_ = false;
+};
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../horovod/api.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../horovod/object.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../horovod/torch_api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../python/python.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -278,10 +416,10 @@ struct TensorTableEntry {
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../horovod/api.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../horovod/object.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../horovod/torch_api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../python/python.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
