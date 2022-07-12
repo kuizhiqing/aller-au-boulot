@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item "><a href="horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item "><a href="horovod/workflow.html"><strong aria-hidden="true">4.3.</strong> workflow</a></li><li class="chapter-item "><a href="horovod/object.html"><strong aria-hidden="true">4.4.</strong> object</a></li><li class="chapter-item "><a href="horovod/common.html"><strong aria-hidden="true">4.5.</strong> common</a></li></ol></li><li class="chapter-item "><a href="python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item "><a href="horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item "><a href="horovod/workflow.html"><strong aria-hidden="true">4.3.</strong> workflow</a></li><li class="chapter-item "><a href="horovod/object.html"><strong aria-hidden="true">4.4.</strong> object</a></li><li class="chapter-item "><a href="horovod/develop.html"><strong aria-hidden="true">4.5.</strong> develop</a></li></ol></li><li class="chapter-item "><a href="python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -2004,9 +2004,15 @@ def init(*args, **kwargs):
 
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="workflow"><a class="header" href="#workflow">workflow</a></h1>
+<h1 id="workflow"><a class="header" href="#workflow">Workflow</a></h1>
 <h3 id="operation"><a class="header" href="#operation">Operation</a></h3>
-<p>接口的具体实现，初始化会启动一个后台进程，不断执行通信操作</p>
+<p>Horovod 的主要流程都在 <code>horovod/common/operations.cc</code> 中，主线包含两个方面</p>
+<ul>
+<li>init 接口调用启动后台进程，不断从 tensor_queue 中取出需要通信的 tensor 进行通信并返回结果</li>
+<li>用户前端接口调用间接调用 EnqueueTensorAllreduces 以及类似的 API 不断将需要进行通信的 tensor 放入 tensor_queue </li>
+</ul>
+<h3 id="初始化和出-queue"><a class="header" href="#初始化和出-queue">初始化和出 Queue</a></h3>
+<p>初始化接口的具体实现，启动一个后台进程，不断出发执行通信操作</p>
 <pre><code class="language-c">// horovod/common/operations.cc
 
 extern &quot;C&quot; {
@@ -2091,8 +2097,8 @@ bool RunLoopOnce(HorovodGlobalState&amp; state) {
 </code></pre>
 <p>这里主要包含两个操作</p>
 <ul>
-<li>process_set.controller-&gt;ComputeResponseList</li>
-<li>PerformOperation</li>
+<li>process_set.controller-&gt;ComputeResponseList 处理通信前的协同</li>
+<li>PerformOperation 从 process_set 的 tensor_queue 中取出内容执行通信</li>
 </ul>
 <h3 id="performoperation"><a class="header" href="#performoperation">PerformOperation</a></h3>
 <pre><code class="language-cpp">// 执行通信操作，获取 Response 
@@ -2127,10 +2133,10 @@ void PerformOperation(Response response, ProcessSet&amp; process_set) {
 </ul>
 <p>具体流程如下</p>
 <ul>
-<li>worker 所有计划的通信操作都会先发送给 coordinator，包括 (tensor, reduce/gather, shape, type)</li>
+<li>worker 所有计划的通信操作都会先发送给 coordinator，Request 类型，包括 (tensor, reduce/gather, shape, type)</li>
 <li>worker 发送 DONE 消息给 coordinator 当所有计划通信操作都已发送</li>
-<li>coordinator 接受来自 worker 的计划通信请求，存在 request table 中，直到收集到所有节点的 DONE 消息</li>
-<li>coordinator 找到全部准备好的 tensor，向 worker 发送 Response 消息，当发送完毕时发送 DONE 消息</li>
+<li>coordinator 接受来自 worker 的计划通信请求，直到收集到所有节点的 DONE 消息</li>
+<li>coordinator 为准备好的 tensor 构建并向 worker 发送 Response 消息，当发送完毕时发送 DONE 消息</li>
 <li>worker 监听来自 coordinator 的消息，执行对应的 reduce/gather 操作，直到收到 DONE 消息</li>
 </ul>
 <pre><code class="language-cpp">// horovod/common/controller.cc
@@ -2139,21 +2145,36 @@ ResponseList Controller::ComputeResponseList(bool this_process_requested_shutdow
                                              HorovodGlobalState&amp; state,
                                              ProcessSet&amp; process_set) {
   CacheCoordinator cache_coordinator(response_cache_.num_active_bits());
+
+  // tensor_queue_ --&gt; message_queue_tmp
   std::deque&lt;Request&gt; message_queue_tmp;
+  tensor_queue_.PopMessagesFromQueue(message_queue_tmp);
+
+  // cache 机制
+  // tensor_queue_.PushMessagesToQueue(messages_to_replace);
 
   ResponseList response_list;
 
   if (!need_communication) {
+    std::deque&lt;Response&gt; responses;
+    for (auto bit : cache_coordinator.cache_hits()) {
+      responses.push_back(response_cache_.get_response(bit));
+    }
     FuseResponses(responses, state, response_list);
   } else {
     std::vector&lt;std::string&gt; ready_to_reduce;
 
-    if (is_coordinator_) {
+    if (is_coordinator_) { // 0 号 worker
+      // message_queue_tmp --&gt; ready_to_reduce
+      while (!message_queue_tmp.empty()) {
+        Request message = message_queue_tmp.front();
+        ready_to_reduce.push_back(message.tensor_name());
+      }
       // Receive ready tensors from other ranks
       std::vector&lt;RequestList&gt; ready_list;
-      RecvReadyTensors(ready_to_reduce, ready_list);
+      RecvReadyTensors(ready_to_reduce, ready_list); // ready_to_reduce 未实际使用
 
-      // Process messages.
+      // ready_list +-&gt; ready_to_reduce 即把各 worker 收集到的和自己的合并
       for (int i = 1; i &lt; size_; ++i) {
         auto received_message_list = ready_list[i];
         for (auto&amp; received_message : received_message_list.requests()) {
@@ -2162,7 +2183,7 @@ ResponseList Controller::ComputeResponseList(bool this_process_requested_shutdow
         }
       }
 
-      // 到此，coordinator 过程结束
+      // 到此准备通信的 tensor 准备完毕
       std::deque&lt;Response&gt; responses;
 
       for (auto&amp; tensor_name : ready_to_reduce) {
@@ -2174,11 +2195,10 @@ ResponseList Controller::ComputeResponseList(bool this_process_requested_shutdow
       // Broadcast final results to other ranks.
       SendFinalTensors(response_list);
 
-    } else {
+    } else { // 非 0 号 worker
       RequestList message_list;
       while (!message_queue_tmp.empty()) {
         message_list.add_request(message_queue_tmp.front());
-        message_queue_tmp.pop_front();
       }
 
       // Send ready tensors to rank zero
@@ -2192,9 +2212,61 @@ ResponseList Controller::ComputeResponseList(bool this_process_requested_shutdow
   return response_list;
 }
 </code></pre>
+<h3 id="调用和入-queue"><a class="header" href="#调用和入-queue">调用和入 Queue</a></h3>
+<p>主要流程如下</p>
+<ul>
+<li>通过入参 process_set_id 从 global state 的 process_set_table 中取出 process_set 对象</li>
+<li>使用入参 Tensor tensors 和 outputs 封装 Request 和 TensorTableEntry </li>
+<li>把上述封装列表添加到 process_set 对象的 tensor_queue 中</li>
+</ul>
+<pre><code class="language-cpp">// horovod/common/operations.cc
+
+Status
+EnqueueTensorAllreduces(std::vector&lt;std::shared_ptr&lt;OpContext&gt;&gt;&amp; contexts,
+                        std::vector&lt;std::shared_ptr&lt;Tensor&gt;&gt;&amp; tensors,
+                        std::vector&lt;std::shared_ptr&lt;Tensor&gt;&gt;&amp; outputs,
+                        std::vector&lt;ReadyEventList&gt;&amp; ready_event_lists,
+                        std::vector&lt;std::string&gt;&amp; names, const int device,
+                        std::vector&lt;StatusCallback&gt;&amp; callbacks,
+                        ReduceOp reduce_op, double prescale_factor,
+                        double postscale_factor, int32_t process_set_id) {
+
+  auto&amp; process_set = horovod_global.process_set_table.Get(process_set_id);
+  Status status;
+
+  std::vector&lt;Request&gt; messages;
+  std::vector&lt;TensorTableEntry&gt; entries;
+
+  for (int n = 0; n &lt; (int)tensors.size(); ++n) {
+    Request message;
+    message.set_xxxx(...);
+    messages.push_back(std::move(message));
+
+    TensorTableEntry e;
+    e.tensor = tensors[n];
+    e.output = outputs[n];
+    e.process_set_id = process_set_id;
+    entries.push_back(std::move(e));
+  }
+
+  status = process_set.tensor_queue.AddToTensorQueueMulti(entries, messages);
+  return status;
+}
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="object"><a class="header" href="#object">object</a></h1>
-<h3 id="global-state"><a class="header" href="#global-state">Global State</a></h3>
+<h1 id="object"><a class="header" href="#object">Object</a></h1>
+<p>Object 列表</p>
+<ul>
+<li>OperationManager </li>
+<li>HorovodGlobalState </li>
+<li>ParameterManager </li>
+<li>FusionBufferManager</li>
+<li>ProcessSet &amp; ProcessSetTable</li>
+<li>Controller</li>
+<li>TensorQueue</li>
+<li>GroupTable</li>
+</ul>
+<h3 id="horovodglobalstate"><a class="header" href="#horovodglobalstate">HorovodGlobalState</a></h3>
 <p>全局状态类，用于保存全局信息，同时持有以下几个对象</p>
 <pre><code class="language-cpp">// horovod/common/global_state.h
 
@@ -2311,6 +2383,12 @@ public:
 
 </code></pre>
 <h3 id="processset--processsettable"><a class="header" href="#processset--processsettable">ProcessSet &amp; ProcessSetTable</a></h3>
+<p>ProcessSet 持有以下对象</p>
+<ul>
+<li>Controller controller</li>
+<li>TensorQueue tensor_queue</li>
+<li>GroupTable group_table</li>
+</ul>
 <p>基本调用流程</p>
 <ul>
 <li>HorovodGlobalState 中的 ProcessSetTable 对象</li>
@@ -2369,6 +2447,13 @@ class ProcessSetTable {
 };
 </code></pre>
 <h3 id="controller"><a class="header" href="#controller">Controller</a></h3>
+<p>Controller 持有以下对象需要在创建时传入，即外部依赖</p>
+<ul>
+<li>TensorQueue&amp; tensor_queue_</li>
+<li>ResponseCache&amp; response_cache_</li>
+<li>ParameterManager&amp; parameter_manager_</li>
+<li>GroupTable&amp; group_table_</li>
+</ul>
 <pre><code class="language-cpp">class Controller : public std::enable_shared_from_this&lt;Controller&gt; {
   void Initialize();
 
@@ -2468,6 +2553,47 @@ class ProcessSetTable {
   GroupTable&amp; group_table_;
 };
 </code></pre>
+<h3 id="tensorqueue"><a class="header" href="#tensorqueue">TensorQueue</a></h3>
+<p>TensorQueue 被 Controller 持有，主要包含两个对象</p>
+<ul>
+<li>Request 的对象 message_queue_，在 controller 中被取出做准备工作</li>
+<li>TensorTableEntry 对象 tensor_table_ 真正需要进行通信的 tensor</li>
+</ul>
+<pre><code class="language-cpp">// horovod/common/tensor_queue.h
+
+class TensorQueue {
+  TensorQueue() = default;
+  Status AddToTensorQueue(TensorTableEntry&amp; e, Request&amp; message);
+  Status AddToTensorQueueMulti(std::vector&lt;TensorTableEntry&gt;&amp; entries, std::vector&lt;Request&gt;&amp; messages);
+
+  void FinalizeTensorQueue(const Status&amp; status);
+
+  int64_t GetTensorDataForAutotuner(const ResponseList&amp; response_list,
+                                    std::vector&lt;std::string&gt;&amp; tensor_names);
+
+  void GetTensorEntriesFromResponse(const Response&amp; response,
+                                    std::vector&lt;TensorTableEntry&gt;&amp; entries,
+                                    bool joined = false);
+
+  const TensorTableEntry&amp; GetTensorEntry(const std::string&amp; tensor_name) const;
+
+  bool IsTensorPresentInTable (const std::string&amp; tensor_name) const;
+
+  void PopMessagesFromQueue(std::deque&lt;Request&gt;&amp; message_queue_buffer);
+
+  void PushMessageToQueue(Request&amp; message);
+
+  void PushMessagesToQueue(std::deque&lt;Request&gt;&amp; messages);
+
+  void RemoveJoinTensor();
+
+  // Tensors waiting to be allreduced or allgathered.
+  std::unordered_map&lt;std::string, TensorTableEntry&gt; tensor_table_;
+
+  // Queue of MPI requests waiting to be sent to the coordinator node.
+  std::queue&lt;Request&gt; message_queue_;
+};
+</code></pre>
 <h3 id="grouptable"><a class="header" href="#grouptable">GroupTable</a></h3>
 <p>在 ProcessSet 中持有，</p>
 <ul>
@@ -2550,7 +2676,7 @@ class OperationManager {
 };
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="common"><a class="header" href="#common">common</a></h1>
+<h1 id="develop"><a class="header" href="#develop">Develop</a></h1>
 <h2 id="horovod-对象"><a class="header" href="#horovod-对象">Horovod 对象</a></h2>
 <pre><code class="language-cpp"># horovod/common/common.h
 

@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item expanded "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">4.3.</strong> workflow</a></li><li class="chapter-item expanded "><a href="../horovod/object.html" class="active"><strong aria-hidden="true">4.4.</strong> object</a></li><li class="chapter-item "><a href="../horovod/common.html"><strong aria-hidden="true">4.5.</strong> common</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item expanded "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">4.3.</strong> workflow</a></li><li class="chapter-item expanded "><a href="../horovod/object.html" class="active"><strong aria-hidden="true">4.4.</strong> object</a></li><li class="chapter-item "><a href="../horovod/develop.html"><strong aria-hidden="true">4.5.</strong> develop</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -125,8 +125,19 @@
                 <div id="content" class="content">
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="object"><a class="header" href="#object">object</a></h1>
-<h3 id="global-state"><a class="header" href="#global-state">Global State</a></h3>
+<h1 id="object"><a class="header" href="#object">Object</a></h1>
+<p>Object 列表</p>
+<ul>
+<li>OperationManager </li>
+<li>HorovodGlobalState </li>
+<li>ParameterManager </li>
+<li>FusionBufferManager</li>
+<li>ProcessSet &amp; ProcessSetTable</li>
+<li>Controller</li>
+<li>TensorQueue</li>
+<li>GroupTable</li>
+</ul>
+<h3 id="horovodglobalstate"><a class="header" href="#horovodglobalstate">HorovodGlobalState</a></h3>
 <p>全局状态类，用于保存全局信息，同时持有以下几个对象</p>
 <pre><code class="language-cpp">// horovod/common/global_state.h
 
@@ -243,6 +254,12 @@ public:
 
 </code></pre>
 <h3 id="processset--processsettable"><a class="header" href="#processset--processsettable">ProcessSet &amp; ProcessSetTable</a></h3>
+<p>ProcessSet 持有以下对象</p>
+<ul>
+<li>Controller controller</li>
+<li>TensorQueue tensor_queue</li>
+<li>GroupTable group_table</li>
+</ul>
 <p>基本调用流程</p>
 <ul>
 <li>HorovodGlobalState 中的 ProcessSetTable 对象</li>
@@ -301,6 +318,13 @@ class ProcessSetTable {
 };
 </code></pre>
 <h3 id="controller"><a class="header" href="#controller">Controller</a></h3>
+<p>Controller 持有以下对象需要在创建时传入，即外部依赖</p>
+<ul>
+<li>TensorQueue&amp; tensor_queue_</li>
+<li>ResponseCache&amp; response_cache_</li>
+<li>ParameterManager&amp; parameter_manager_</li>
+<li>GroupTable&amp; group_table_</li>
+</ul>
 <pre><code class="language-cpp">class Controller : public std::enable_shared_from_this&lt;Controller&gt; {
   void Initialize();
 
@@ -400,6 +424,47 @@ class ProcessSetTable {
   GroupTable&amp; group_table_;
 };
 </code></pre>
+<h3 id="tensorqueue"><a class="header" href="#tensorqueue">TensorQueue</a></h3>
+<p>TensorQueue 被 Controller 持有，主要包含两个对象</p>
+<ul>
+<li>Request 的对象 message_queue_，在 controller 中被取出做准备工作</li>
+<li>TensorTableEntry 对象 tensor_table_ 真正需要进行通信的 tensor</li>
+</ul>
+<pre><code class="language-cpp">// horovod/common/tensor_queue.h
+
+class TensorQueue {
+  TensorQueue() = default;
+  Status AddToTensorQueue(TensorTableEntry&amp; e, Request&amp; message);
+  Status AddToTensorQueueMulti(std::vector&lt;TensorTableEntry&gt;&amp; entries, std::vector&lt;Request&gt;&amp; messages);
+
+  void FinalizeTensorQueue(const Status&amp; status);
+
+  int64_t GetTensorDataForAutotuner(const ResponseList&amp; response_list,
+                                    std::vector&lt;std::string&gt;&amp; tensor_names);
+
+  void GetTensorEntriesFromResponse(const Response&amp; response,
+                                    std::vector&lt;TensorTableEntry&gt;&amp; entries,
+                                    bool joined = false);
+
+  const TensorTableEntry&amp; GetTensorEntry(const std::string&amp; tensor_name) const;
+
+  bool IsTensorPresentInTable (const std::string&amp; tensor_name) const;
+
+  void PopMessagesFromQueue(std::deque&lt;Request&gt;&amp; message_queue_buffer);
+
+  void PushMessageToQueue(Request&amp; message);
+
+  void PushMessagesToQueue(std::deque&lt;Request&gt;&amp; messages);
+
+  void RemoveJoinTensor();
+
+  // Tensors waiting to be allreduced or allgathered.
+  std::unordered_map&lt;std::string, TensorTableEntry&gt; tensor_table_;
+
+  // Queue of MPI requests waiting to be sent to the coordinator node.
+  std::queue&lt;Request&gt; message_queue_;
+};
+</code></pre>
 <h3 id="grouptable"><a class="header" href="#grouptable">GroupTable</a></h3>
 <p>在 ProcessSet 中持有，</p>
 <ul>
@@ -489,7 +554,7 @@ class OperationManager {
                             <a rel="prev" href="../horovod/workflow.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../horovod/common.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../horovod/develop.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -501,7 +566,7 @@ class OperationManager {
                     <a rel="prev" href="../horovod/workflow.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../horovod/common.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../horovod/develop.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
