@@ -15,6 +15,6 @@
   - [api](horovod/api.md)
   - [workflow](horovod/workflow.md)
   - [object](horovod/object.md)
-  - [common](horovod/common.md)
+  - [develop](horovod/develop.md)
 - [python](python/python.md)
   - [concurrent execution](python/concurrent.md)

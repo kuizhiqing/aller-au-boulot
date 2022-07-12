@@ -1,6 +1,17 @@
-# object
+# Object
 
-### Global State
+Object 列表
+
+- OperationManager 
+- HorovodGlobalState 
+- ParameterManager 
+- FusionBufferManager
+- ProcessSet & ProcessSetTable
+- Controller
+- TensorQueue
+- GroupTable
+
+### HorovodGlobalState 
 
 全局状态类，用于保存全局信息，同时持有以下几个对象
 
@@ -130,6 +141,12 @@ public:
 
 ### ProcessSet & ProcessSetTable
 
+ProcessSet 持有以下对象
+
+* Controller controller
+* TensorQueue tensor_queue
+* GroupTable group_table
+
 基本调用流程
 
 * HorovodGlobalState 中的 ProcessSetTable 对象
@@ -190,6 +207,13 @@ class ProcessSetTable {
 ```
 
 ### Controller
+
+Controller 持有以下对象需要在创建时传入，即外部依赖
+
+* TensorQueue& tensor_queue_
+* ResponseCache& response_cache_
+* ParameterManager& parameter_manager_
+* GroupTable& group_table_
 
 ```cpp
 class Controller : public std::enable_shared_from_this<Controller> {
@@ -289,6 +313,50 @@ class Controller : public std::enable_shared_from_this<Controller> {
   ParameterManager& parameter_manager_;
 
   GroupTable& group_table_;
+};
+```
+
+### TensorQueue
+
+TensorQueue 被 Controller 持有，主要包含两个对象
+
+* Request 的对象 message_queue_，在 controller 中被取出做准备工作
+* TensorTableEntry 对象 tensor_table_ 真正需要进行通信的 tensor
+
+```cpp
+// horovod/common/tensor_queue.h
+
+class TensorQueue {
+  TensorQueue() = default;
+  Status AddToTensorQueue(TensorTableEntry& e, Request& message);
+  Status AddToTensorQueueMulti(std::vector<TensorTableEntry>& entries, std::vector<Request>& messages);
+
+  void FinalizeTensorQueue(const Status& status);
+
+  int64_t GetTensorDataForAutotuner(const ResponseList& response_list,
+                                    std::vector<std::string>& tensor_names);
+
+  void GetTensorEntriesFromResponse(const Response& response,
+                                    std::vector<TensorTableEntry>& entries,
+                                    bool joined = false);
+
+  const TensorTableEntry& GetTensorEntry(const std::string& tensor_name) const;
+
+  bool IsTensorPresentInTable (const std::string& tensor_name) const;
+
+  void PopMessagesFromQueue(std::deque<Request>& message_queue_buffer);
+
+  void PushMessageToQueue(Request& message);
+
+  void PushMessagesToQueue(std::deque<Request>& messages);
+
+  void RemoveJoinTensor();
+
+  // Tensors waiting to be allreduced or allgathered.
+  std::unordered_map<std::string, TensorTableEntry> tensor_table_;
+
+  // Queue of MPI requests waiting to be sent to the coordinator node.
+  std::queue<Request> message_queue_;
 };
 ```
 

@@ -1,8 +1,15 @@
-# workflow
+# Workflow
 
 ### Operation
 
-接口的具体实现，初始化会启动一个后台进程，不断执行通信操作
+Horovod 的主要流程都在 `horovod/common/operations.cc` 中，主线包含两个方面
+
+* init 接口调用启动后台进程，不断从 tensor_queue 中取出需要通信的 tensor 进行通信并返回结果
+* 用户前端接口调用间接调用 EnqueueTensorAllreduces 以及类似的 API 不断将需要进行通信的 tensor 放入 tensor_queue 
+
+### 初始化和出 Queue
+
+初始化接口的具体实现，启动一个后台进程，不断出发执行通信操作
 
 ```c
 // horovod/common/operations.cc
@@ -90,8 +97,8 @@ bool RunLoopOnce(HorovodGlobalState& state) {
 
 这里主要包含两个操作
 
-* process_set.controller->ComputeResponseList
-* PerformOperation
+* process_set.controller->ComputeResponseList 处理通信前的协同
+* PerformOperation 从 process_set 的 tensor_queue 中取出内容执行通信
 
 ### PerformOperation
 
@@ -131,10 +138,10 @@ void PerformOperation(Response response, ProcessSet& process_set) {
 
 具体流程如下
 
-- worker 所有计划的通信操作都会先发送给 coordinator，包括 (tensor, reduce/gather, shape, type)
+- worker 所有计划的通信操作都会先发送给 coordinator，Request 类型，包括 (tensor, reduce/gather, shape, type)
 - worker 发送 DONE 消息给 coordinator 当所有计划通信操作都已发送
-- coordinator 接受来自 worker 的计划通信请求，存在 request table 中，直到收集到所有节点的 DONE 消息
-- coordinator 找到全部准备好的 tensor，向 worker 发送 Response 消息，当发送完毕时发送 DONE 消息
+- coordinator 接受来自 worker 的计划通信请求，直到收集到所有节点的 DONE 消息
+- coordinator 为准备好的 tensor 构建并向 worker 发送 Response 消息，当发送完毕时发送 DONE 消息
 - worker 监听来自 coordinator 的消息，执行对应的 reduce/gather 操作，直到收到 DONE 消息
 
 ```cpp
@@ -144,21 +151,36 @@ ResponseList Controller::ComputeResponseList(bool this_process_requested_shutdow
                                              HorovodGlobalState& state,
                                              ProcessSet& process_set) {
   CacheCoordinator cache_coordinator(response_cache_.num_active_bits());
+
+  // tensor_queue_ --> message_queue_tmp
   std::deque<Request> message_queue_tmp;
+  tensor_queue_.PopMessagesFromQueue(message_queue_tmp);
+
+  // cache 机制
+  // tensor_queue_.PushMessagesToQueue(messages_to_replace);
 
   ResponseList response_list;
 
   if (!need_communication) {
+    std::deque<Response> responses;
+    for (auto bit : cache_coordinator.cache_hits()) {
+      responses.push_back(response_cache_.get_response(bit));
+    }
     FuseResponses(responses, state, response_list);
   } else {
     std::vector<std::string> ready_to_reduce;
 
-    if (is_coordinator_) {
+    if (is_coordinator_) { // 0 号 worker
+      // message_queue_tmp --> ready_to_reduce
+      while (!message_queue_tmp.empty()) {
+        Request message = message_queue_tmp.front();
+        ready_to_reduce.push_back(message.tensor_name());
+      }
       // Receive ready tensors from other ranks
       std::vector<RequestList> ready_list;
-      RecvReadyTensors(ready_to_reduce, ready_list);
+      RecvReadyTensors(ready_to_reduce, ready_list); // ready_to_reduce 未实际使用
 
-      // Process messages.
+      // ready_list +-> ready_to_reduce 即把各 worker 收集到的和自己的合并
       for (int i = 1; i < size_; ++i) {
         auto received_message_list = ready_list[i];
         for (auto& received_message : received_message_list.requests()) {
@@ -167,7 +189,7 @@ ResponseList Controller::ComputeResponseList(bool this_process_requested_shutdow
         }
       }
 
-      // 到此，coordinator 过程结束
+      // 到此准备通信的 tensor 准备完毕
       std::deque<Response> responses;
 
       for (auto& tensor_name : ready_to_reduce) {
@@ -179,11 +201,10 @@ ResponseList Controller::ComputeResponseList(bool this_process_requested_shutdow
       // Broadcast final results to other ranks.
       SendFinalTensors(response_list);
 
-    } else {
+    } else { // 非 0 号 worker
       RequestList message_list;
       while (!message_queue_tmp.empty()) {
         message_list.add_request(message_queue_tmp.front());
-        message_queue_tmp.pop_front();
       }
 
       // Send ready tensors to rank zero
@@ -197,3 +218,48 @@ ResponseList Controller::ComputeResponseList(bool this_process_requested_shutdow
   return response_list;
 }
 ```
+
+### 调用和入 Queue
+
+主要流程如下
+
+* 通过入参 process_set_id 从 global state 的 process_set_table 中取出 process_set 对象
+* 使用入参 Tensor tensors 和 outputs 封装 Request 和 TensorTableEntry 
+* 把上述封装列表添加到 process_set 对象的 tensor_queue 中
+
+```cpp
+// horovod/common/operations.cc
+
+Status
+EnqueueTensorAllreduces(std::vector<std::shared_ptr<OpContext>>& contexts,
+                        std::vector<std::shared_ptr<Tensor>>& tensors,
+                        std::vector<std::shared_ptr<Tensor>>& outputs,
+                        std::vector<ReadyEventList>& ready_event_lists,
+                        std::vector<std::string>& names, const int device,
+                        std::vector<StatusCallback>& callbacks,
+                        ReduceOp reduce_op, double prescale_factor,
+                        double postscale_factor, int32_t process_set_id) {
+
+  auto& process_set = horovod_global.process_set_table.Get(process_set_id);
+  Status status;
+
+  std::vector<Request> messages;
+  std::vector<TensorTableEntry> entries;
+
+  for (int n = 0; n < (int)tensors.size(); ++n) {
+    Request message;
+    message.set_xxxx(...);
+    messages.push_back(std::move(message));
+
+    TensorTableEntry e;
+    e.tensor = tensors[n];
+    e.output = outputs[n];
+    e.process_set_id = process_set_id;
+    entries.push_back(std::move(e));
+  }
+
+  status = process_set.tensor_queue.AddToTensorQueueMulti(entries, messages);
+  return status;
+}
+```
+
