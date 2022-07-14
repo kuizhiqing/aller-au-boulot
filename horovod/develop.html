@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item expanded "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">4.3.</strong> workflow</a></li><li class="chapter-item "><a href="../horovod/object.html"><strong aria-hidden="true">4.4.</strong> object</a></li><li class="chapter-item expanded "><a href="../horovod/develop.html" class="active"><strong aria-hidden="true">4.5.</strong> develop</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item expanded "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">4.2.</strong> workflow</a></li><li class="chapter-item "><a href="../horovod/object.html"><strong aria-hidden="true">4.3.</strong> object</a></li><li class="chapter-item expanded "><a href="../horovod/develop.html" class="active"><strong aria-hidden="true">4.4.</strong> develop</a></li><li class="chapter-item "><a href="../horovod/pytorch.html"><strong aria-hidden="true">4.5.</strong> pytorch</a></li><li class="chapter-item "><a href="../horovod/tensorflow.html"><strong aria-hidden="true">4.6.</strong> tensorflow</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -126,6 +126,7 @@
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="develop"><a class="header" href="#develop">Develop</a></h1>
+<p>这里列的 horovod 对象是用于二次开发的接口。</p>
 <h2 id="horovod-对象"><a class="header" href="#horovod-对象">Horovod 对象</a></h2>
 <pre><code class="language-cpp"># horovod/common/common.h
 
@@ -134,7 +135,11 @@ enum StatusType { OK, UNKNOWN_ERROR, PRECONDITION_ERROR, ABORTED, INVALID_ARGUME
 enum DeviceType { CPU, GPU };
 
 // for gpu
-struct Event {};
+struct Event {
+  std::shared_ptr&lt;gpuEvent_t&gt; event;
+  uint64_t event_idx;
+  gpuStream_t stream = nullptr;
+};
 
 class Status {
 public:
@@ -399,6 +404,142 @@ class ResponseList {
   bool shutdown_ = false;
 };
 </code></pre>
+<p>ResponseCache </p>
+<pre><code class="language-cpp">// horovod/common/response_cache.h
+
+struct TensorParams {
+  DataType dtype;
+  std::vector&lt;int64_t&gt; shape;
+  int32_t device;
+};
+
+// LRU cache of Responses
+class ResponseCache {
+public:
+  ResponseCache() = default;
+  ResponseCache(const ResponseCache&amp;) = delete;
+
+  enum CacheState { MISS = 0, HIT = 1, INVALID = 2 };
+
+  void clear();
+
+  void set_capacity(uint32_t capacity);
+
+  uint32_t capacity() const;
+
+  size_t num_active_bits() const;
+
+  CacheState cached(const Request&amp; message) const;
+
+  CacheState cached(const Response&amp; response, const TensorParams&amp; params,
+                    bool joined = false) const;
+
+  void put(const Response&amp; response, TensorQueue&amp; tensor_queue,
+           bool joined = false);
+
+  const Response&amp; get_response(uint32_t cache_bit);
+
+  const Response&amp; peek_response(uint32_t cache_bit) const;
+
+  uint32_t peek_cache_bit(const Request&amp; message) const;
+
+  uint32_t peek_cache_bit(const std::string&amp; tensor_name) const;
+
+  std::vector&lt;uint32_t&gt; list_all_bits() const;
+
+  void erase_response(uint32_t cache_bit);
+
+  void update_cache_bits();
+
+private:
+  void put_(const Response&amp; response, TensorParams&amp; params,
+            bool joined = false);
+
+  uint32_t capacity_ = 0;
+
+  // List containing cached entries. Each entry in the cache is a pair
+  // of a Response and a TensorParams struct.
+  std::list&lt;std::pair&lt;Response, TensorParams&gt;&gt; cache_;
+
+  // Vector of iterators to cache entries. Indexed by cache bit.
+  std::vector&lt;std::list&lt;std::pair&lt;Response, TensorParams&gt;&gt;::iterator&gt;
+      cache_iters_;
+
+  // Lookup table mapping tensor names to assigned cache bits.
+  std::unordered_map&lt;std::string, uint32_t&gt; tensor_name_to_bit_;
+
+  bool bits_outdated_ = false;
+
+  bool print_warning_ = true;
+};
+
+// Helper class to coordinate cache and state information
+// across workers. Uses global controller operations on a bit vector
+// for cheaper coordination.
+class CacheCoordinator {
+public:
+  explicit CacheCoordinator(size_t num_active_bits_);
+
+  void record_hit(uint32_t bit);
+
+  void record_invalid_bit(uint32_t bit);
+
+  void erase_hit(uint32_t bit);
+
+  void set_should_shut_down(bool should_shut_down);
+
+  void set_uncached_in_queue(bool uncached_in_queue);
+
+  const std::set&lt;uint32_t&gt;&amp; cache_hits() const;
+
+  const std::set&lt;uint32_t&gt;&amp; invalid_bits() const;
+
+  const std::set&lt;uint32_t&gt;&amp; timeline_bits() const;
+
+  bool should_shut_down() const;
+
+  bool uncached_in_queue() const;
+
+  // Method to sync state and bit sets across workers.
+  void sync(std::shared_ptr&lt;Controller&gt; controller, bool timeline_enabled);
+
+private:
+  enum StatusBit {
+    SHOULD_SHUT_DOWN = 0,
+    UNCACHED_IN_QUEUE = 1,
+    INVALID_IN_QUEUE = 2
+  };
+
+  // Number of active bits in the cache. Required to size the
+  // bitvector identically across workers.
+  size_t num_active_bits_;
+
+  // Set of cache hit bits. After sync(), contains only common
+  // cache hit bits across workers.
+  std::set&lt;uint32_t&gt; cache_hits_;
+
+  // Set of invalid bits. After sync(), contains only common
+  // invalid bits across workers.
+  std::set&lt;uint32_t&gt; invalid_bits_;
+
+  // Set of bits for timeline handling. After sync(), contains bits
+  // where at least one worker recorded a cache hit. This indicates
+  // that the timeline negotion phase should be started/continued.
+  std::set&lt;uint32_t&gt; timeline_bits_;
+
+  // States used externally in cycle loop.
+  bool should_shut_down_ = false;
+  bool uncached_in_queue_ = false;
+
+  // State used internally to trigger second bit vector communication
+  // to sync invalid bits.
+  bool invalid_in_queue_ = false;
+
+  std::vector&lt;long long&gt; bitvector_;
+
+  bool synced_ = false;
+};
+</code></pre>
 
                     </main>
 
@@ -407,7 +548,7 @@ class ResponseList {
                             <a rel="prev" href="../horovod/object.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../python/python.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../horovod/pytorch.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -419,7 +560,7 @@ class ResponseList {
                     <a rel="prev" href="../horovod/object.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../python/python.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../horovod/pytorch.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

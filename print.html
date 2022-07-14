@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item "><a href="horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="horovod/api.html"><strong aria-hidden="true">4.2.</strong> api</a></li><li class="chapter-item "><a href="horovod/workflow.html"><strong aria-hidden="true">4.3.</strong> workflow</a></li><li class="chapter-item "><a href="horovod/object.html"><strong aria-hidden="true">4.4.</strong> object</a></li><li class="chapter-item "><a href="horovod/develop.html"><strong aria-hidden="true">4.5.</strong> develop</a></li></ol></li><li class="chapter-item "><a href="python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="ray/ray.html"><strong aria-hidden="true">1.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="ray/overview.html"><strong aria-hidden="true">1.1.</strong> overview</a></li><li class="chapter-item "><a href="ray/gcs.html"><strong aria-hidden="true">1.2.</strong> gcs</a></li><li class="chapter-item "><a href="ray/raylet.html"><strong aria-hidden="true">1.3.</strong> raylet</a></li><li class="chapter-item "><a href="ray/api.html"><strong aria-hidden="true">1.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item "><a href="horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="horovod/workflow.html"><strong aria-hidden="true">4.2.</strong> workflow</a></li><li class="chapter-item "><a href="horovod/object.html"><strong aria-hidden="true">4.3.</strong> object</a></li><li class="chapter-item "><a href="horovod/develop.html"><strong aria-hidden="true">4.4.</strong> develop</a></li><li class="chapter-item "><a href="horovod/pytorch.html"><strong aria-hidden="true">4.5.</strong> pytorch</a></li><li class="chapter-item "><a href="horovod/tensorflow.html"><strong aria-hidden="true">4.6.</strong> tensorflow</a></li></ol></li><li class="chapter-item "><a href="python/python.html"><strong aria-hidden="true">5.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="python/concurrent.html"><strong aria-hidden="true">5.1.</strong> concurrent execution</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -1622,7 +1622,12 @@ from horovod.runner.gloo_run import gloo_run, gloo_run_elastic
 </code></pre>
 <pre><code class="language-python"></code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="api-3"><a class="header" href="#api-3">API</a></h1>
+<h1 id="workflow"><a class="header" href="#workflow">Workflow</a></h1>
+<p>本节关于 horovod 的主要工作流程，包含以下内容</p>
+<ul>
+<li>HorovodBasics 即 API 部分</li>
+<li>Operation 基于上述 API 的调用和调用后主要流程</li>
+</ul>
 <h2 id="horovodbasics"><a class="header" href="#horovodbasics">HorovodBasics</a></h2>
 <h3 id="python-api"><a class="header" href="#python-api">Python API</a></h3>
 <ul>
@@ -1789,223 +1794,7 @@ Status EnqueueBarrier(StatusCallback callback,
 
 #endif // HOROVOD_OPERATIONS_H
 </code></pre>
-<h2 id="pytorch-api"><a class="header" href="#pytorch-api">PyTorch API</a></h2>
-<p><code>horovod.torch</code> api</p>
-<p>大部分 api 从 mpi_ops 中引入</p>
-<pre><code class="language-python"># horovod/torch/__init__.py
-
-from horovod.torch import elastic
-from horovod.torch.compression import Compression
-from horovod.torch.functions import allgather_object, broadcast_object, broadcast_optimizer_state, broadcast_parameters
-from horovod.torch.mpi_ops import allreduce, allreduce_async, allreduce_, allreduce_async_
-from horovod.torch.mpi_ops import grouped_allreduce, grouped_allreduce_async, grouped_allreduce_, grouped_allreduce_async_
-from horovod.torch.mpi_ops import sparse_allreduce_async
-from horovod.torch.mpi_ops import allgather, allgather_async
-from horovod.torch.mpi_ops import broadcast, broadcast_async, broadcast_, broadcast_async_
-from horovod.torch.mpi_ops import alltoall, alltoall_async
-from horovod.torch.mpi_ops import reducescatter, reducescatter_async
-from horovod.torch.mpi_ops import join
-from horovod.torch.mpi_ops import barrier
-from horovod.torch.mpi_ops import poll, synchronize
-from horovod.torch.mpi_ops import init, shutdown
-from horovod.torch.mpi_ops import is_initialized, start_timeline, stop_timeline
-from horovod.torch.mpi_ops import size, local_size, cross_size, rank, local_rank, cross_rank
-from horovod.torch.mpi_ops import mpi_threads_supported, mpi_enabled, mpi_built
-from horovod.torch.mpi_ops import gloo_enabled, gloo_built
-from horovod.torch.mpi_ops import nccl_built, ddl_built, ccl_built, cuda_built, rocm_built
-from horovod.torch.mpi_ops import ProcessSet, global_process_set, add_process_set, remove_process_set
-from horovod.torch.mpi_ops import Average, Sum, Adasum
-from horovod.torch.optimizer import DistributedOptimizer
-from horovod.torch.sync_batch_norm import SyncBatchNorm
-</code></pre>
-<p><code>mpi_ops</code></p>
-<p>这里的 api 分为两部分</p>
-<ul>
-<li>一部分从 mpi_lib_v2 library 中通过 C api 暴露，然后通过 basic 引入</li>
-<li>通信 api 通过 pybind 调用</li>
-</ul>
-<pre><code class="language-python"># horovod/torch/mpi_ops.py
-
-# so library
-from horovod.torch import mpi_lib_v2 as mpi_lib
-
-_basics = _HorovodBasics(__file__, 'mpi_lib_v2')
-# import basic methods
-# mpi_ops 中会包含 basic 中的 api
-
-# 重要
-# handle 会被放在 map 中，避免被 gc
-# 在 synchronize 之后被释放
-_handle_map = {}
-
-# inplace allreduce
-# allreduce_ -&gt; allreduce_async_ + synchronize -&gt; _allreduce_async -&gt; mpi_lib.horovod_torch_allreduce_async_
-
-# allreduce
-# allreduce -&gt; HorovodAllreduce.apply -&gt; allreduce_async + synchronize -&gt; _allreduce_async -&gt; mpi_lib.horovod_torch_allreduce_async_
-
-def _allreduce_function_factory(tensor):
-    return 'horovod_torch_allreduce_async_' + tensor.type().replace('.', '_')
-
-
-def _allreduce_async(tensor, output, name, op, prescale_factor, postscale_factor, process_set: ProcessSet):
-    function = _check_function(_allreduce_function_factory, tensor)
-    try:
-        handle = getattr(mpi_lib, function)(tensor, output, divisor,
-                                            name.encode() if name is not None else _NULL, op,
-                                            prescale_factor, postscale_factor, process_set.process_set_id)
-    except RuntimeError as e:
-        raise HorovodInternalError(e)
-    return handle
-
-
-def allreduce_async(tensor, average=None, name=None, op=None,
-                    prescale_factor=1.0, postscale_factor=1.0,
-                    process_set=global_process_set):
-    output = tensor.new(tensor.shape)
-    return _allreduce_async(tensor, output, name, op, prescale_factor, postscale_factor, process_set)
-
-
-class HorovodAllreduce(torch.autograd.Function):
-    @staticmethod
-    def forward(ctx, tensor, average, name, op, prescale_factor, postscale_factor, process_set):
-        ctx.average = average
-        ctx.op = op
-        ctx.prescale_factor = prescale_factor
-        ctx.postscale_factor = postscale_factor
-        ctx.process_set = process_set
-        handle = allreduce_async(tensor, average, name, op, prescale_factor, postscale_factor, process_set)
-        return synchronize(handle)
-
-    @staticmethod
-    def backward(ctx, grad_output):
-        return allreduce(grad_output, average=ctx.average, op=ctx.op,
-                         prescale_factor=ctx.prescale_factor,
-                         postscale_factor=ctx.postscale_factor,
-                         process_set=ctx.process_set), None, None, None, None, None, None
-
-
-def allreduce(tensor, average=None, name=None, compression=Compression.none, op=None,
-              prescale_factor=1.0, postscale_factor=1.0, process_set=global_process_set):
-    &quot;&quot;&quot;
-    This acts as a thin wrapper around an autograd function.  If your input
-    tensor requires gradients, then callings this function will allow gradients
-    to be computed and backpropagated.
-    &quot;&quot;&quot;
-    tensor_compressed, ctx = compression.compress(tensor)
-    summed_tensor_compressed = HorovodAllreduce.apply(tensor_compressed, average, name, op,
-                                                      prescale_factor, postscale_factor,
-                                                      process_set)
-    return compression.decompress(summed_tensor_compressed, ctx)
-
-
-def allreduce_async_(tensor, average=None, name=None, op=None,
-                     prescale_factor=1.0, postscale_factor=1.0,
-                     process_set=global_process_set):
-    op = handle_average_backwards_compatibility(op, average)
-    return _allreduce_async(tensor, tensor, name, op, prescale_factor, postscale_factor, process_set)
-
-
-def allreduce_(tensor, average=None, name=None, op=None,
-               prescale_factor=1.0, postscale_factor=1.0,
-               process_set=global_process_set):
-    handle = allreduce_async_(tensor, average, name, op, prescale_factor, postscale_factor, process_set)
-    return synchronize(handle)
-
-</code></pre>
-<p>cpp api</p>
-<pre><code class="language-cpp">// horovod/torch/mpi_ops_v2.cc
-
-PYBIND11_MODULE(mpi_lib_v2, m) {
-  m.def(&quot;horovod_torch_allreduce_async_torch_IntTensor&quot;, &amp;DoAllreduce);
-  ...
-}
-
-int DoAllreduce(::torch::Tensor tensor, ::torch::Tensor output, int divisor,
-                const std::string&amp; name, int reduce_op_int,
-                double prescale_factor, double postscale_factor,
-                int process_set_id) {
-  auto handle = handle_manager.AllocateHandle();
-  common::ReadyEventList ready_event_list;
-  auto hvd_tensor = std::make_shared&lt;TorchTensor&gt;(tensor);
-  auto hvd_context = std::make_shared&lt;TorchOpContext&gt;(device, output);
-  auto hvd_output = std::make_shared&lt;TorchTensor&gt;(output);
-
-  ReduceOp reduce_op = static_cast&lt;ReduceOp&gt;(reduce_op_int);
-  auto enqueue_result = EnqueueTensorAllreduce(hvd_context, hvd_tensor, hvd_output, ready_event_list, ...);
-
-  return handle;
-}
-</code></pre>
-<ul>
-<li><code>EnqueueTensorAllreduce</code> 来自 horovod/common/operations.h</li>
-</ul>
-<pre><code class="language-cpp">// horovod/torch/adapter_v2.h
-
-class TorchPersistentBuffer : public PersistentBuffer {
-  AccessData(std::shared_ptr&lt;OpContext&gt; context) const override;
-  ::torch::Tensor tensor_;
-};
-
-class TorchTensor : public Tensor {
-  ::torch::Tensor tensor_;
-};
-
-class TorchOpContext : public OpContext {
-  std::vector&lt;::torch::Tensor&gt; outputs_;
-};
-</code></pre>
-<h2 id="tensorflow-api"><a class="header" href="#tensorflow-api">Tensorflow api</a></h2>
-<h3 id="demo-1"><a class="header" href="#demo-1">Demo</a></h3>
-<pre><code class="language-python">    import tensorflow as tf
-    import horovod.tensorflow as hvd
-
-
-    # Initialize Horovod
-    hvd.init()
-
-    # Pin GPU to be used to process local rank (one GPU per process)
-    config = tf.ConfigProto()
-    config.gpu_options.visible_device_list = str(hvd.local_rank())
-
-    # Build model...
-    loss = ...
-    opt = tf.train.AdagradOptimizer(0.01 * hvd.size())
-
-    # Add Horovod Distributed Optimizer
-    opt = hvd.DistributedOptimizer(opt)
-
-    # Add hook to broadcast variables from rank 0 to all other processes during
-    # initialization.
-    hooks = [hvd.BroadcastGlobalVariablesHook(0)]
-
-    # Make training operation
-    train_op = opt.minimize(loss)
-
-    # Save checkpoints only on worker 0 to prevent other workers from corrupting them.
-    checkpoint_dir = '/tmp/train_logs' if hvd.rank() == 0 else None
-
-    # The MonitoredTrainingSession takes care of session initialization,
-    # restoring from a checkpoint, saving to a checkpoint, and closing when done
-    # or an error occurs.
-    with tf.train.MonitoredTrainingSession(checkpoint_dir=checkpoint_dir,
-                                           config=config,
-                                           hooks=hooks) as mon_sess:
-      while not mon_sess.should_stop():
-        # Perform synchronous training.
-        mon_sess.run(train_op)
-
-</code></pre>
-<pre><code class="language-python"># horovod/tensorflow/mpi_ops.py 
-
-def init(*args, **kwargs):
-    _basics.init(*args, **kwargs)
-    _setup_process_sets(_basics)
-
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="workflow"><a class="header" href="#workflow">Workflow</a></h1>
-<h3 id="operation"><a class="header" href="#operation">Operation</a></h3>
+<h2 id="operation"><a class="header" href="#operation">Operation</a></h2>
 <p>Horovod 的主要流程都在 <code>horovod/common/operations.cc</code> 中，主线包含两个方面</p>
 <ul>
 <li>init 接口调用启动后台进程，不断从 tensor_queue 中取出需要通信的 tensor 进行通信并返回结果</li>
@@ -2677,6 +2466,7 @@ class OperationManager {
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="develop"><a class="header" href="#develop">Develop</a></h1>
+<p>这里列的 horovod 对象是用于二次开发的接口。</p>
 <h2 id="horovod-对象"><a class="header" href="#horovod-对象">Horovod 对象</a></h2>
 <pre><code class="language-cpp"># horovod/common/common.h
 
@@ -2685,7 +2475,11 @@ enum StatusType { OK, UNKNOWN_ERROR, PRECONDITION_ERROR, ABORTED, INVALID_ARGUME
 enum DeviceType { CPU, GPU };
 
 // for gpu
-struct Event {};
+struct Event {
+  std::shared_ptr&lt;gpuEvent_t&gt; event;
+  uint64_t event_idx;
+  gpuStream_t stream = nullptr;
+};
 
 class Status {
 public:
@@ -2949,6 +2743,499 @@ class ResponseList {
   std::vector&lt;Response&gt; responses_;
   bool shutdown_ = false;
 };
+</code></pre>
+<p>ResponseCache </p>
+<pre><code class="language-cpp">// horovod/common/response_cache.h
+
+struct TensorParams {
+  DataType dtype;
+  std::vector&lt;int64_t&gt; shape;
+  int32_t device;
+};
+
+// LRU cache of Responses
+class ResponseCache {
+public:
+  ResponseCache() = default;
+  ResponseCache(const ResponseCache&amp;) = delete;
+
+  enum CacheState { MISS = 0, HIT = 1, INVALID = 2 };
+
+  void clear();
+
+  void set_capacity(uint32_t capacity);
+
+  uint32_t capacity() const;
+
+  size_t num_active_bits() const;
+
+  CacheState cached(const Request&amp; message) const;
+
+  CacheState cached(const Response&amp; response, const TensorParams&amp; params,
+                    bool joined = false) const;
+
+  void put(const Response&amp; response, TensorQueue&amp; tensor_queue,
+           bool joined = false);
+
+  const Response&amp; get_response(uint32_t cache_bit);
+
+  const Response&amp; peek_response(uint32_t cache_bit) const;
+
+  uint32_t peek_cache_bit(const Request&amp; message) const;
+
+  uint32_t peek_cache_bit(const std::string&amp; tensor_name) const;
+
+  std::vector&lt;uint32_t&gt; list_all_bits() const;
+
+  void erase_response(uint32_t cache_bit);
+
+  void update_cache_bits();
+
+private:
+  void put_(const Response&amp; response, TensorParams&amp; params,
+            bool joined = false);
+
+  uint32_t capacity_ = 0;
+
+  // List containing cached entries. Each entry in the cache is a pair
+  // of a Response and a TensorParams struct.
+  std::list&lt;std::pair&lt;Response, TensorParams&gt;&gt; cache_;
+
+  // Vector of iterators to cache entries. Indexed by cache bit.
+  std::vector&lt;std::list&lt;std::pair&lt;Response, TensorParams&gt;&gt;::iterator&gt;
+      cache_iters_;
+
+  // Lookup table mapping tensor names to assigned cache bits.
+  std::unordered_map&lt;std::string, uint32_t&gt; tensor_name_to_bit_;
+
+  bool bits_outdated_ = false;
+
+  bool print_warning_ = true;
+};
+
+// Helper class to coordinate cache and state information
+// across workers. Uses global controller operations on a bit vector
+// for cheaper coordination.
+class CacheCoordinator {
+public:
+  explicit CacheCoordinator(size_t num_active_bits_);
+
+  void record_hit(uint32_t bit);
+
+  void record_invalid_bit(uint32_t bit);
+
+  void erase_hit(uint32_t bit);
+
+  void set_should_shut_down(bool should_shut_down);
+
+  void set_uncached_in_queue(bool uncached_in_queue);
+
+  const std::set&lt;uint32_t&gt;&amp; cache_hits() const;
+
+  const std::set&lt;uint32_t&gt;&amp; invalid_bits() const;
+
+  const std::set&lt;uint32_t&gt;&amp; timeline_bits() const;
+
+  bool should_shut_down() const;
+
+  bool uncached_in_queue() const;
+
+  // Method to sync state and bit sets across workers.
+  void sync(std::shared_ptr&lt;Controller&gt; controller, bool timeline_enabled);
+
+private:
+  enum StatusBit {
+    SHOULD_SHUT_DOWN = 0,
+    UNCACHED_IN_QUEUE = 1,
+    INVALID_IN_QUEUE = 2
+  };
+
+  // Number of active bits in the cache. Required to size the
+  // bitvector identically across workers.
+  size_t num_active_bits_;
+
+  // Set of cache hit bits. After sync(), contains only common
+  // cache hit bits across workers.
+  std::set&lt;uint32_t&gt; cache_hits_;
+
+  // Set of invalid bits. After sync(), contains only common
+  // invalid bits across workers.
+  std::set&lt;uint32_t&gt; invalid_bits_;
+
+  // Set of bits for timeline handling. After sync(), contains bits
+  // where at least one worker recorded a cache hit. This indicates
+  // that the timeline negotion phase should be started/continued.
+  std::set&lt;uint32_t&gt; timeline_bits_;
+
+  // States used externally in cycle loop.
+  bool should_shut_down_ = false;
+  bool uncached_in_queue_ = false;
+
+  // State used internally to trigger second bit vector communication
+  // to sync invalid bits.
+  bool invalid_in_queue_ = false;
+
+  std::vector&lt;long long&gt; bitvector_;
+
+  bool synced_ = false;
+};
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="pytorch-1"><a class="header" href="#pytorch-1">PyTorch</a></h1>
+<h2 id="api-3"><a class="header" href="#api-3">API</a></h2>
+<p><code>horovod.torch</code> api</p>
+<p>大部分 api 从 mpi_ops 中引入</p>
+<pre><code class="language-python"># horovod/torch/__init__.py
+
+from horovod.torch import elastic
+from horovod.torch.compression import Compression
+from horovod.torch.functions import allgather_object, broadcast_object, broadcast_optimizer_state, broadcast_parameters
+from horovod.torch.mpi_ops import allreduce, allreduce_async, allreduce_, allreduce_async_
+from horovod.torch.mpi_ops import grouped_allreduce, grouped_allreduce_async, grouped_allreduce_, grouped_allreduce_async_
+from horovod.torch.mpi_ops import sparse_allreduce_async
+from horovod.torch.mpi_ops import allgather, allgather_async
+from horovod.torch.mpi_ops import broadcast, broadcast_async, broadcast_, broadcast_async_
+from horovod.torch.mpi_ops import alltoall, alltoall_async
+from horovod.torch.mpi_ops import reducescatter, reducescatter_async
+from horovod.torch.mpi_ops import join
+from horovod.torch.mpi_ops import barrier
+from horovod.torch.mpi_ops import poll, synchronize
+from horovod.torch.mpi_ops import init, shutdown
+from horovod.torch.mpi_ops import is_initialized, start_timeline, stop_timeline
+from horovod.torch.mpi_ops import size, local_size, cross_size, rank, local_rank, cross_rank
+from horovod.torch.mpi_ops import mpi_threads_supported, mpi_enabled, mpi_built
+from horovod.torch.mpi_ops import gloo_enabled, gloo_built
+from horovod.torch.mpi_ops import nccl_built, ddl_built, ccl_built, cuda_built, rocm_built
+from horovod.torch.mpi_ops import ProcessSet, global_process_set, add_process_set, remove_process_set
+from horovod.torch.mpi_ops import Average, Sum, Adasum
+from horovod.torch.optimizer import DistributedOptimizer
+from horovod.torch.sync_batch_norm import SyncBatchNorm
+</code></pre>
+<p><code>mpi_ops</code></p>
+<p>这里的 api 分为两部分</p>
+<ul>
+<li>一部分从 mpi_lib_v2 library 中通过 C api 暴露，然后通过 basic 引入</li>
+<li>通信 api 通过 pybind 调用</li>
+</ul>
+<pre><code class="language-python"># horovod/torch/mpi_ops.py
+
+# so library
+from horovod.torch import mpi_lib_v2 as mpi_lib
+
+_basics = _HorovodBasics(__file__, 'mpi_lib_v2')
+# import basic methods
+# mpi_ops 中会包含 basic 中的 api
+
+# 重要
+# handle 会被放在 map 中，避免被 gc
+# 在 synchronize 之后被释放
+_handle_map = {}
+
+# inplace allreduce
+# allreduce_ -&gt; allreduce_async_ + synchronize -&gt; _allreduce_async -&gt; mpi_lib.horovod_torch_allreduce_async_
+
+# allreduce
+# allreduce -&gt; HorovodAllreduce.apply -&gt; allreduce_async + synchronize -&gt; _allreduce_async -&gt; mpi_lib.horovod_torch_allreduce_async_
+
+def _allreduce_function_factory(tensor):
+    return 'horovod_torch_allreduce_async_' + tensor.type().replace('.', '_')
+
+
+def _allreduce_async(tensor, output, name, op, prescale_factor, postscale_factor, process_set: ProcessSet):
+    function = _check_function(_allreduce_function_factory, tensor)
+    try:
+        handle = getattr(mpi_lib, function)(tensor, output, divisor,
+                                            name.encode() if name is not None else _NULL, op,
+                                            prescale_factor, postscale_factor, process_set.process_set_id)
+    except RuntimeError as e:
+        raise HorovodInternalError(e)
+    return handle
+
+
+def allreduce_async(tensor, average=None, name=None, op=None,
+                    prescale_factor=1.0, postscale_factor=1.0,
+                    process_set=global_process_set):
+    output = tensor.new(tensor.shape)
+    return _allreduce_async(tensor, output, name, op, prescale_factor, postscale_factor, process_set)
+
+
+class HorovodAllreduce(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, tensor, average, name, op, prescale_factor, postscale_factor, process_set):
+        ctx.average = average
+        ctx.op = op
+        ctx.prescale_factor = prescale_factor
+        ctx.postscale_factor = postscale_factor
+        ctx.process_set = process_set
+        handle = allreduce_async(tensor, average, name, op, prescale_factor, postscale_factor, process_set)
+        return synchronize(handle)
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        return allreduce(grad_output, average=ctx.average, op=ctx.op,
+                         prescale_factor=ctx.prescale_factor,
+                         postscale_factor=ctx.postscale_factor,
+                         process_set=ctx.process_set), None, None, None, None, None, None
+
+
+def allreduce(tensor, average=None, name=None, compression=Compression.none, op=None,
+              prescale_factor=1.0, postscale_factor=1.0, process_set=global_process_set):
+    &quot;&quot;&quot;
+    This acts as a thin wrapper around an autograd function.  If your input
+    tensor requires gradients, then callings this function will allow gradients
+    to be computed and backpropagated.
+    &quot;&quot;&quot;
+    tensor_compressed, ctx = compression.compress(tensor)
+    summed_tensor_compressed = HorovodAllreduce.apply(tensor_compressed, average, name, op,
+                                                      prescale_factor, postscale_factor,
+                                                      process_set)
+    return compression.decompress(summed_tensor_compressed, ctx)
+
+
+def allreduce_async_(tensor, average=None, name=None, op=None,
+                     prescale_factor=1.0, postscale_factor=1.0,
+                     process_set=global_process_set):
+    op = handle_average_backwards_compatibility(op, average)
+    return _allreduce_async(tensor, tensor, name, op, prescale_factor, postscale_factor, process_set)
+
+
+def allreduce_(tensor, average=None, name=None, op=None,
+               prescale_factor=1.0, postscale_factor=1.0,
+               process_set=global_process_set):
+    handle = allreduce_async_(tensor, average, name, op, prescale_factor, postscale_factor, process_set)
+    return synchronize(handle)
+
+</code></pre>
+<p>这里最终调用的例如 <code>mpi_lib.horovod_torch_allreduce_async_</code> api 来自 cpp api 的 pybind.</p>
+<p>cpp api</p>
+<pre><code class="language-cpp">// horovod/torch/mpi_ops_v2.cc
+
+PYBIND11_MODULE(mpi_lib_v2, m) {
+  m.def(&quot;horovod_torch_allreduce_async_torch_IntTensor&quot;, &amp;DoAllreduce);
+  ...
+}
+
+int DoAllreduce(::torch::Tensor tensor, ::torch::Tensor output, int divisor,
+                const std::string&amp; name, int reduce_op_int,
+                double prescale_factor, double postscale_factor,
+                int process_set_id) {
+  auto handle = handle_manager.AllocateHandle();
+  common::ReadyEventList ready_event_list;
+  auto hvd_tensor = std::make_shared&lt;TorchTensor&gt;(tensor);
+  auto hvd_context = std::make_shared&lt;TorchOpContext&gt;(device, output);
+  auto hvd_output = std::make_shared&lt;TorchTensor&gt;(output);
+
+  ReduceOp reduce_op = static_cast&lt;ReduceOp&gt;(reduce_op_int);
+  auto enqueue_result = EnqueueTensorAllreduce(hvd_context, hvd_tensor, hvd_output, ready_event_list, ... handle);
+
+  return handle;
+}
+</code></pre>
+<p>这里主要包括两个内容</p>
+<ul>
+<li>torch tensor 到 horovod tensor 的转换</li>
+<li>调用来自 horovod/common/operations.h 的 <code>EnqueueTensorAllreduce</code> 将计划通信的 tensor 加入队列</li>
+</ul>
+<h3 id="handlemanager"><a class="header" href="#handlemanager">HandleManager</a></h3>
+<p>HandleManager 用于记录通信操作的返回结果 Status, 通过它可以知道操作完成情况和进行同步。</p>
+<pre><code class="language-cpp">// horovod/torch/handle_manager.h
+
+class HandleManager {
+  std::unordered_map&lt;int, std::shared_ptr&lt;Status&gt;&gt; results_;
+};
+</code></pre>
+<h3 id="torchtensor"><a class="header" href="#torchtensor">TorchTensor</a></h3>
+<p>TorchTensor 是 horovod tensor 的子类，它实现了对应的接口，horovod 的通信中可以直接使用该对象.</p>
+<pre><code class="language-cpp">// horovod/torch/adapter_v2.h
+
+class TorchPersistentBuffer : public PersistentBuffer {
+  AccessData(std::shared_ptr&lt;OpContext&gt; context) const override;
+  ::torch::Tensor tensor_;
+};
+
+class TorchTensor : public Tensor {
+  ::torch::Tensor tensor_;
+};
+
+class TorchOpContext : public OpContext {
+  std::vector&lt;::torch::Tensor&gt; outputs_;
+};
+</code></pre>
+<h2 id="develop-1"><a class="header" href="#develop-1">Develop</a></h2>
+<p>总结 PyTorch 接入 Horovod 框架需要做的工作</p>
+<ul>
+<li>API 封装，暴露拓展的 API 给用户，可以使用 torch 的 tensor 作为参数传递等；在 <code>horovod/torch/mpi_ops.py</code> 中实现</li>
+<li>API 对接，前端 API 调用 horovod API 以及绑定 py API；在 <code>horovod/torch/mpi_ops_v2.cc</code> 中实现</li>
+<li>Tensor 适配，即 torch 的 tensor 能够在 horovord 框架中使用；在 <code>horovod/torch/adapter_v2.*</code> 中实现</li>
+</ul>
+<h2 id="distributedoptimizer"><a class="header" href="#distributedoptimizer">DistributedOptimizer</a></h2>
+<h3 id="demo-1"><a class="header" href="#demo-1">Demo</a></h3>
+<pre><code class="language-python">output = model(data)
+loss = F.nll_loss(output, target)
+loss.backward()
+optimizer.synchronize()
+torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
+with optimizer.skip_synchronize():
+    optimizer.step()
+</code></pre>
+<pre><code class="language-python">class _DistributedOptimizer(torch.optim.Optimizer):
+    def __init__(self, ...):
+        self._register_hooks()
+
+    def _register_hooks(self):
+        for param_group in self.param_groups:
+            for p in param_group['params']:
+                if p.requires_grad:
+                    self._requires_update.add(p)
+                    # p_tmp 和 p 使用同样的 storage，不占用额外显存
+                    p_tmp = p.expand_as(p)
+                    grad_acc = p_tmp.grad_fn.next_functions[0][0]
+                    grad_acc.register_hook(self._make_hook(p))
+                    self._grad_accs.append(grad_acc)
+
+    def _make_hook(self, p):
+        def hook(*ignore):
+            handle, ctx = None, None
+            self._allreduce_delay[p] -= 1
+            if self._allreduce_delay[p] == 0:
+                handle, ctx = self._allreduce_grad_async(p)
+            self._handles[p] = (handle, ctx)
+        return hook
+
+    def _allreduce_grad_async(self, p):
+        name = self._parameter_names.get(p)
+        tensor = p.grad
+
+        if p.grad.is_sparse:
+            if self.sparse_as_dense:
+                tensor = tensor.to_dense()
+            else:
+                return self._sparse_allreduce_grad_async(p, name)
+
+        tensor_compressed, ctx = self._compression.compress(tensor)
+
+        handle = allreduce_async_(tensor_compressed, name=name, op=self.op,
+                                  prescale_factor=prescale_factor,
+                                  postscale_factor=postscale_factor,
+                                  process_set=self.process_set)
+        return handle, ctx
+
+    def _sparse_allreduce_grad_async(self, p, name):
+        handle = sparse_allreduce_async(p.grad, name=name, op=self.op,
+                                        process_set=self.process_set)
+        return handle, None
+
+    def synchronize(self):
+        if not self.process_set.included():
+            self._synchronized = True
+            return
+
+        completed = set()
+        for x in self._handles.keys():
+          completed.update(x) if isinstance(x, tuple) else completed.add(x)
+        missing_p = self._requires_update - completed
+
+        # 处理 hook 注册不成功，或者说 hook 没有被调用
+        # hook 被调用后会添加 self._handles
+        for p in missing_p:
+            handle, ctx = self._allreduce_grad_async(p)
+            self._handles[p] = (handle, ctx)
+
+        # handle 为 None 的 hook 跳过又不跳过了？
+        # 需要注意 synchronize 函数每个 step 被调用，但不是每次 backward 都会被调用
+        # 在之前的 train 中有每个 step 会多次 backward，所以 grad 的 hook 会被多次调用，次数匹配
+        # 所以代码执行到这里 handle 应该是一次调用_allreduce_grad_async 如果不是就补上
+        for p, (handle, ctx) in self._handles.items():
+            if handle is None:
+                handle, ctx = self._allreduce_grad_async(p)
+                self._handles[p] = (handle, ctx)
+
+        # for 循环处理异步通信的结果
+        for p, (handle, ctx) in self._handles.items():
+                # When handle is a callable function, it returns the aggregated tensor result
+                output = synchronize(handle) if not callable(handle) else handle()
+                self._allreduce_delay[p] = self.backward_passes_per_step
+                if p.grad.is_sparse:
+                    aggregated = self._compression.decompress(output, ctx)
+                    if not aggregated.is_sparse:
+                        aggregated = aggregated.to_sparse()
+
+                    # Sparse grads do not support set_ for some reason, so we do this as an equivalent
+                    p.grad.zero_().add_(aggregated)
+                else:
+                    p.grad.set_(self._compression.decompress(output, ctx))
+        self._handles.clear()
+
+        self._synchronized = True
+
+
+def DistributedOptimizer(optimizer, named_parameters=None,
+                         compression=Compression.none,
+                         backward_passes_per_step=1,
+                         op=Average,
+                         gradient_predivide_factor=1.0,
+                         num_groups=0, groups=None,
+                         sparse_as_dense=False,
+                         process_set=global_process_set):
+    if op != Adasum or size() == 1:
+        cls = type(optimizer.__class__.__name__, (optimizer.__class__,),
+                   dict(_DistributedOptimizer.__dict__))
+        return cls(optimizer.param_groups, named_parameters, compression, backward_passes_per_step, op,
+                   gradient_predivide_factor, groups, sparse_as_dense, process_set)
+    else:
+        cls = type(optimizer.__class__.__name__, (optimizer.__class__,),
+                   dict(_DistributedAdasumOptimizer.__dict__))
+        return cls(optimizer.param_groups, named_parameters, compression, backward_passes_per_step)
+</code></pre>
+<p><a href="https://arxiv.org/abs/2006.02924">Adasum</a> 是 allreduce 时一种计算合并 gradient 的方法，可以让结果更加稳定。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="tensorflow"><a class="header" href="#tensorflow">Tensorflow</a></h1>
+<h3 id="demo-2"><a class="header" href="#demo-2">Demo</a></h3>
+<pre><code class="language-python">    import tensorflow as tf
+    import horovod.tensorflow as hvd
+
+
+    # Initialize Horovod
+    hvd.init()
+
+    # Pin GPU to be used to process local rank (one GPU per process)
+    config = tf.ConfigProto()
+    config.gpu_options.visible_device_list = str(hvd.local_rank())
+
+    # Build model...
+    loss = ...
+    opt = tf.train.AdagradOptimizer(0.01 * hvd.size())
+
+    # Add Horovod Distributed Optimizer
+    opt = hvd.DistributedOptimizer(opt)
+
+    # Add hook to broadcast variables from rank 0 to all other processes during
+    # initialization.
+    hooks = [hvd.BroadcastGlobalVariablesHook(0)]
+
+    # Make training operation
+    train_op = opt.minimize(loss)
+
+    # Save checkpoints only on worker 0 to prevent other workers from corrupting them.
+    checkpoint_dir = '/tmp/train_logs' if hvd.rank() == 0 else None
+
+    # The MonitoredTrainingSession takes care of session initialization,
+    # restoring from a checkpoint, saving to a checkpoint, and closing when done
+    # or an error occurs.
+    with tf.train.MonitoredTrainingSession(checkpoint_dir=checkpoint_dir,
+                                           config=config,
+                                           hooks=hooks) as mon_sess:
+      while not mon_sess.should_stop():
+        # Perform synchronous training.
+        mon_sess.run(train_op)
+
+</code></pre>
+<pre><code class="language-python"># horovod/tensorflow/mpi_ops.py 
+
+def init(*args, **kwargs):
+    _basics.init(*args, **kwargs)
+    _setup_process_sets(_basics)
+
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="python"><a class="header" href="#python">python</a></h1>
