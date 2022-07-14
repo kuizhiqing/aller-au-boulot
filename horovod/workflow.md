@@ -1,6 +1,183 @@
 # Workflow
 
-### Operation
+本节关于 horovod 的主要工作流程，包含以下内容
+
+- HorovodBasics 即 API 部分
+- Operation 基于上述 API 的调用和调用后主要流程
+
+## HorovodBasics 
+
+### Python API
+
+* horovod 的基础 API，会被具体实现 (torch/tf) 使用
+* 提供 C 接口的 py 封装，通过 ctypes 实现调用
+
+```python
+# horovod/common/basics.py
+
+class HorovodBasics(object):
+    def __init__(self, pkg_path, *args):
+        # 加载 mpi lib 实现包
+        self.MPI_LIB_CTYPES = ctypes.CDLL(full_path, mode=ctypes.RTLD_GLOBAL)
+
+    def init(self, comm, process_sets):
+        initialization_ok = self.MPI_LIB_CTYPES.horovod_init(...)
+        # initialization_ok = self.MPI_LIB_CTYPES.horovod_init_multi_comm(...)
+
+        _init_process_sets(process_sets)
+
+    def shutdown(self):
+    def is_initialized(self):
+    def start_timeline(self, file_path, mark_cycles=False):
+    def stop_timeline(self):
+    def size(self):
+    def local_size(self):
+    def cross_size(self):
+    def rank(self):
+    def local_rank(self):
+    def cross_rank(self):
+    def is_homogeneous(self):
+    def mpi_threads_supported(self):
+    def mpi_enabled(self):
+    def mpi_built(self):
+    def gloo_enabled(self):
+    def gloo_built(self):
+    def nccl_built(self):
+    def ddl_built(self):
+    def ccl_built(self):
+    def cuda_built(self):
+    def rocm_built(self):
+    def _add_process_set_impl(self, ranks: Sequence[int]) -> Optional[int]:
+    def _remove_process_set_impl(self, process_set_id: int) -> Optional[int]:
+    def _process_set_rank(self, process_set_id: int) -> int:
+    def _process_set_size(self, process_set_id: int) -> int:
+    def _get_process_set_ids_and_ranks(self) -> Dict[int, List[int]]:
+    def _comm_process_set_id(self, comm: MPI.Comm) -> int:
+```
+
+### C API
+
+这里的接口有两个部分
+
+* 系统相关的 C 接口，通过 py 的 ctypes 引用
+* 通信相关的接口，直接被调用
+
+```c
+// horovod/common/operations.h
+
+namespace horovod {
+namespace common {
+
+extern "C" {
+
+bool horovod_init(const int* ranks, int nranks, const int* process_set_ranks,
+                  const int* process_set_sizes, int num_process_sets);
+
+#if HAVE_MPI
+// 使用 MPI communicators 初始化
+bool horovod_init_multi_comm(MPI_Comm* comm, int ncomms,
+                             const int* process_set_ranks_via_ranks,
+                             const int* process_set_sizes_via_ranks,
+                             int num_process_sets_via_ranks);
+#endif
+
+void horovod_shutdown();
+
+int horovod_rank();
+int horovod_local_rank();
+
+int horovod_size();
+int horovod_local_size();
+
+// bool horovod_xxx_enabled();
+// bool horovod_xxx_built();
+
+int horovod_reduce_op_average();
+int horovod_reduce_op_sum();
+int horovod_reduce_op_adasum();
+
+int horovod_add_process_set(const int *ranks, int nranks);
+int horovod_remove_process_set(int process_set_id);
+int horovod_process_set_rank(int process_set_id);
+int horovod_process_set_size(int process_set_id);
+int horovod_process_set_included(int process_set_id);
+int horovod_number_of_process_sets();
+void horovod_process_set_ids(int* ids_prealloc);
+int horovod_process_set_ranks(int id, int* ranks_prealloc);
+
+} // C API 结束
+
+Status EnqueueTensorAllreduce(std::shared_ptr<OpContext> context,
+                              std::shared_ptr<Tensor> tensor,
+                              std::shared_ptr<Tensor> output,
+                              ReadyEventList ready_event_list,
+                              std::string name, int device,
+                              StatusCallback callback,
+                              ReduceOp reduce_op = ReduceOp::SUM,
+                              double prescale_factor = 1.0,
+                              double postscale_factor = 1.0,
+                              int32_t process_set_id = 0);
+
+Status EnqueueTensorAllreduces(std::vector<std::shared_ptr<OpContext>>& contexts,
+                               std::vector<std::shared_ptr<Tensor>>& tensors,
+                               std::vector<std::shared_ptr<Tensor>>& outputs,
+                               std::vector<ReadyEventList>& ready_event_lists,
+                               std::vector<std::string>& names,
+                               int device,
+                               std::vector<StatusCallback>& callbacks,
+                               ReduceOp reduce_op = ReduceOp::SUM,
+                               double prescale_factor = 1.0,
+                               double postscale_factor = 1.0,
+                               int32_t process_set_id = 0);
+
+Status EnqueueTensorAllgather(std::shared_ptr<OpContext> context,
+                              std::shared_ptr<Tensor> tensor,
+                              ReadyEventList ready_event_list,
+                              const std::string& name, int device,
+                              StatusCallback callback,
+                              int32_t process_set_id = 0);
+
+Status EnqueueTensorBroadcast(std::shared_ptr<OpContext> context,
+                              std::shared_ptr<Tensor> tensor,
+                              std::shared_ptr<Tensor> output, int root_rank,
+                              ReadyEventList ready_event_list,
+                              const std::string& name, int device,
+                              StatusCallback callback,
+                              int32_t process_set_id = 0);
+
+Status EnqueueTensorAlltoall(std::shared_ptr<OpContext> context,
+                             std::shared_ptr<Tensor> tensor,
+                             std::shared_ptr<Tensor> splits,
+                             ReadyEventList ready_event_list,
+                             const std::string& name, int device,
+                             StatusCallback callback,
+                             int32_t process_set_id = 0);
+
+Status EnqueueTensorReducescatter(std::shared_ptr<OpContext> context,
+                                  std::shared_ptr<Tensor> tensor,
+                                  ReadyEventList ready_event_list,
+                                  const std::string& name, int device,
+                                  StatusCallback callback,
+                                  ReduceOp reduce_op = ReduceOp::SUM,
+                                  int32_t process_set_id = 0);
+
+Status EnqueueJoin(std::shared_ptr<OpContext> context,
+                   std::shared_ptr<Tensor> output_last_joined_rank,
+                   ReadyEventList ready_event_list,
+                   const std::string& name, int device,
+                   StatusCallback callback,
+                   int32_t process_set_id = 0);
+
+Status EnqueueBarrier(StatusCallback callback,
+                   int32_t process_set_id = 0);
+
+} // namespace common
+} // namespace horovod
+
+#endif // HOROVOD_OPERATIONS_H
+```
+
+## Operation
 
 Horovod 的主要流程都在 `horovod/common/operations.cc` 中，主线包含两个方面
 
