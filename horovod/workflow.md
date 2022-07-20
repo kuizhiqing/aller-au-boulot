@@ -209,6 +209,9 @@ bool horovod_init_multi_comm(MPI_Comm* comm, int ncomms,
 bool InitializeHorovodOnce(
     const std::vector<int>& ranks,
     const std::vector<std::vector<int>>& process_set_ranks) {
+
+  EnrichProcessSetWithMPIController(global_process_set);
+
   if (!horovod_global.initialize_flag.test_and_set()) {
     horovod_global.initialization_done = false;
     horovod_global.background_thread =
@@ -219,6 +222,15 @@ bool InitializeHorovodOnce(
          !horovod_global.initialization_failed) {
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
+}
+
+// 初始化 controller，将 global 中的多个对象赋值给 controller 
+void EnrichProcessSetWithMPIController(ProcessSet& process_set) {
+  process_set.controller.reset(new MPIController(
+      process_set.response_cache, process_set.tensor_queue,
+      horovod_global.timeline, horovod_global.parameter_manager,
+      process_set.group_table, horovod_global.timeline_controller,
+      process_set.mpi_context));
 }
 
 void BackgroundThreadLoop(HorovodGlobalState& state) {
