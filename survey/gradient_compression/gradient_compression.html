@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>gradient_compression - Aller au boulot</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Projects excelling">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../survey/survey.html"><strong aria-hidden="true">1.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../survey/pollux.html"><strong aria-hidden="true">1.1.</strong> pollux</a></li><li class="chapter-item "><a href="../../survey/adasum.html"><strong aria-hidden="true">1.2.</strong> adasum</a></li><li class="chapter-item "><a href="../../survey/adaptation_learning.html"><strong aria-hidden="true">1.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="../../survey/gradient_descent.html"><strong aria-hidden="true">1.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="../../survey/auto_parallel.html"><strong aria-hidden="true">1.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="../../survey/scheduling.html"><strong aria-hidden="true">1.6.</strong> scheduling</a></li><li class="chapter-item expanded "><a href="../../survey/gradient_compression/gradient_compression.html" class="active"><strong aria-hidden="true">1.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../survey/gradient_compression/dgc.html"><strong aria-hidden="true">1.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="../../survey/gradient_compression/csc.html"><strong aria-hidden="true">1.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="../../survey/adaptive_training.html"><strong aria-hidden="true">1.8.</strong> adaptive training</a></li></ol></li><li class="chapter-item "><a href="../../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="../../pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li></ol></li><li class="chapter-item "><a href="../../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item "><a href="../../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../../horovod/workflow.html"><strong aria-hidden="true">4.2.</strong> workflow</a></li><li class="chapter-item "><a href="../../horovod/object.html"><strong aria-hidden="true">4.3.</strong> object</a></li><li class="chapter-item "><a href="../../horovod/develop.html"><strong aria-hidden="true">4.4.</strong> develop</a></li><li class="chapter-item "><a href="../../horovod/pytorch.html"><strong aria-hidden="true">4.5.</strong> pytorch</a></li><li class="chapter-item "><a href="../../horovod/tensorflow.html"><strong aria-hidden="true">4.6.</strong> tensorflow</a></li></ol></li><li class="chapter-item "><a href="../../ray/ray.html"><strong aria-hidden="true">5.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../ray/overview.html"><strong aria-hidden="true">5.1.</strong> overview</a></li><li class="chapter-item "><a href="../../ray/gcs.html"><strong aria-hidden="true">5.2.</strong> gcs</a></li><li class="chapter-item "><a href="../../ray/raylet.html"><strong aria-hidden="true">5.3.</strong> raylet</a></li><li class="chapter-item "><a href="../../ray/api.html"><strong aria-hidden="true">5.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../../python/python.html"><strong aria-hidden="true">6.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../python/concurrent.html"><strong aria-hidden="true">6.1.</strong> concurrent execution</a></li></ol></li><li class="chapter-item "><a href="../../kubernetes/kubernetes.html"><strong aria-hidden="true">7.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../kubernetes/scheduler.html"><strong aria-hidden="true">7.1.</strong> scheduler</a></li><li class="chapter-item "><a href="../../kubernetes/operator.html"><strong aria-hidden="true">7.2.</strong> operator</a></li><li class="chapter-item "><a href="../../kubernetes/device_plugin.html"><strong aria-hidden="true">7.3.</strong> device plugin</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">Aller au boulot</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/kuizhiqing/aller-au-boulot" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h2 id="1-bit-stochastic-gradient-descent-and-its-application-to-data-parallel-distributed-training-of-speech-dnns"><a class="header" href="#1-bit-stochastic-gradient-descent-and-its-application-to-data-parallel-distributed-training-of-speech-dnns">1-Bit Stochastic Gradient Descent and its Application to Data-Parallel Distributed Training of Speech DNNs</a></h2>
+<p>Frank Seide et. al. MRA, Tsinghua, MR. INTERSPEECH 2014</p>
+<p>1-BitSGDwithErrorFeedback</p>
+<p>总结：1 bit 量化的思路是把每个 32 位的值按照正负分别用 1 或 0 量化，然后通信，更新时 1 则更新 +1，0 则更新 -1，同时本地量化差异保留补偿。这样的效果应该相当于本地梯度累积，每次通信根据正负同步 1 个单位的量。当然，每次更新带上系数，最终得到收敛效果。</p>
+<h2 id="1-bit-adam-communication-efficient-large-scale-training-with-adams-convergence-speed"><a class="header" href="#1-bit-adam-communication-efficient-large-scale-training-with-adams-convergence-speed">1-bit Adam: Communication Efficient Large-Scale Training with Adam’s Convergence Speed</a></h2>
+<p>Hanlin Tang et. al. Microsoft 2021</p>
+<p>总结：adam 的梯度更新是非线性的，沿用 1bit sgd 的梯度累积或者说梯度补偿策略无法保证收敛性，文章提出了针对 adam 的保证收敛性的 1 bit 梯度量化方法并给出了理论证明。方法的核心在于在 warm-up 阶段计算 momentum 方差，用于后面进行误差补偿的计算。</p>
+<h2 id="deep-gradient-compression-reducing-the-communication-bandwidth-for-distributed-training"><a class="header" href="#deep-gradient-compression-reducing-the-communication-bandwidth-for-distributed-training">Deep Gradient Compression: Reducing the Communication Bandwidth for Distributed Training</a></h2>
+<p>Yujun Lin et. al. Tsinghua University, ICLR 2018</p>
+<p><a href="https://github.com/synxlin/deep-gradient-compression">DGC</a></p>
+<h2 id="optimizing-network-performance-for-distributed-dnn-training-on-gpu-clusters-imagenetalexnet-training-in-15-minutes"><a class="header" href="#optimizing-network-performance-for-distributed-dnn-training-on-gpu-clusters-imagenetalexnet-training-in-15-minutes">Optimizing Network Performance for Distributed DNN Training on GPU Clusters: ImageNet/AlexNet Training in 1.5 Minutes</a></h2>
+<p>Peng Sun et. al. SenseTime 2019</p>
+<h2 id="grace-a-compressed-communication-framework-for-distributed-machine-learning"><a class="header" href="#grace-a-compressed-communication-framework-for-distributed-machine-learning">GRACE: A Compressed Communication Framework for Distributed Machine Learning</a></h2>
+<p>Hang Xu et. al. 2021</p>
+<p><a href="https://github.com/sands-lab/grace">GRACE</a></p>
+<h2 id="sidco-an-efficient-statistical-based-gradient-compression-technique-for-distributed-training-systems"><a class="header" href="#sidco-an-efficient-statistical-based-gradient-compression-technique-for-distributed-training-systems">SIDCo An Efficient Statistical-based Gradient Compression Technique for Distributed Training Systems</a></h2>
+<p>Ahmed M. Abdelmoniem et. al. CEMSE, KAUST. MLSys 2021</p>
+<p><a href="https://github.com/sands-lab/SIDCo">SIDCo</a></p>
+<h2 id="powersgd-practical-low-rank-gradient-compression-for-distributed-optimization"><a class="header" href="#powersgd-practical-low-rank-gradient-compression-for-distributed-optimization">PowerSGD: Practical Low-Rank Gradient Compression for Distributed Optimization</a></h2>
+<p>Thijs Vogels et. al. EPFL. NeurIPS 2019</p>
+<p><a href="https://github.com/epfml/powersgd">PowerSGD</a></p>
+<h2 id="dont-use-large-mini-batches-use-local-sgd"><a class="header" href="#dont-use-large-mini-batches-use-local-sgd">Don't Use Large Mini-Batches, Use Local SGD</a></h2>
+<p>Tao Lin et. al.  EPFL. ICLR 2020</p>
+<p><a href="https://github.com/epfml/LocalSGD-Code">LocalSGD-Code</a></p>
+<p>总结：为减轻同步模式中慢节点的影响，可以减少通信，这会带来精度损失。使用 local SGD 的方法可以现在节点内进行 SGD 更新，多步之后再同步各个节点上的参数。 post local SGD 的方法将训练过程分成两阶段：先使用同步 SGD，再增大同步间隔提高训练吞吐。</p>
+<h2 id="adaptive-communication-strategies-to-achieve-the-best-error-runtime-trade-off-in-local-update-sgd"><a class="header" href="#adaptive-communication-strategies-to-achieve-the-best-error-runtime-trade-off-in-local-update-sgd">Adaptive Communication Strategies to Achieve the Best Error-Runtime Trade-off in Local-Update SGD</a></h2>
+<p>Jianyu Wang et. al. Carnegie Mellon University. SysML 2019</p>
+<p>总结：动态调整参数同步间隔来平衡训练吞吐和精度。</p>
+<h2 id="overlap-local-sgd-an-algorithmic-approach-to-hide-communication-delays-in-distributed-sgd"><a class="header" href="#overlap-local-sgd-an-algorithmic-approach-to-hide-communication-delays-in-distributed-sgd">Overlap Local-SGD: An Algorithmic Approach to Hide Communication Delays in Distributed SGD</a></h2>
+<p>Jianyu Wang et. al. ICASSP 2020</p>
+<p><a href="https://github.com/JYWa/Overlap_Local_SGD">Overlap_Local_SGD</a></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../survey/scheduling.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../../survey/gradient_compression/dgc.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../survey/scheduling.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../../survey/gradient_compression/dgc.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
