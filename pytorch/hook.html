@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>hook - Aller au boulot</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Projects excelling">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><a href="../survey/survey.html"><strong aria-hidden="true">1.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/pollux.html"><strong aria-hidden="true">1.1.</strong> pollux</a></li><li class="chapter-item "><a href="../survey/adasum.html"><strong aria-hidden="true">1.2.</strong> adasum</a></li><li class="chapter-item "><a href="../survey/adaptation_learning.html"><strong aria-hidden="true">1.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="../survey/gradient_descent.html"><strong aria-hidden="true">1.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="../survey/auto_parallel.html"><strong aria-hidden="true">1.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="../survey/scheduling.html"><strong aria-hidden="true">1.6.</strong> scheduling</a></li><li class="chapter-item "><a href="../survey/gradient_compression/gradient_compression.html"><strong aria-hidden="true">1.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/gradient_compression/dgc.html"><strong aria-hidden="true">1.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="../survey/gradient_compression/csc.html"><strong aria-hidden="true">1.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="../survey/adaptive_training.html"><strong aria-hidden="true">1.8.</strong> adaptive training</a></li></ol></li><li class="chapter-item expanded "><a href="../pytorch/overview.html"><strong aria-hidden="true">2.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">2.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">2.2.</strong> profiler</a></li><li class="chapter-item expanded "><a href="../pytorch/hook.html" class="active"><strong aria-hidden="true">2.3.</strong> hook</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">3.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">3.1.</strong> ps</a></li></ol></li><li class="chapter-item "><a href="../horovod/horovod.html"><strong aria-hidden="true">4.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">4.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">4.2.</strong> workflow</a></li><li class="chapter-item "><a href="../horovod/object.html"><strong aria-hidden="true">4.3.</strong> object</a></li><li class="chapter-item "><a href="../horovod/develop.html"><strong aria-hidden="true">4.4.</strong> develop</a></li><li class="chapter-item "><a href="../horovod/pytorch.html"><strong aria-hidden="true">4.5.</strong> pytorch</a></li><li class="chapter-item "><a href="../horovod/tensorflow.html"><strong aria-hidden="true">4.6.</strong> tensorflow</a></li></ol></li><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">5.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">5.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">5.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">5.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">5.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">6.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">6.1.</strong> concurrent execution</a></li></ol></li><li class="chapter-item "><a href="../kubernetes/kubernetes.html"><strong aria-hidden="true">7.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../kubernetes/scheduler.html"><strong aria-hidden="true">7.1.</strong> scheduler</a></li><li class="chapter-item "><a href="../kubernetes/operator.html"><strong aria-hidden="true">7.2.</strong> operator</a></li><li class="chapter-item "><a href="../kubernetes/device_plugin.html"><strong aria-hidden="true">7.3.</strong> device plugin</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">Aller au boulot</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/kuizhiqing/aller-au-boulot" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="hook"><a class="header" href="#hook">Hook</a></h1>
+<h3 id="summary"><a class="header" href="#summary">Summary</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Hook</th><th>触发时机</th><th>API</th></tr></thead><tbody>
+<tr><td>反向 hook</td><td>反向梯度计算完成后</td><td>register_hook(hook)</td></tr>
+<tr><td>前向 after hook</td><td>forward() 调用之后</td><td>register_forward_hook(hook)</td></tr>
+<tr><td>前向 before hook</td><td>forward() 调用之前</td><td>register_forward_pre_hook(hook)</td></tr>
+<tr><td>module hook</td><td>module inputs 反向梯度计算完成后</td><td>register_full_backward_hook(hook)</td></tr>
+<tr><td>节点 hook</td><td>autograd hook, 节点计算后</td><td>register_hook(hook)</td></tr>
+<tr><td>通信 hook</td><td>hook 参数 dist.GradBucket ready</td><td>register_comm_hook(state, hook)</td></tr>
+</tbody></table>
+</div>
+<blockquote>
+<p>torch.nn.parallel.DistributedDataParallel.register_comm_hook
+Tensor.register_hook(hook)
+torch.nn.Module.register_forward_hook(hook)
+torch.nn.Module.register_forward_pre_hook(hook)
+torch.nn.Module.register_full_backward_hook(hook)
+Node.register_hook(hook)
+torch.nn.parallel.DistributedDataParallel.register_comm_hook(state, hook)</p>
+</blockquote>
+<h3 id="反向-hook"><a class="header" href="#反向-hook">反向 hook</a></h3>
+<p>反向 hook 最为常用的 hook，但反向梯度生成后加入逻辑。</p>
+<pre><code class="language-python"># hook signature
+hook(grad) -&gt; Tensor or None
+
+def hook(grad):
+    return grad * 2
+
+v = torch.tensor([0., 0., 0.], requires_grad=True)
+h = v.register_hook(hook)  # double the gradient
+v.backward(torch.tensor([1., 2., 3.]))
+v.grad # 2 4 6
+h.remove()  # removes the hook
+</code></pre>
+<h3 id="module-hook"><a class="header" href="#module-hook">Module hook</a></h3>
+<pre><code class="language-python">register_forward_hook(hook)
+hook(module, input, output) -&gt; None or modified output
+register_forward_pre_hook(hook)
+hook(module, input) -&gt; None or modified input
+register_full_backward_hook(hook)
+hook(module, grad_input, grad_output) -&gt; tuple(Tensor) or None
+# 不允许修改参数 tensor，但是可以返回 tensor 用于后续梯度计算
+</code></pre>
+<h3 id="autograd-hook"><a class="header" href="#autograd-hook">Autograd Hook</a></h3>
+<p>autograd hook，node grad
+经典用法来自 horovod optimizer</p>
+<pre><code class="language-python">p_tmp = p.expand_as(p)
+grad_acc = p_tmp.grad_fn.next_functions[0][0]
+grad_acc.register_hook(self._make_hook(p))
+# 示例
+&gt;&gt;&gt; p = torch.tensor([1,2,3], dtype=float, requires_grad=True)
+&gt;&gt;&gt; p
+tensor([1., 2., 3.], dtype=torch.float64, requires_grad=True)
+&gt;&gt;&gt; pt = p.expand_as(p)
+&gt;&gt;&gt; pt
+tensor([1., 2., 3.], dtype=torch.float64, grad_fn=&lt;ExpandBackward0&gt;)
+&gt;&gt;&gt; pg = pt.grad_fn.next_functions[0][0]
+&gt;&gt;&gt; pg
+&lt;AccumulateGrad object at 0x7fa7ade03710&gt;
+</code></pre>
+<h3 id="ddp-通信-hook"><a class="header" href="#ddp-通信-hook">DDP 通信 hook</a></h3>
+<pre><code class="language-python">torch.nn.parallel.DistributedDataParallel.register_comm_hook(state, hook)
+hook(state: object, bucket: dist.GradBucket) -&gt; torch.futures.Future[torch.Tensor]
+</code></pre>
+<p><strong>Example</strong></p>
+<pre><code class="language-python">def encode_and_decode(state: object, bucket: dist.GradBucket): -&gt; torch.futures.Future[torch.Tensor]
+    encoded_tensor = encode(bucket.buffer()) # encode gradients
+    fut = torch.distributed.all_reduce(encoded_tensor).get_future()
+    # Define the then callback to decode.
+    def decode(fut):
+        decoded_tensor = decode(fut.value()[0]) # decode gradients
+        return decoded_tensor
+    return fut.then(decode)
+</code></pre>
+<h3 id="reference"><a class="header" href="#reference">Reference</a></h3>
+<ul>
+<li>https://pytorch.org/docs/stable/generated/torch.Tensor.register_hook.html</li>
+<li>https://pytorch.org/docs/stable/ddp_comm_hooks.html</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../pytorch/profiler.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../paddle/paddle.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../pytorch/profiler.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../paddle/paddle.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
