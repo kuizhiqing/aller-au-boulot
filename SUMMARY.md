@@ -15,6 +15,7 @@
 - [pytorch](pytorch/overview.md)
   - [tensor](pytorch/tensor.md)
   - [profiler](pytorch/profiler.md)
+  - [hook](pytorch/hook.md)
 
 - [paddle](paddle/paddle.md)
   - [ps](paddle/ps/ps-code-overview.md)
