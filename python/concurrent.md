@@ -82,3 +82,11 @@ proc.close()
 
 * IPC a little more complicated with more overhead (communication model vs. shared memory/objects)
 * Larger memory footprint
+
+### exec
+
+python 转 shell 执行
+
+```
+os.execve('/bin/sh', 'echo', 'ok')
+```

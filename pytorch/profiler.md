@@ -1,5 +1,17 @@
 # PyTorch Profiler
 
+## Overview
+
+* PyTorch 功能相对齐全：
+  * 基础设计明确：profiler/benchmark/debug 信息分的很细，比如时间统计放 benchmark，前反向信息放 debug
+  * profiler 数据设计层次明确：打点日志 events --> 整理数据 key_averages --> 数据展示 table
+  * 数据展示部分：
+    * 控制台打印依赖整理数据的表格，通过控制各项 api 参数控制列，如统计设备/内存/flops 等等
+    * chrome tracing 使用保存的 json 文件，适用于 timeline 相关信息分析，同时支持元素详细信息展示，如tensor shape 等
+    * 数据展示能力的发挥在于利用了 tensorbord，提供多种视图，多种形式的数据展示形式
+  * 目前关于 model/layer 的支持仅限 torchscript 模式，还不完善，由 with_modules 参数控制
+  * Highlight: 信息展示中有根据 profiler 分析数据，给出优化建议
+
 ## Demo
 
 体现基本流程的示例
@@ -146,4 +158,10 @@ class record_function(ContextDecorator):
         torch.ops.profiler._record_function_exit(self.record)
 ```
 
+## Reference
+
+* [profiler](https://pytorch.org/docs/stable/profiler.html)
+* [profiler_recipe](https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html)
+* [tensorboard_profiler_tutorial](https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html)
+* [benchmark](https://pytorch.org/tutorials/recipes/recipes/benchmark.html)
 

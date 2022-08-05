@@ -27,6 +27,7 @@
   - [develop](horovod/develop.md)
   - [pytorch](horovod/pytorch.md)
   - [tensorflow](horovod/tensorflow.md)
+  - [elastic](horovod/elastic.md)
 
 - [ray](ray/ray.md)
   - [overview](ray/overview.md)
@@ -42,3 +43,4 @@
   - [operator](kubernetes/operator.md)
   - [device plugin](kubernetes/device_plugin.md)
 
+- [leveldb](leveldb/leveldb.md)
