@@ -1,5 +1,7 @@
 # Summary
 
+- [welcome](README.md)
+
 - [survey](survey/survey.md)
   - [pollux](survey/pollux.md)
   - [adasum](survey/adasum.md)

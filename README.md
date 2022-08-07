@@ -1,5 +1,5 @@
-# aller-au-boulot
+# Aller au boulot!
 
-Aller au boulot!
+Welcome to my notes space, I really appreciate if you find something helpful here.
 
-Notes at [excel.kuizhiqing.cn](http://excel.kuizhiqing.cn/)
+Host on [excel.kuizhiqing.cn](http://excel.kuizhiqing.cn/).

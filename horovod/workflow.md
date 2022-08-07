@@ -5,6 +5,16 @@
 - HorovodBasics 即 API 部分
 - Operation 基于上述 API 的调用和调用后主要流程
 
+## TL;DR;
+
+`hvd.init()` 
+* 调用 c api `horovod_init`, 调用函数 `InitializeHorovodOnce` 创建 thread 运行 `BackgroundThreadLoop`, 完成初始化后函数返回。
+* 后台线程执行 `BackgroundThreadLoop` 进行各种初始化操作，最后 while 循环 `RunLoopOnce(state)`.
+* `RunLoopOnce` 从队列中取出 tensor 驱动分布式通信。
+
+`allreduce_async_`
+* python api 是根据框架封装的，PyTorch 通过 pybind 调用 `EnqueueTensorAllreduces`，将 tensor 放如队列。
+
 ## HorovodBasics 
 
 ### Python API
