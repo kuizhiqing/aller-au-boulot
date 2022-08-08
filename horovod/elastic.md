@@ -1,6 +1,112 @@
 # Elastic
 
 
+## 弹性启动
+
+前述接正常启动部分，弹性使用 gloo 启动
+
+```python
+def _run_elastic(args):
+    settings = elastic_settings.ElasticSettings(discovery=discover_hosts,...)
+    return gloo_run_elastic(settings, env, args.run_func if args.run_func else args.command, executable)
+
+from horovod.runner.gloo_run import gloo_run, gloo_run_elastic
+```
+
+```python
+# horovod/runner/gloo_run.py
+
+def gloo_run_elastic(settings, env, command_or_func, executable) -> Optional[Any]:
+    rendezvous = RendezvousServer(settings.verbose)
+    return launch_gloo_elastic(command_or_func, exec_command, settings, env, get_common_interfaces, rendezvous, executable)
+
+def launch_gloo_elastic(command_or_func, exec_command, settings, env, get_common_interfaces, rendezvous, executable):
+    driver = ElasticDriver(rendezvous, settings.discovery,
+                           settings.min_num_proc, settings.max_num_proc,
+                           timeout=settings.elastic_timeout,
+                           reset_limit=settings.reset_limit,
+                           cooldown_range=settings.cooldown_range,
+                           verbose=settings.verbose)
+
+    handler = create_rendezvous_handler(driver)
+    global_rendezv_port = rendezvous.start(handler)
+    driver.wait_for_available_slots(settings.num_proc)
+
+    run_command = get_run_command(command, server_ip, nics, global_rendezv_port, elastic=True)
+    create_worker = _create_elastic_worker_fn(exec_command, run_command, env, event)
+
+    driver.start(settings.num_proc, create_worker)
+    res = driver.get_results()
+    driver.stop()
+
+```
+
+### Driver
+
+ElasticDriver 中有两个线程
+
+* 一个线程 while 循环执行 `_discover_hosts` 监控、报告节点更新
+* 一个线程执行 `run_worker` 启动 worker
+
+注意 driver 不会阻塞，启动 worker 后返回 launch 函数，等待获取 results, 具体地，`driver.get_results()` 是一个 while 循环会造成阻塞。
+
+```python
+# horovod/runner/elastic/driver.py 
+
+class ElasticDriver(object):
+    def __init__(self, rendezvous, ...):
+        self._worker_registry = WorkerStateRegistry(self, self._host_manager, reset_limit=reset_limit)
+        self._results = ResultsRecorder()
+        self._discovery_thread = threading.Thread(target=self._discover_hosts)
+
+    def start(self, num_proc, create_worker_fn):
+        self._activate_workers(num_proc)
+
+    def get_results(self):
+        return self._results.get_results()
+
+    def register_worker_server(self, host, slot, addresses, secret_key):
+        self._worker_clients[(host, slot)] = WorkerNotificationClient(
+            addresses, secret_key, self._verbose)
+
+    def _activate_workers(self, min_num_proc):
+        current_hosts = self.wait_for_available_slots(min_num_proc)
+        pending_slots = self._update_host_assignments(current_hosts)
+        self._worker_registry.reset(self.world_size())
+        self._start_worker_processes(pending_slots)
+
+    def _discover_hosts(self):
+        while not self._shutdown.is_set():
+            self._wait_hosts_cond.acquire()
+            try:
+                update_res = self._host_manager.update_available_hosts()
+                if update_res != HostUpdateResult.no_update:
+                    self._notify_workers_host_changes(self._host_manager.current_hosts, update_res)
+                    self._wait_hosts_cond.notify_all()
+            finally:
+                self._wait_hosts_cond.release()
+            self._shutdown.wait(DISCOVER_HOSTS_FREQUENCY_SECS)
+
+    def _notify_workers_host_changes(self, current_hosts, update_res):
+        coordinator_client.notify_hosts_updated(timestamp, update_res)
+
+    def _start_worker_processes(self, pending_slots):
+        for slot_info in pending_slots:
+            self._start_worker_process(slot_info)
+
+    def _start_worker_process(self, slot_info):
+        def run_worker():
+            res = create_worker_fn(slot_info, [shutdown_event, host_event])
+            exit_code, timestamp = res
+            self._handle_worker_exit(slot_info, exit_code, timestamp)
+
+        thread = threading.Thread(target=run_worker)
+        thread.daemon = True
+        thread.start()
+        self._results.expect(thread)
+
+```
+
 ## Usage
 
 ```python
@@ -40,6 +146,40 @@ state = hvd.elastic.TorchState(model, optimizer, batch=0, epoch=0)
 state.register_reset_callbacks([on_state_reset])
 train(state)
 ```
+
+## Implementation
+
+在训练的循环函数上会有装饰器，用于识别错误和自身的恢复，另外通过 `notification_manager` 别的节点也会感知到错误的发生。
+
+```python
+# horovod/common/elastic.py
+
+notification_manager = WorkerNotificationManager()
+
+def run_fn(func, reset):
+    @functools.wraps(func)
+    def wrapper(state, *args, **kwargs):
+        notification_manager.init()
+        notification_manager.register_listener(state)
+
+        try:
+            while True:
+                try:
+                    if not skip_sync:
+                        state.sync()
+
+                    return func(state, *args, **kwargs)
+                except HorovodInternalError:
+                    state.restore()
+                    skip_sync = False
+                except HostsUpdatedInterrupt as e:
+                    skip_sync = e.skip_sync
+
+                reset()
+                state.on_reset()
+    return wrapper
+```
+
 
 ```python
 # horovod/common/elastic.py
@@ -95,29 +235,7 @@ class TorchState(ObjectState):
         super(TorchState, self).restore()
 ```
 
-```python
-# horovod/common/elastic.py
-
-def run_fn(func, reset):
-    @functools.wraps(func)
-    def wrapper(state, *args, **kwargs):
-        try:
-            while True:
-                try:
-                    if not skip_sync:
-                        state.sync()
-
-                    return func(state, *args, **kwargs)
-                except HorovodInternalError:
-                    state.restore()
-                    skip_sync = False
-                except HostsUpdatedInterrupt as e:
-                    skip_sync = e.skip_sync
-
-                reset()
-                state.on_reset()
-    return wrapper
-```
+因为 `hvd.init()` 之后，一直会有后台进程在负责真正的通信过程，在有节点变化时，通信组需要重建，具体实现如下。
 
 ```cpp
 // horovod/common/operations.cc
@@ -139,6 +257,7 @@ bool RunLoopOnce(HorovodGlobalState& state) {
 Reinitialize Horovod context performing a new round of rendezvous.
 
 负责重建通信域
+
 ```cpp
 // horovod/common/process_set.cc
 
@@ -184,7 +303,7 @@ void GlooContext::InitializeForProcessSet(const GlooContext& global_context,
 }
 ```
 
-调用顺序 
+接口的调用顺序 
 
 ```python
 # horovod/common/process_sets.py

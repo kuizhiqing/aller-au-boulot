@@ -174,14 +174,3 @@ def mpi_run(settings, nics, env, command, stdout=None, stderr=None):
         os.execve('/bin/sh', ['/bin/sh', '-c', mpirun_command], env)
 ```
 
-### 弹性启动
-```python
-def _run_elastic(args):
-    settings = elastic_settings.ElasticSettings(discovery=discover_hosts,...)
-    return gloo_run_elastic(settings, env, args.run_func if args.run_func else args.command, executable)
-
-from horovod.runner.gloo_run import gloo_run, gloo_run_elastic
-```
-
-```python
-```
