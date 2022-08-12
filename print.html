@@ -5211,6 +5211,35 @@ Tensor Expression, DSL (domain-specific language)</p>
 <p><strong>Relay</strong> TVM’s high-level model language</p>
 <p><strong>IR</strong> intermediate representation</p>
 <p><strong>TIR</strong> Tensor Intermediate Representation, TVM’s low-level intermediate representation</p>
+<p><strong>Schedule</strong> how to execute the computation</p>
+<p><strong>Stage</strong> schedule for one operation</p>
+<p><strong>TOPI</strong> TVM Operator Inventory, numpy-style generic operations and schedules </p>
+<h2 id="demo-3"><a class="header" href="#demo-3">Demo</a></h2>
+<pre><code class="language-python">from tvm.driver import tvmc
+
+#Step 1: Load
+model = tvmc.load('resnet50-v2-7.onnx', shape_dict={'data':[1, 3, 224, 224]}) 
+
+#Step 1.5: Optional Tune
+tuning_records = tvmc.tune(model, target=&quot;llvm&quot;) 
+
+#Step 2: Compile
+package = tvmc.compile(model, target=&quot;llvm&quot;, tuning_records = tuning_records) 
+
+#Step 3: Run
+result = tvmc.run(package, device=&quot;cpu&quot;) 
+
+print(result)
+</code></pre>
+<ul>
+<li>IRModule: relay.Function + tir.PrimFunc</li>
+<li>tvmc.compile: relay::Function --&gt; tir::PrimFunc</li>
+</ul>
+<p><strong>Why TVM ?</strong></p>
+<p><code>tvmc.tune</code> make model run more fast.</p>
+<p><strong>How ?</strong></p>
+<p>ALL, especially,</p>
+<p>AutoTVM (template-based) or AutoScheduler (Ansor, template-free auto-tuning)</p>
 <h2 id="tvm-optimizaing-compiler-workflow"><a class="header" href="#tvm-optimizaing-compiler-workflow">TVM optimizaing compiler workflow</a></h2>
 <ol>
 <li>TF/PyTroch/ONNX</li>
@@ -5234,30 +5263,216 @@ Tensor Expression, DSL (domain-specific language)</p>
 <p>low-level loop optimizations: tiling, vectorization, parallelization, unrolling, and fusion</p>
 <h2 id="tvm-auto-scheduler-aka-ansor"><a class="header" href="#tvm-auto-scheduler-aka-ansor">TVM Auto-scheduler (a.k.a. Ansor)</a></h2>
 <p>package <code>tvm.auto_scheduler</code></p>
-<h2 id="demo-3"><a class="header" href="#demo-3">Demo</a></h2>
-<pre><code class="language-python">from tvm.driver import tvmc
-
-model = tvmc.load('resnet50-v2-7.onnx', shape_dict={'data':[1, 3, 224, 224]}) #Step 1: Load
-
-tuning_records = tvmc.tune(model, target=&quot;llvm&quot;) #Step 1.5: Optional Tune
-
-package = tvmc.compile(model, target=&quot;llvm&quot;, tuning_records = tuning_records) #Step 2: Compile
-
-result = tvmc.run(package, device=&quot;cpu&quot;) #Step 3: Run
-
-print(result)
-</code></pre>
-<ul>
-<li>IRModule: relay.Function + tir.PrimFunc</li>
-<li>tvmc.compile: relay::Function --&gt; tir::PrimFunc</li>
-</ul>
 <h2 id="schedule-primitives"><a class="header" href="#schedule-primitives">Schedule Primitives</a></h2>
-<p><strong>split</strong></p>
+<p>How to get good performance kernel ?</p>
+<h2 id="te"><a class="header" href="#te">TE</a></h2>
+<pre><code class="language-python">import tvm
+from tvm import te
+
+m = te.var('m')
+n = te.var('n')
+
+a = te.placeholder((m, n), name='A')
+b = te.placeholder((m, n), name='B')
+
+c = te.compute((m, n), lambda i, j: a[i, j]*b[i, j], name='C')
+
+s = te.create_schedule([c.op])
+
+tgt = tvm.target.Target(target=&quot;llvm&quot;, host=&quot;llvm&quot;)
+mult = tvm.build(s, [a, b, c], target=tgt, name=&quot;mult&quot;)
+
+print(mult.get_source())
+
+print(tvm.lower(s, [a, b, c], simple_mode=True))
+</code></pre>
+<p><code>tvm.build</code> </p>
+<p>tvm.te.schedule.Schedule, tvm.tir.PrimFunc, IRModule, Mapping[str, IRModule] --&gt; <code>tvm.runtime.Module</code></p>
+<p>A module that combines both host and device code</p>
+<p><code>tvm.lower</code> </p>
+<p>tvm.te.schedule.Schedule, tvm.tir.PrimFunc, IRModule --&gt; <code>IRModule</code></p>
+<p>Demo for IRModule transform</p>
+<pre><code class="language-python">import tvm
+from tvm.ir.module import IRModule
+from tvm.script import tir as T
+import numpy as np
+
+from tvm import te
+
+A = te.placeholder((8,), dtype=&quot;float32&quot;, name=&quot;A&quot;)
+B = te.compute((8,), lambda *i: A(*i) + 1.0, name=&quot;B&quot;)
+func = te.create_prim_func([A, B])
+ir_module = IRModule({&quot;main&quot;: func})
+print(ir_module.script())
+&quot;&quot;&quot;
+# from tvm.script import tir as T
+@tvm.script.ir_module
+class Module:
+    @T.prim_func
+    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
+        # function attr dict
+        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
+        # body
+        # with T.block(&quot;root&quot;)
+        for i0 in T.serial(8):
+            with T.block(&quot;B&quot;):
+                i0_1 = T.axis.spatial(8, i0)
+                T.reads(A[i0_1])
+                T.writes(B[i0_1])
+                B[i0_1] = A[i0_1] + T.float32(1)
+&quot;&quot;&quot;
+</code></pre>
+<pre><code class="language-python"># &lt;class 'tvm.driver.build_module.OperatorModule'&gt;
+mod = tvm.build(ir_module, target=&quot;llvm&quot;)  # The module for CPU backends.
+
+# &lt;class 'tvm.tir.schedule.schedule.Schedule'&gt;
+sch = tvm.tir.Schedule(ir_module)
+block_b = sch.get_block(&quot;B&quot;)
+(i,) = sch.get_loops(block_b)
+</code></pre>
+<pre><code class="language-python">i_0, i_1, i_2 = sch.split(i, factors=[2, 2, 2])
+print(sch.mod.script())
+&quot;&quot;&quot;
+# from tvm.script import tir as T
+@tvm.script.ir_module
+class Module:
+    @T.prim_func
+    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
+        # function attr dict
+        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
+        # body
+        # with T.block(&quot;root&quot;)
+        for i0_0, i0_1, i0_2 in T.grid(2, 2, 2):
+            with T.block(&quot;B&quot;):
+                i0 = T.axis.spatial(8, i0_0 * 4 + i0_1 * 2 + i0_2)
+                T.reads(A[i0])
+                T.writes(B[i0])
+                B[i0] = A[i0] + T.float32(1)
+&quot;&quot;&quot;
+</code></pre>
+<pre><code class="language-python">sch.reorder(i_0, i_2, i_1)
+print(sch.mod.script())
+&quot;&quot;&quot;
+# from tvm.script import tir as T
+@tvm.script.ir_module
+class Module:
+    @T.prim_func
+    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
+        # function attr dict
+        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
+        # body
+        # with T.block(&quot;root&quot;)
+        for i0_0, i0_2, i0_1 in T.grid(2, 2, 2):
+            with T.block(&quot;B&quot;):
+                i0 = T.axis.spatial(8, i0_0 * 4 + i0_1 * 2 + i0_2)
+                T.reads(A[i0])
+                T.writes(B[i0])
+                B[i0] = A[i0] + T.float32(1)
+&quot;&quot;&quot;
+</code></pre>
+<pre><code class="language-python">sch.bind(i_0, &quot;blockIdx.x&quot;)
+sch.bind(i_2, &quot;threadIdx.x&quot;)
+print(sch.mod.script())
+&quot;&quot;&quot;
+# from tvm.script import tir as T
+@tvm.script.ir_module
+class Module:
+    @T.prim_func
+    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
+        # function attr dict
+        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
+        # body
+        # with T.block(&quot;root&quot;)
+        for i0_0 in T.thread_binding(2, thread=&quot;blockIdx.x&quot;):
+            for i0_2 in T.thread_binding(2, thread=&quot;threadIdx.x&quot;):
+                for i0_1 in T.serial(2):
+                    with T.block(&quot;B&quot;):
+                        i0 = T.axis.spatial(8, i0_0 * 4 + i0_1 * 2 + i0_2)
+                        T.reads(A[i0])
+                        T.writes(B[i0])
+                        B[i0] = A[i0] + T.float32(1)
+&quot;&quot;&quot;
+</code></pre>
+<h2 id="relay"><a class="header" href="#relay">Relay</a></h2>
+<p><strong>relay.build()</strong></p>
+<p>return</p>
+<ul>
+<li>execution graph in json format</li>
+<li>TVM module library of compiled functions specifically for this graph on the target hardware</li>
+<li>parameter blobs of the model</li>
+</ul>
+<p>During the compilation, </p>
+<ul>
+<li>Relay does the graph-level optimization,</li>
+<li>TVM does the tensor-level optimization,</li>
+</ul>
+<p>resulting in an optimized runtime module for model serving.</p>
+<h3 id="relay-vs-te"><a class="header" href="#relay-vs-te">Relay v.s. TE</a></h3>
+<pre><code class="language-python">tvm.tir.sqrt(x: tvm.ir.PrimExpr) -&gt; tvm.ir.PrimExpr
+
+# Alias of tvm.tir.sqrt()
+tvm.te.sqrt(x: tvm.ir.PrimExpr) -&gt; tvm.ir.PrimExpr
+
+tvm.relay.sqrt(data: tvm.ir.RelayExpr) -&gt; tvm.ir.RelayExpr)
+</code></pre>
+<p>For tvm.ir.BaseExpr,</p>
+<ul>
+<li>PrimExpr is class of all primitive expressions, used in the low-level code optimizations and integer analysis.</li>
+<li>RelayExpr is class of all non-primitive expressions.</li>
+</ul>
+<h3 id="build-1"><a class="header" href="#build-1">Build</a></h3>
+<p><code>tvm.build</code> v.s. <code>tvm.relay.build</code></p>
+<pre><code class="language-python">tvm.relay.build(ir_mod: IRModule, target, target_host, executor=graph{}, runtime=cpp) 
+    -&gt; tvm.relay.backend.executor_factory.ExecutorFactoryModule
+
+tvm.build(inputs: Union[tvm.te.schedule.Schedule, tvm.tir.function.PrimFunc, tvm.ir.module.IRModule, Mapping[str, tvm.ir.module.IRModule]], args, target, target_host, runtime, binds) 
+    -&gt; tvm.driver.build_module.OperatorModule
+</code></pre>
+<h2 id="optimization"><a class="header" href="#optimization">Optimization</a></h2>
+<p><strong>Blocking</strong>, <strong>Cache</strong></p>
+<p>通过分 Block, 让留在 cache 中的中间计算结果能够发挥作用，从而提升性能。</p>
+<p><strong>Vectorization</strong>, <strong>Array Packing</strong></p>
+<p>连续的内存访问会比较高效，通过 <code>vectorize</code> 达到这样的目的。对矩阵的 Array Packing 也是在做这样的优化。</p>
+<p><strong>Parallelization</strong></p>
+<p>非依赖的情况下可以使用并行策略提高整体性能。</p>
+<h2 id="topi"><a class="header" href="#topi">TOPI</a></h2>
+<pre><code class="language-python">n = te.var(&quot;n&quot;)
+m = te.var(&quot;m&quot;)
+A = te.placeholder((n, m), name=&quot;A&quot;)
+</code></pre>
+<p>origin</p>
+<pre><code class="language-python">k = te.reduce_axis((0, m), &quot;k&quot;)
+B = te.compute((n,), lambda i: te.sum(A[i, k], axis=k), name=&quot;B&quot;)
+s = te.create_schedule(B.op)
+# print(tvm.lower(s, [A], simple_mode=True))
+</code></pre>
+<p>TOPI </p>
+<pre><code class="language-python">C = topi.sum(A, axis=1)
+ts = te.create_schedule(C.op)
+# print(tvm.lower(ts, [A], simple_mode=True))
+</code></pre>
+<h2 id="develop-2"><a class="header" href="#develop-2">Develop</a></h2>
+<ul>
+<li>write a pass with IR</li>
+<li>glue to lowering</li>
+</ul>
+<p>每一个 phase 做的 transformation 如下，</p>
+<ul>
+<li>Phase 0 generates the raw IR and loop levels.</li>
+<li>Phase 1 flattens the array storage.</li>
+<li>Phase 2 transforms loops, like unroll, vectorization and thread-binding.</li>
+<li>Phase 3 does some cleanup work.</li>
+</ul>
+<p>所以比如自定义的 vectorize 适合放在 phase 1 之后。</p>
+<pre><code class="language-python">with tvm.transform.PassContext(config={&quot;tir.add_lower_pass&quot;: [(1, vectorize)]}):
+    print(tvm.lower(sch, [a, b, c]))
+</code></pre>
 <h2 id="reference-7"><a class="header" href="#reference-7">Reference</a></h2>
 <ul>
 <li><a href="https://tvm.apache.org/docs/">https://tvm.apache.org/docs/</a></li>
 <li><a href="https://tvm.apache.org/docs/how_to/work_with_schedules/schedule_primitives.html">schedule_primitives</a></li>
 <li><a href="https://tvm.apache.org/docs/tutorial/tensor_expr_get_started.html">optimization TE</a></li>
+<li><a href="https://tvm.apache.org/docs/how_to/extend_tvm/low_level_custom_pass.html">custom pass</a></li>
 </ul>
 
                     </main>
