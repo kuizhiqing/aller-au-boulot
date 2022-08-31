@@ -21,6 +21,8 @@
 
 - [paddle](paddle/paddle.md)
   - [ps](paddle/ps/ps-code-overview.md)
+  - [framework](paddle/framework.md)
+  - [cinn](paddle/cinn.md)
 
 - [horovod](horovod/horovod.md)
   - [run](horovod/run.md)
@@ -44,6 +46,7 @@
   - [scheduler](kubernetes/scheduler.md)
   - [operator](kubernetes/operator.md)
   - [device plugin](kubernetes/device_plugin.md)
+  - [docker](kubernetes/docker.md)
 
 - [leveldb](leveldb/leveldb.md)
 
