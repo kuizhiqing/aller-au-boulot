@@ -18,6 +18,7 @@
   - [tensor](pytorch/tensor.md)
   - [profiler](pytorch/profiler.md)
   - [hook](pytorch/hook.md)
+  - [elastic](pytorch/elastic.md)
 
 - [paddle](paddle/paddle.md)
   - [ps](paddle/ps/ps-code-overview.md)
@@ -51,3 +52,5 @@
 - [leveldb](leveldb/leveldb.md)
 
 - [tvm](tvm/tvm.md)
+
+- [gloo](gloo/gloo.md)
