@@ -54,3 +54,5 @@
 - [tvm](tvm/tvm.md)
 
 - [gloo](gloo/gloo.md)
+- [nccl](nccl/nccl.md)
+- [mpi](mpi/mpi.md)

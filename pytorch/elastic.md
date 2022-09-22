@@ -453,6 +453,8 @@ class MultiprocessContext(PContext):
 
 ## demo
 
+上面部分的内容都是 run 模块的部分，下面是用户侧代码比如 train.py 的部分。
+
 ```python
 import torch
 
@@ -617,3 +619,5 @@ def _env_rendezvous_handler(
     yield (store, rank, world_size)
 
 ```
+
+rendezvous_handler 的实现使用了 iterator 可以避免被多次调用，同时有 lazy init 的效果。
