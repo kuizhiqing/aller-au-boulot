@@ -201,6 +201,19 @@ proc.close()
 <li>IPC a little more complicated with more overhead (communication model vs. shared memory/objects)</li>
 <li>Larger memory footprint</li>
 </ul>
+<h3 id="4-executor"><a class="header" href="#4-executor">4. Executor</a></h3>
+<p><a href="https://docs.python.org/3/library/concurrent.futures.html">doc</a></p>
+<ul>
+<li>ProcessPoolExecutor 封装 multiprocessing module，提供进程池</li>
+<li>ThreadPoolExecutor, 线程池</li>
+</ul>
+<p>API</p>
+<pre><code>class concurrent.futures.Executor:
+    submit(fn, /, *args, **kwargs)
+    map(func, *iterables, timeout=None, chunksize=1)
+    shutdown(wait=True, *, cancel_futures=False)
+</code></pre>
+<p>调用 submit 返回 <code>concurrent.futures.Future</code>, 使用 result(timeout=None) 获取结果。.</p>
 <h3 id="exec"><a class="header" href="#exec">exec</a></h3>
 <p>python 转 shell 执行</p>
 <pre><code>os.execve('/bin/sh', 'echo', 'ok')

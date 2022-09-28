@@ -5837,6 +5837,19 @@ proc.close()
 <li>IPC a little more complicated with more overhead (communication model vs. shared memory/objects)</li>
 <li>Larger memory footprint</li>
 </ul>
+<h3 id="4-executor"><a class="header" href="#4-executor">4. Executor</a></h3>
+<p><a href="https://docs.python.org/3/library/concurrent.futures.html">doc</a></p>
+<ul>
+<li>ProcessPoolExecutor 封装 multiprocessing module，提供进程池</li>
+<li>ThreadPoolExecutor, 线程池</li>
+</ul>
+<p>API</p>
+<pre><code>class concurrent.futures.Executor:
+    submit(fn, /, *args, **kwargs)
+    map(func, *iterables, timeout=None, chunksize=1)
+    shutdown(wait=True, *, cancel_futures=False)
+</code></pre>
+<p>调用 submit 返回 <code>concurrent.futures.Future</code>, 使用 result(timeout=None) 获取结果。.</p>
 <h3 id="exec"><a class="header" href="#exec">exec</a></h3>
 <p>python 转 shell 执行</p>
 <pre><code>os.execve('/bin/sh', 'echo', 'ok')
@@ -6621,6 +6634,52 @@ ncclCommInitRank(&amp;comm, nRanks, id, myRank);
 </ul>
 </li>
 </ul>
+<h2 id="init"><a class="header" href="#init">Init</a></h2>
+<pre><code class="language-cpp">// nccl/src/init.cc
+
+ncclResult_t ncclGetUniqueId(ncclUniqueId* out) {
+  NCCLCHECK(ncclInit());
+  return bootstrapGetUniqueId(out);
+}
+
+static ncclResult_t ncclInit() {
+  if (initialized) return ncclSuccess;
+  pthread_mutex_lock(&amp;initLock);
+  if (!initialized) {
+    initEnv();
+    initGdrCopy();
+    maxLocalSizeBytes = ncclKernMaxLocalSize();
+    NCCLCHECK(initNet());
+    INFO(NCCL_INIT, &quot;Using network %s&quot;, ncclNetName());
+    initialized = true;
+  }
+  pthread_mutex_unlock(&amp;initLock);
+  return ncclSuccess;
+}
+</code></pre>
+<pre><code class="language-cpp">// nccl/src/bootstrap.cc  
+
+ncclResult_t bootstrapGetUniqueId(ncclUniqueId* id) {
+  static_assert(sizeof(union socketAddress) &lt; sizeof(ncclUniqueId), &quot;NetId does not fit inside ncclUniqueId&quot;);
+  memset(id, 0, sizeof(ncclUniqueId));
+  union socketAddress* connectAddr = (union socketAddress*) id;
+
+  char* env = getenv(&quot;NCCL_COMM_ID&quot;);
+  if (env) {
+    INFO(NCCL_ENV, &quot;NCCL_COMM_ID set by environment to %s&quot;, env);
+    if (GetSocketAddrFromString(connectAddr, env) != ncclSuccess) {
+      WARN(&quot;Invalid NCCL_COMM_ID, please use format: &lt;ipv4&gt;:&lt;port&gt; or [&lt;ipv6&gt;]:&lt;port&gt; or &lt;hostname&gt;:&lt;port&gt;&quot;);
+      return ncclInvalidArgument;
+    }
+  } else {
+    memcpy(id, &amp;bootstrapNetIfAddr, sizeof(union socketAddress));
+    NCCLCHECK(bootstrapCreateRoot(id, false));
+  }
+
+  return ncclSuccess;
+}
+
+</code></pre>
 <h2 id="cuda-graph"><a class="header" href="#cuda-graph">Cuda Graph</a></h2>
 <pre><code class="language-cpp">cudaGraph_t graph;
 cudaStreamBeginCapture(stream);
