@@ -87,6 +87,57 @@ ncclCommDestroy(comm);
     * ncclSend
     * ncclRecv
 
+## Init
+
+```cpp
+// nccl/src/init.cc
+
+ncclResult_t ncclGetUniqueId(ncclUniqueId* out) {
+  NCCLCHECK(ncclInit());
+  return bootstrapGetUniqueId(out);
+}
+
+static ncclResult_t ncclInit() {
+  if (initialized) return ncclSuccess;
+  pthread_mutex_lock(&initLock);
+  if (!initialized) {
+    initEnv();
+    initGdrCopy();
+    maxLocalSizeBytes = ncclKernMaxLocalSize();
+    NCCLCHECK(initNet());
+    INFO(NCCL_INIT, "Using network %s", ncclNetName());
+    initialized = true;
+  }
+  pthread_mutex_unlock(&initLock);
+  return ncclSuccess;
+}
+```
+
+```cpp
+// nccl/src/bootstrap.cc  
+
+ncclResult_t bootstrapGetUniqueId(ncclUniqueId* id) {
+  static_assert(sizeof(union socketAddress) < sizeof(ncclUniqueId), "NetId does not fit inside ncclUniqueId");
+  memset(id, 0, sizeof(ncclUniqueId));
+  union socketAddress* connectAddr = (union socketAddress*) id;
+
+  char* env = getenv("NCCL_COMM_ID");
+  if (env) {
+    INFO(NCCL_ENV, "NCCL_COMM_ID set by environment to %s", env);
+    if (GetSocketAddrFromString(connectAddr, env) != ncclSuccess) {
+      WARN("Invalid NCCL_COMM_ID, please use format: <ipv4>:<port> or [<ipv6>]:<port> or <hostname>:<port>");
+      return ncclInvalidArgument;
+    }
+  } else {
+    memcpy(id, &bootstrapNetIfAddr, sizeof(union socketAddress));
+    NCCLCHECK(bootstrapCreateRoot(id, false));
+  }
+
+  return ncclSuccess;
+}
+
+```
+
 ## Cuda Graph
 
 ```cpp
