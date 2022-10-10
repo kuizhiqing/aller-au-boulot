@@ -6634,51 +6634,257 @@ ncclCommInitRank(&amp;comm, nRanks, id, myRank);
 </ul>
 </li>
 </ul>
-<h2 id="init"><a class="header" href="#init">Init</a></h2>
+<h2 id="workflow-2"><a class="header" href="#workflow-2">Workflow</a></h2>
+<h3 id="ncclgetuniqueid"><a class="header" href="#ncclgetuniqueid">ncclGetUniqueId</a></h3>
+<p>创建 <code>ncclGetUniqueId</code> 时会首先调用初始化函数 <code>ncclInit</code> 确认网络已经初始化, 然后调用 <code>bootstrapGetUniqueId</code> 创建 <code>ncclUniqueId</code>。</p>
 <pre><code class="language-cpp">// nccl/src/init.cc
 
 ncclResult_t ncclGetUniqueId(ncclUniqueId* out) {
   NCCLCHECK(ncclInit());
   return bootstrapGetUniqueId(out);
 }
+</code></pre>
+<p><code>ncclInit</code> 分为两部分</p>
+<ul>
+<li><code>bootstrapNetInit</code> 调用 <code>ncclFindInterfaces</code> 完成获取 Interface 信息，赋值 <code>ncclSocketAddress bootstrapNetIfAddr</code></li>
+<li><code>ncclNetPluginInit</code> 加载 net plugin</li>
+</ul>
+<pre><code class="language-cpp">// nccl/src/init.cc
 
 static ncclResult_t ncclInit() {
-  if (initialized) return ncclSuccess;
-  pthread_mutex_lock(&amp;initLock);
-  if (!initialized) {
-    initEnv();
-    initGdrCopy();
-    maxLocalSizeBytes = ncclKernMaxLocalSize();
-    NCCLCHECK(initNet());
-    INFO(NCCL_INIT, &quot;Using network %s&quot;, ncclNetName());
-    initialized = true;
-  }
-  pthread_mutex_unlock(&amp;initLock);
+  NCCLCHECK(bootstrapNetInit());
+  NCCLCHECK(ncclNetPluginInit());
   return ncclSuccess;
 }
 </code></pre>
+<p>从定义</p>
+<pre><code class="language-cpp">#define NCCL_UNIQUE_ID_BYTES 128
+typedef struct { char internal[NCCL_UNIQUE_ID_BYTES]; } ncclUniqueId;
+</code></pre>
+<p>可以看出 <code>ncclUniqueId</code> 就是 128 个 char 构成的 struct。</p>
 <pre><code class="language-cpp">// nccl/src/bootstrap.cc  
 
+static union socketAddress bootstrapNetIfAddr;
+
 ncclResult_t bootstrapGetUniqueId(ncclUniqueId* id) {
-  static_assert(sizeof(union socketAddress) &lt; sizeof(ncclUniqueId), &quot;NetId does not fit inside ncclUniqueId&quot;);
   memset(id, 0, sizeof(ncclUniqueId));
-  union socketAddress* connectAddr = (union socketAddress*) id;
 
   char* env = getenv(&quot;NCCL_COMM_ID&quot;);
   if (env) {
-    INFO(NCCL_ENV, &quot;NCCL_COMM_ID set by environment to %s&quot;, env);
-    if (GetSocketAddrFromString(connectAddr, env) != ncclSuccess) {
-      WARN(&quot;Invalid NCCL_COMM_ID, please use format: &lt;ipv4&gt;:&lt;port&gt; or [&lt;ipv6&gt;]:&lt;port&gt; or &lt;hostname&gt;:&lt;port&gt;&quot;);
+    if (ncclGetSocketAddrFromString(connectAddr, env) != ncclSuccess) {
       return ncclInvalidArgument;
     }
   } else {
-    memcpy(id, &amp;bootstrapNetIfAddr, sizeof(union socketAddress));
+    memcpy(id, &amp;bootstrapNetIfAddr, sizeof(union ncclSocketAddress));
     NCCLCHECK(bootstrapCreateRoot(id, false));
   }
 
   return ncclSuccess;
 }
+</code></pre>
+<p>创建主节点监听线程，<code>ncclUniqueId</code> 的本质是 <code>socketAddress</code>，</p>
+<pre><code class="language-cpp">ncclResult_t bootstrapCreateRoot(ncclUniqueId* id, bool idFromEnv) {
+  union socketAddress* connectAddr = (union socketAddress*) id;
+  int listenFd;
+  NCCLCHECK(createListenSocket(&amp;listenFd, connectAddr));
+  pthread_t thread;
+  pthread_create(&amp;thread, NULL, bootstrapRoot, (void*)(uint64_t)listenFd);
+  return ncclSuccess;
+}
+</code></pre>
+<blockquote>
+<p>使用 <code>NCCL_COMM_ID</code> 时，该函数在 <code>ncclCommInitRankDev</code> 里调用启动 root 上的 tcp 监听服务。</p>
+</blockquote>
+<h3 id="ncclcomminitrank"><a class="header" href="#ncclcomminitrank">ncclCommInitRank</a></h3>
+<p><code>ncclCommInitRank</code> 初始化调用 <code>ncclCommInitRankDev</code> 完成初始化，包括</p>
+<ul>
+<li>如果使用 <code>NCCL_COMM_ID</code> 且 rank 为 0 则需要启动 root 服务；</li>
+<li>确保已经 <code>ncclInit</code></li>
+<li>调用 <code>ncclCommInitRankFunc</code> 初始化，主要调用 <code>initTransportsRank</code> 完成 <code>rendezvous</code>.</li>
+</ul>
+<pre><code class="language-cpp">// nccl/src/init.cc
 
+ncclResult_t ncclCommInitRank(ncclComm_t* newcomm, int nranks, ncclUniqueId commId, int myrank) {
+  NCCLCHECK(ncclCommInitRankDev(newcomm, nranks, commId, myrank, cudaDev, NULL));
+  return ncclSuccess;
+}
+
+static ncclResult_t ncclCommInitRankDev(ncclComm_t* newcomm, int nranks, ncclUniqueId commId, int myrank, int cudaDev, ncclConfig_t *config) {
+  char* env = getenv(&quot;NCCL_COMM_ID&quot;);
+  if (env &amp;&amp; myrank == 0) {
+    NCCLCHECKGOTO(bootstrapCreateRoot(&amp;commId, true), res, fail);
+  }
+
+  NCCLCHECKGOTO(ncclInit(), res, fail);
+
+  struct ncclCommInitRankAsyncJob *job = NULL;
+  NCCLCHECKGOTO(ncclAsyncLaunch(&amp;job-&gt;base, ncclCommInitRankFunc, NULL, free, comm), res, fail);
+
+  return ncclGroupErrCheck(res);
+}
+
+static ncclResult_t ncclCommInitRankFunc(struct ncclAsyncJob* job_) {
+  NCCLCHECKGOTO(initTransportsRank(*newcomm, &amp;commId), res, cleanup);
+
+  comm-&gt;initState = ncclSuccess;
+  return ncclSuccess;
+}
+</code></pre>
+<p><code>initTransportsRank</code> 是初始化中最为复杂的部分，主要包括</p>
+<ul>
+<li>通过 bootstrapAllGather 把所有 peer 的信息收集在一起</li>
+<li>计算 3 个 ncclTopoGraph: ring/tree/colnet </li>
+<li>建立 p2p/ring/tree 等链接</li>
+</ul>
+<pre><code class="language-cpp">
+static ncclResult_t initTransportsRank(struct ncclComm* comm, ncclUniqueId* commId) {
+  // We use 2 AllGathers
+  // 1. { peerInfo, comm, compCap}
+  // 2. { nChannels, graphInfo, topoRanks }
+
+  NCCLCHECK(bootstrapInit(commId, comm));
+
+  NCCLCHECK(bootstrapAllGather(comm-&gt;bootstrap, comm-&gt;peerInfo, sizeof(struct ncclPeerInfo)));
+
+  // Topo detection / System graph creation
+  NCCLCHECK(ncclTopoGetSystem(comm, &amp;comm-&gt;topo));
+  // Compute paths between GPUs and NICs
+  NCCLCHECK(ncclTopoComputePaths(comm-&gt;topo, comm));
+  // Remove inaccessible GPUs and unused NICs
+  NCCLCHECK(ncclTopoTrimSystem(comm-&gt;topo, comm));
+  // Recompute paths after trimming
+  NCCLCHECK(ncclTopoComputePaths(comm-&gt;topo, comm));
+  // Init search
+  NCCLCHECK(ncclTopoSearchInit(comm-&gt;topo));
+  // Print final topology
+  NCCLCHECK(ncclTopoPrint(comm-&gt;topo));
+
+  // Set Affinity to a CPU local the our GPU, so that all memory we allocate
+  // on the host is local.
+  NCCLCHECK(ncclTopoGetCpuAffinity(comm-&gt;topo, comm-&gt;rank, &amp;comm-&gt;cpuAffinity));
+
+  // Launch proxy service thread
+  NCCLCHECK(ncclProxyCreate(comm));
+
+  // Get rings and trees
+  struct ncclTopoGraph ringGraph;
+  NCCLCHECK(ncclTopoCompute(comm-&gt;topo, &amp;ringGraph));
+  NCCLCHECK(ncclTopoPrintGraph(comm-&gt;topo, &amp;ringGraph));
+
+  struct ncclTopoGraph treeGraph;
+  NCCLCHECK(ncclTopoCompute(comm-&gt;topo, &amp;treeGraph));
+  NCCLCHECK(ncclTopoPrintGraph(comm-&gt;topo, &amp;treeGraph));
+
+  struct ncclTopoGraph collNetGraph;
+  NCCLCHECK(ncclTopoCompute(comm-&gt;topo, &amp;collNetGraph));
+  NCCLCHECK(ncclTopoPrintGraph(comm-&gt;topo, &amp;collNetGraph));
+
+  // Determine local CollNet support before all-gather
+
+  // AllGather3 - begin
+  struct ncclGraphInfo {
+    int pattern;
+    int nChannels;
+    int sameChannels;
+    float bwIntra;
+    float bwInter;
+    int typeIntra;
+    int typeInter;
+  };
+
+  struct {
+    int netDev;
+    int collNetSupport;
+    struct ncclGraphInfo tree;
+    struct ncclGraphInfo ring;
+    struct ncclGraphInfo collNet;
+    struct ncclTopoRanks topoRanks;
+  } *allGather3Data;
+
+  NCCLCHECK(bootstrapAllGather(comm-&gt;bootstrap, allGather3Data, sizeof(*allGather3Data)));
+
+  // Connect with prev/next for each ring
+  for (int c=0; c&lt;comm-&gt;nChannels; c++) {
+    NCCLCHECKGOTO(setupChannel(comm, c, rank, nranks, rings+c*nranks), ret, affinity_restore);
+    NCCLCHECKGOTO(ncclTransportP2pConnect(comm, c, 1, &amp;channel-&gt;ring.prev, 1, &amp;channel-&gt;ring.next, 0), ret, affinity_restore);
+  }
+  NCCLCHECKGOTO(ncclTransportP2pSetup(comm, &amp;ringGraph, 0), ret, affinity_restore);
+
+  // Connect Trees
+  for (int c=0; c&lt;comm-&gt;nChannels; c++) {
+    NCCLCHECKGOTO(ncclTransportP2pConnect(comm, c, NCCL_MAX_TREE_ARITY, channel-&gt;tree.down, 1, &amp;channel-&gt;tree.up, 0), ret, affinity_restore);
+    NCCLCHECKGOTO(ncclTransportP2pConnect(comm, c, 1, &amp;channel-&gt;tree.up, NCCL_MAX_TREE_ARITY, channel-&gt;tree.down, 0), ret, affinity_restore);
+  }
+  NCCLCHECKGOTO(ncclTransportP2pSetup(comm, &amp;treeGraph, 0), ret, affinity_restore);
+
+  // Compute nChannels per peer for p2p
+  NCCLCHECK(ncclTopoComputeP2pChannels(comm));
+
+  /* Local intra-node barrier */
+  NCCLCHECK(bootstrapBarrier(comm-&gt;bootstrap, comm-&gt;localRankToRank, comm-&gt;localRank, comm-&gt;localRanks, comm-&gt;localRankToRank[0]));
+
+  return ncclSuccess;
+}
+</code></pre>
+<p>其中 <code>bootstrapInit</code> 和 <code>bootstrapAllGather</code> 完成建立 socket 和连接的操作。</p>
+<pre><code class="language-cpp">// src/bootstrap.cc
+
+ncclResult_t bootstrapInit(ncclUniqueId * id, struct ncclComm* comm) {
+  // Create socket for other ranks to contact me
+  NCCLCHECK(ncclSocketListen(&amp;state-&gt;listenSock));
+  memcpy(&amp;info.extAddressListen, &amp;state-&gt;listenSock.addr, sizeof(union ncclSocketAddress));
+
+  // Create socket for root to contact me
+  NCCLCHECK(ncclSocketListen(&amp;listenSockRoot));
+  memcpy(&amp;info.extAddressListenRoot, &amp;listenSockRoot.addr, sizeof(union ncclSocketAddress));
+
+  // send info on my listening socket to root
+  NCCLCHECK(ncclSocketConnect(&amp;sock));
+  NCCLCHECK(bootstrapNetSend(&amp;sock, &amp;info, sizeof(info)));
+
+  // get info on my &quot;next&quot; rank in the bootstrap ring from root
+  NCCLCHECK(ncclSocketAccept(&amp;sock, &amp;listenSockRoot));
+  NCCLCHECK(bootstrapNetRecv(&amp;sock, &amp;state-&gt;ringSendSocket.addr, sizeof(union ncclSocketAddress)));
+
+  NCCLCHECK(ncclSocketConnect(&amp;state-&gt;ringSendSocket));
+  // Accept the connect request from the previous rank in the AllGather ring
+  NCCLCHECK(ncclSocketAccept(&amp;state-&gt;ringRecvSocket, &amp;state-&gt;listenSock));
+
+  // AllGather all listen handlers
+  NCCLCHECK(ncclCalloc(&amp;state-&gt;peerCommAddresses, nranks));
+  memcpy(state-&gt;peerCommAddresses+rank, &amp;state-&gt;listenSock.addr, sizeof(union ncclSocketAddress));
+  NCCLCHECK(bootstrapAllGather(state, state-&gt;peerCommAddresses, sizeof(union ncclSocketAddress)));
+
+  // Create the service proxy
+  NCCLCHECK(ncclCalloc(&amp;state-&gt;peerProxyAddresses, nranks));
+  struct ncclSocket* proxySocket;
+  NCCLCHECK(ncclCalloc(&amp;proxySocket, 1));
+  NCCLCHECK(ncclSocketInit(proxySocket, &amp;bootstrapNetIfAddr, NULL, 0));
+  NCCLCHECK(ncclSocketListen(proxySocket));
+  memcpy(state-&gt;peerProxyAddresses+rank, &amp;proxySocket-&gt;addr, sizeof(union ncclSocketAddress));
+  NCCLCHECK(bootstrapAllGather(state, state-&gt;peerProxyAddresses, sizeof(union ncclSocketAddress)));
+  NCCLCHECK(ncclProxyInit(comm, proxySocket, state-&gt;peerProxyAddresses));
+
+  return ncclSuccess;
+}
+
+ncclResult_t bootstrapAllGather(void* commState, void* allData, int size) {
+  /* Simple ring based AllGather
+   * At each step i receive data from (rank-i-1) from left
+   * and send previous step's data from (rank-i) to right
+   */
+  for (int i=0; i&lt;nranks-1; i++) {
+    size_t rslice = (rank - i - 1 + nranks) % nranks;
+    size_t sslice = (rank - i + nranks) % nranks;
+
+    // Send slice to the right
+    NCCLCHECK(bootstrapNetSend(&amp;state-&gt;ringSendSocket, data+sslice*size, size));
+    // Recv slice from the left
+    NCCLCHECK(bootstrapNetRecv(&amp;state-&gt;ringRecvSocket, data+rslice*size, size));
+  }
+
+  return ncclSuccess;
+}
 </code></pre>
 <h2 id="cuda-graph"><a class="header" href="#cuda-graph">Cuda Graph</a></h2>
 <pre><code class="language-cpp">cudaGraph_t graph;
@@ -6711,6 +6917,10 @@ for(int istep=0; istep&lt;NSTEP; istep++){
   cudaStreamSynchronize(stream);
 }
 </code></pre>
+<h2 id="env"><a class="header" href="#env">ENV</a></h2>
+<ul>
+<li><code>NCCL_GRAPH_DUMP_FILE</code> 可以保存网络拓扑信息到文件</li>
+</ul>
 <h2 id="references"><a class="header" href="#references">References</a></h2>
 <ul>
 <li><a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/examples.html">examples</a></li>
