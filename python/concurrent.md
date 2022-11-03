@@ -1,6 +1,13 @@
 # Concurrent Execution
 
-[doc](https://docs.python.org/3/library/concurrency.html)
+**TL;DR;**
+
+* 使用 python 作为引子/driver 启动其他独立进程，使用 exec. 
+* 使用 python 作为主进程管理，子进程是独立启动的进程，使用 subprocess.Popen.
+* 子进程是 python 函数使用 multiprocessing。
+* 把 python 函数当作线程启动时使用 threading。
+
+[https://docs.python.org/3/library/concurrency.html](https://docs.python.org/3/library/concurrency.html)
 
 ### 1. subprocess
 
@@ -16,7 +23,7 @@ proc.communicate()
 proc.terminate()
 proc.kill()
 ```
-[doc](https://docs.python.org/3/library/subprocess.html)
+[https://docs.python.org/3/library/subprocess.html](https://docs.python.org/3/library/subprocess.html)
 
 ### 2. threading
 
@@ -34,7 +41,7 @@ thread.start()
 thread.join()
 ```
 
-[doc](https://docs.python.org/3/library/threading.html)
+[https://docs.python.org/3/library/threading.html](https://docs.python.org/3/library/threading.html)
 
 #### Pros
 * Lightweight - low memory footprint
@@ -65,7 +72,7 @@ proc.join()
 proc.close()
 
 ```
-[doc](https://docs.python.org/3/library/multiprocessing.html)
+[https://docs.python.org/3/library/multiprocessing.html](https://docs.python.org/3/library/multiprocessing.html)
 
 
 #### Pros
@@ -85,7 +92,7 @@ proc.close()
 
 ### 4. Executor
 
-[doc](https://docs.python.org/3/library/concurrent.futures.html)
+[https://docs.python.org/3/library/concurrent.futures.html](https://docs.python.org/3/library/concurrent.futures.html)
 
 * ProcessPoolExecutor 封装 multiprocessing module，提供进程池
 * ThreadPoolExecutor, 线程池
