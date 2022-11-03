@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>multiprocessing - Aller au boulot</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Projects excelling">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><a href="../index.html"><strong aria-hidden="true">1.</strong> welcome</a></li><li class="chapter-item "><a href="../survey/survey.html"><strong aria-hidden="true">2.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/pollux.html"><strong aria-hidden="true">2.1.</strong> pollux</a></li><li class="chapter-item "><a href="../survey/adasum.html"><strong aria-hidden="true">2.2.</strong> adasum</a></li><li class="chapter-item "><a href="../survey/adaptation_learning.html"><strong aria-hidden="true">2.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="../survey/gradient_descent.html"><strong aria-hidden="true">2.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="../survey/auto_parallel.html"><strong aria-hidden="true">2.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="../survey/scheduling.html"><strong aria-hidden="true">2.6.</strong> scheduling</a></li><li class="chapter-item "><a href="../survey/gradient_compression/gradient_compression.html"><strong aria-hidden="true">2.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/gradient_compression/dgc.html"><strong aria-hidden="true">2.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="../survey/gradient_compression/csc.html"><strong aria-hidden="true">2.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="../survey/adaptive_training.html"><strong aria-hidden="true">2.8.</strong> adaptive training</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">3.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">3.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">3.2.</strong> profiler</a></li><li class="chapter-item "><a href="../pytorch/hook.html"><strong aria-hidden="true">3.3.</strong> hook</a></li><li class="chapter-item "><a href="../pytorch/elastic.html"><strong aria-hidden="true">3.4.</strong> elastic</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">4.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">4.1.</strong> ps</a></li><li class="chapter-item "><a href="../paddle/framework.html"><strong aria-hidden="true">4.2.</strong> framework</a></li><li class="chapter-item "><a href="../paddle/cinn.html"><strong aria-hidden="true">4.3.</strong> cinn</a></li></ol></li><li class="chapter-item "><a href="../horovod/horovod.html"><strong aria-hidden="true">5.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">5.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">5.2.</strong> workflow</a></li><li class="chapter-item "><a href="../horovod/object.html"><strong aria-hidden="true">5.3.</strong> object</a></li><li class="chapter-item "><a href="../horovod/develop.html"><strong aria-hidden="true">5.4.</strong> develop</a></li><li class="chapter-item "><a href="../horovod/pytorch.html"><strong aria-hidden="true">5.5.</strong> pytorch</a></li><li class="chapter-item "><a href="../horovod/tensorflow.html"><strong aria-hidden="true">5.6.</strong> tensorflow</a></li><li class="chapter-item "><a href="../horovod/elastic.html"><strong aria-hidden="true">5.7.</strong> elastic</a></li></ol></li><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">6.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">6.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">6.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">6.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">6.4.</strong> api</a></li></ol></li><li class="chapter-item expanded "><a href="../python/python.html"><strong aria-hidden="true">7.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">7.1.</strong> concurrent execution</a></li><li class="chapter-item expanded "><a href="../python/multiprocessing.html" class="active"><strong aria-hidden="true">7.2.</strong> multiprocessing</a></li><li class="chapter-item "><a href="../python/decorator.html"><strong aria-hidden="true">7.3.</strong> decorator</a></li></ol></li><li class="chapter-item "><a href="../kubernetes/kubernetes.html"><strong aria-hidden="true">8.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../kubernetes/scheduler.html"><strong aria-hidden="true">8.1.</strong> scheduler</a></li><li class="chapter-item "><a href="../kubernetes/operator.html"><strong aria-hidden="true">8.2.</strong> operator</a></li><li class="chapter-item "><a href="../kubernetes/device_plugin.html"><strong aria-hidden="true">8.3.</strong> device plugin</a></li><li class="chapter-item "><a href="../kubernetes/docker.html"><strong aria-hidden="true">8.4.</strong> docker</a></li></ol></li><li class="chapter-item "><a href="../tvm/tvm.html"><strong aria-hidden="true">9.</strong> tvm</a></li><li class="chapter-item "><a href="../gloo/gloo.html"><strong aria-hidden="true">10.</strong> gloo</a></li><li class="chapter-item "><a href="../nccl/nccl.html"><strong aria-hidden="true">11.</strong> nccl</a></li><li class="chapter-item "><a href="../mpi/mpi.html"><strong aria-hidden="true">12.</strong> mpi</a></li><li class="chapter-item "><a href="../nlp/nlp.html"><strong aria-hidden="true">13.</strong> nlp</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../nlp/transformer.html"><strong aria-hidden="true">13.1.</strong> transformer</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">Aller au boulot</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/kuizhiqing/aller-au-boulot" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="multiprocessing"><a class="header" href="#multiprocessing">multiprocessing</a></h1>
+<p><a href="https://docs.python.org/3/library/multiprocessing.html">multiprocessing — Process-based parallelism — Python 3.10.1 documentation</a></p>
+<p>Difference between <code>Pipe</code> and <code>Queue</code></p>
+<ul>
+<li>
+<p>A <code>Pipe()</code> can have two endpoints</p>
+</li>
+<li>
+<p>A <code>Queue()</code> can have multiple producers and consumers</p>
+</li>
+</ul>
+<p>A <code>Pipe</code> has a better performance than <code>Queue</code> since <code>Queue</code> is built on top of <code>Pipe</code>.</p>
+<h3 id="queue"><a class="header" href="#queue">Queue</a></h3>
+<pre><code class="language-py">from multiprocessing import Process, Queue
+
+def f(q):
+    q.put([42, None, 'hello'])
+
+if __name__ == '__main__':
+    q = Queue()
+    p = Process(target=f, args=(q,))
+    p.start()
+    print(q.get())    # prints &quot;[42, None, 'hello']&quot;
+    p.join()
+</code></pre>
+<h3 id="pipe"><a class="header" href="#pipe">Pipe</a></h3>
+<pre><code class="language-py">from multiprocessing import Process, Pipe
+
+def f(conn):
+    conn.send([42, None, 'hello'])
+    conn.close()
+
+if __name__ == '__main__':
+    parent_conn, child_conn = Pipe()
+    p = Process(target=f, args=(child_conn,))
+    p.start()
+    print(parent_conn.recv())   # prints &quot;[42, None, 'hello']&quot;
+    p.join()
+</code></pre>
+<h3 id="lock"><a class="header" href="#lock">Lock</a></h3>
+<pre><code class="language-py">from multiprocessing import Process, Lock
+
+def f(l, i):
+    l.acquire()
+    try:
+        print('hello world', i)
+    finally:
+        l.release()
+
+if __name__ == '__main__':
+    lock = Lock()
+
+    for num in range(10):
+        Process(target=f, args=(lock, num)).start()s
+</code></pre>
+<h3 id="shared--memory"><a class="header" href="#shared--memory">Shared  memory</a></h3>
+<p>Value and Array Only</p>
+<pre><code class="language-py">from multiprocessing import Process, Value, Array
+
+def f(n, a):
+    n.value = 3.1415927
+    for i in range(len(a)):
+        a[i] = -a[i]
+
+if __name__ == '__main__':
+    num = Value('d', 0.0)
+    arr = Array('i', range(10))
+
+    p = Process(target=f, args=(num, arr))
+    p.start()
+    p.join()
+
+    print(num.value)
+    print(arr[:])
+</code></pre>
+<h3 id="server-process"><a class="header" href="#server-process">Server process</a></h3>
+<pre><code class="language-python">from multiprocessing import Process, Manager
+
+def f(d, l):
+    d[1] = '1'
+    d['2'] = 2
+    d[0.25] = None
+    l.reverse()
+
+if __name__ == '__main__':
+    with Manager() as manager:
+        d = manager.dict()
+        l = manager.list(range(10))
+
+        p = Process(target=f, args=(d, l))
+        p.start()
+        p.join()
+
+        print(d)
+        print(l)
+</code></pre>
+<p><strong>remote manager</strong></p>
+<p>start server</p>
+<pre><code class="language-python">from multiprocessing.managers import BaseManager
+from queue import Queue
+queue = Queue()
+class QueueManager(BaseManager): pass
+QueueManager.register('get_queue', callable=lambda:queue)
+m = QueueManager(address=('', 50000), authkey=b'abracadabra')
+s = m.get_server()
+s.serve_forever()
+</code></pre>
+<p>use in clients</p>
+<pre><code class="language-python">from multiprocessing.managers import BaseManager
+class QueueManager(BaseManager): pass
+QueueManager.register('get_queue')
+m = QueueManager(address=('foo.bar.org', 50000), authkey=b'abracadabra')
+m.connect()
+queue = m.get_queue()
+queue.put('hello')
+#queue.get('hello')
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../python/concurrent.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../python/decorator.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../python/concurrent.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../python/decorator.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
