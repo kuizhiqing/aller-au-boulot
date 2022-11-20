@@ -143,7 +143,9 @@ struct Edge {
 };
 ```
 
-## Workflow
+## 网络构建
+
+先看简单的例子,
 
 ```python
 import torch
@@ -164,172 +166,11 @@ d grad:None grad_fn:<MulBackward0 object at 0x7f6862dc76d0>
 '''
 ```
 
-以上代码的网络构建如图所示
+以上代码构建的网络如图所示
 
 ![1](4.png)
 
-下面解析详细过程.
-
-在之前的版本中，`torch.tensor()` 的 bind 来自于自动代码生成，相关生成逻辑参考以下两个部分，
-
-```cpp
-// tools/autograd/templates/python_torch_functions.cpp
-
-static PyMethodDef torch_functions_shard[] = {
-  ${py_method_defs}
-};
-```
-
-```python
-# tools/autograd/gen_python_functions.py
-
-def create_python_bindings(...
-def create_python_bindings_sharded(...
-```
-
-最新的 pytorch 使用 python object 暴露 python tensor. 对应类型 THPVariable_tensor.
-
-```cpp
-// torch/csrc/autograd/python_torch_functions_manual.cpp
-
-// implemented on python object to allow torch.tensor to be constructed with
-// arbitrarily nested python objects - list, tuple, np array, scalar, etc.
-static PyObject* THPVariable_tensor( PyObject* self, PyObject* args, PyObject* kwargs) {
-  jit::tracer::warn("torch.tensor", jit::tracer::WARN_CONSTRUCTOR);
-  return THPVariable_Wrap(torch::utils::tensor_ctor(
-      torch::tensors::get_default_dispatch_key(),
-      torch::tensors::get_default_scalar_type(),
-      r));
-}
-```
-
-* torch::utils::tensor_ctor() 返回 cpp tensor
-* torch::tensors::get_default_dispatch_key() 获取默认 dispatch key
-* torch::tensors::get_default_scalar_type() 获取默认数据类型
-* THPVariable_Wrap 把 tensor 封装成 python 可使用的 THPVariable
-
-![1](3.png)
-
-### tensor_new
-
-```cpp
-// torch/csrc/utils/tensor_new.cpp
-
-Tensor tensor_ctor(
-    c10::DispatchKey dispatch_key,
-    at::ScalarType scalar_type,
-    PythonArgs& r) {
-  if (r.idx == 0) {
-    PyObject* data = r.pyobject(0);
-    bool type_inference = r.isNone(1);
-    bool pin_memory = r.toBool(3);
-    bool args_requires_grad = r.toBool(4);
-    auto new_tensor = internal_new_from_data(
-        typeIdWithDefault(r, 2, dispatch_key),
-        r.scalartypeWithDefault(1, scalar_type),
-        r.deviceOptional(2),
-        data,
-        /*copy_variables=*/true,
-        /*copy_numpy=*/true,
-        /*type_inference=*/type_inference,
-        pin_memory);
-    auto names = r.toDimnameListOptional(5);
-    if (names) {
-      at::namedinference::propagate_names(
-          new_tensor, *names, /*validate_names=*/true);
-    }
-    new_tensor.detach_(); // ensure new_tensor a leaf node
-    new_tensor.set_requires_grad(args_requires_grad);
-    return new_tensor;
-  }
-}
-```
-
-* 解析参数
-* 调用 internal_new_from_data 创建 cpp tensor，初始化 storage_
-* new_tensor.detach_() 确保是叶子结点，初始化 autograd_meta_
-
-### internal_new_from_data
-
-```cpp
-// torch/csrc/utils/tensor_new.cpp
-
-Tensor internal_new_from_data(
-    c10::TensorOptions options,
-    at::ScalarType scalar_type,
-    c10::optional<Device> device_opt,
-    PyObject* data,
-    bool copy_variables,
-    bool copy_numpy,
-    bool type_inference,
-    bool pin_memory = false) {
-  if (THPVariable_Check(data)) {
-    auto var = THPVariable_Unpack(data);
-    return var.to(...);
-  }
-
-  if (PyObject_HasAttrString(data, "__cuda_array_interface__")) {
-    auto tensor = tensor_from_cuda_array_interface(data);
-    return tensor.to(...);
-  }
-
-  if (is_numpy_available() && PyArray_Check(data)) {
-     auto tensor = tensor_from_numpy(data, /*warn_if_not_writeable=*/!copy_numpy);
-     return tensor.to(...);
-  }
-
-  auto device = device_opt.has_value() ? *device_opt : options.device();
-  auto sizes = compute_sizes(data, scalar_type);
-  ScalarType inferred_scalar_type = type_inference ? infer_scalar_type(data) : scalar_type;
-
-  Tensor tensor;
-  {
-    {
-      if (isStorage(data)) {
-        Storage storage = createStorageGetType(data, storage_scalar_type, is_typed_storage);
-        tensor = at::empty( sizes,
-            at::initialTensorOptions().dtype( is_typed_storage ? storage_scalar_type : inferred_scalar_type)
-                .pinned_memory(pin_memory)
-                .device(storage.device()));
-        tensor.set_(storage);
-
-      } else {
-        TensorOptions opts = at::initialTensorOptions().dtype(inferred_scalar_type);
-        tensor = at::empty(sizes, opts.pinned_memory(pin_memory));
-        recursive_store(
-              (char*)tensor.data_ptr(),
-              tensor.sizes(),
-              tensor.strides(),
-              0,
-              inferred_scalar_type,
-              tensor.dtype().itemsize(),
-              data);
-      }
-    }
-    maybe_initialize_cuda(device);
-    tensor = tensor.to(device, inferred_scalar_type, /*non_blocking=*/false, /*copy=*/false);
-  }
-
-  return at::lift_fresh(tensor);
-}
-```
-
-* at::empty() 创建 tensor
-* recursive_store() 初始化 tensor 数据
-
-其中 `detach_` 调用会调用 materialize_autograd_meta 初始化 autograd_meta_.
-
-```cpp
-// torch/csrc/autograd/variable.cpp
-
-AutogradMeta* materialize_autograd_meta(const at::TensorBase& self) {
-  auto p = self.unsafeGetTensorImpl();
-  if (!p->autograd_meta()) {
-    p->set_autograd_meta(std::make_unique<AutogradMeta>());
-  }
-  return get_autograd_meta(self);
-}
-```
+下面解析详细构建过程.
 
 ## torch.add
 
@@ -337,6 +178,8 @@ AutogradMeta* materialize_autograd_meta(const at::TensorBase& self) {
 
 ```cpp
 // torch/csrc/autograd/generated/VariableType_2.cpp
+
+// @generated by torchgen/gen.py from VariableType.cpp
 
 at::Tensor add_Tensor(c10::DispatchKeySet ks, const at::Tensor & self, const at::Tensor & other, const at::Scalar & alpha) {
   auto& self_ = unpack(self, "self", 0);
@@ -372,10 +215,51 @@ at::Tensor add_Tensor(c10::DispatchKeySet ks, const at::Tensor & self, const at:
 * 计算 at::redispatch::add，结果保存至 result
 * 关联 AddBackward0 和 result
 
+首先计算逻辑 add 的调用是自动生成的
+
+```cpp
+// torch/include/ATen/RedispatchFunctions.h
+
+// @generated by torchgen/gen.py from RedispatchFunctions.h
+
+namespace at {
+namespace redispatch {
+    // aten::add.Tensor(Tensor self, Tensor other, *, Scalar alpha=1) -> Tensor
+    inline at::Tensor add(c10::DispatchKeySet dispatchKeySet, const at::Tensor & self, const at::Tensor & other, const at::Scalar & alpha=1) {
+        return at::_ops::add_Tensor::redispatch(dispatchKeySet, self, other, alpha);
+    }
+}
+}
+```
+
+具体实现 kernel 如下
+
+```cpp
+// torch/include/ATen/ops/add_ops.h
+
+// @generated by torchgen/gen.py from Operator.h
+
+namespace at {
+namespace _ops {
+
+struct TORCH_API add_Tensor {
+  using schema = at::Tensor (const at::Tensor &, const at::Tensor &, const at::Scalar &);
+  using ptr_schema = schema*;
+  // See Note [static constexpr char* members for windows NVCC]
+  STATIC_CONSTEXPR_STR_INL_EXCEPT_WIN_CUDA(name, "aten::add")
+  STATIC_CONSTEXPR_STR_INL_EXCEPT_WIN_CUDA(overload_name, "Tensor")
+  STATIC_CONSTEXPR_STR_INL_EXCEPT_WIN_CUDA(schema_str, "add.Tensor(Tensor self, Tensor other, *, Scalar alpha=1) -> Tensor")
+  static at::Tensor call(const at::Tensor & self, const at::Tensor & other, const at::Scalar & alpha);
+  static at::Tensor redispatch(c10::DispatchKeySet dispatchKeySet, const at::Tensor & self, const at::Tensor & other, const at::Scalar & alpha);
+};
+```
+
 AddBackward0
 
 ```cpp
 // torch/csrc/autograd/generated/Functions.h
+
+// @generated from ../tools/autograd/templates/Functions.h
 
 struct TORCH_API AddBackward0 : public TraceableFunction {
   using TraceableFunction::TraceableFunction;
@@ -400,6 +284,7 @@ struct TraceableFunction : public Node {
     return true;
   }
 };
+```
 
 collect_next_edges 根据两个输入找到节点的 Edges
 

@@ -1,20 +1,23 @@
 # Tensor
 
-## Tensor API dependency
+## init
 
-The dependency of tensor related API
+What's behind `import torch` ?
 
-![Tensor View API Dependence](tensor-api.png)
+```python
+# torch/__init__.py
 
+from torch._C import *
+```
 
-## View
+```c
+// torch/csrc/stub.c
 
-Tensor view explication
-
-![Tensor View API Dependence](tensor-view.png)
-
-
-## Data Structure
+PyMODINIT_FUNC PyInit__C(void)
+{
+  return initModule();
+}
+```
 
 ```cpp
 // torch/csrc/Module.cpp
@@ -23,6 +26,7 @@ extern "C"
 TORCH_API PyObject* initModule();
 PyObject* initModule() {
   THPUtils_addPyMethodDefs(methods, TorchMethods);
+  THPUtils_addPyMethodDefs(methods, torch::autograd::python_functions());
 
   static struct PyModuleDef torchmodule = {
      PyModuleDef_HEAD_INIT,
@@ -51,6 +55,47 @@ PyObject* initModule() {
   return module;
 }
 ```
+
+Why `torch` have method `tensor` ?
+
+Since method `tensor` is in  `methods.data()`.
+
+But How ?
+
+
+
+## class torch.Tensor 
+
+What's behind `torch.Tensor` ?
+
+### From py to cpp
+
+```python
+# torch/__init__.py
+
+from ._tensor import Tensor
+```
+
+python `Tensor` 都继承自 `torch._C._TensorBase`
+
+```python
+# torch/_tensor.py
+
+class Tensor(torch._C._TensorBase):
+    def __deepcopy__(self, memo):
+        ...
+    def storage(self):
+        return self._typed_storage()
+    def backward(self, gradient=None, retain_graph=None, create_graph=False, inputs=None):
+        torch.autograd.backward(
+            self, gradient, retain_graph, create_graph, inputs=inputs
+        )
+    def register_hook(self, hook):
+        return handle
+    ...
+```
+
+python 的 `torch._C._TensorBase` 绑定在 cpp `THPVariableType` 上
 
 ```cpp
 // torch/csrc/autograd/python_variable.cpp
@@ -97,13 +142,11 @@ PyTypeObject THPVariableMetaType = {
 };
 ```
 
-python 的 `_TensorBase` 绑定在 `THPVariableType` 上，python 相关的 `Tensor` 都继承自 `torch._C._TensorBase`.
 
 ```cpp
 // torch/csrc/autograd/python_variable.h
 
 // Python object that backs torch.autograd.Variable
-// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 struct THPVariable {
   PyObject_HEAD;
   // Payload
@@ -125,11 +168,11 @@ using variable_list = std::vector<Variable>;
 } }
 ```
 
-PyTorch Tensor 相关主要数据结构和关系
+### TensorBase and Tensor
 
-![1](1.png)
+TensorBase
 
-Tensor v.s. TensorBase
+`Tensor` 继承自 `TensorBase`, `TensorBase` 不依赖 function 自动生成，使用 `TensorBase` 可以避免自动生成部分有改动时全量编译，其次是引用计数问题。
 
 ```cpp
 // aten/src/ATen/core/TensorBase.h
@@ -223,7 +266,47 @@ protected:
 };
 ```
 
-`Tensor` 继承自 `TensorBase`, `TensorBase` 不依赖 function 自动生成，使用 `TensorBase` 可以避免自动生成部分有改动时全量编译，其次是引用计数问题。
+Tensor API
+
+```cpp
+// torch/include/ATen/core/TensorBody.h
+// aten/src/ATen/templates/TensorBody.h
+
+// Tensor is a "generic" object holding a pointer to the underlying TensorImpl object, which$ has an embedded reference count. 
+// similar to boost::intrusive_ptr.
+class TORCH_API Tensor: public TensorBase {
+ protected:
+  friend MaybeOwnedTraits<Tensor>;
+  friend OptionalTensorRef;
+
+ public:
+  explicit Tensor(
+      c10::intrusive_ptr<TensorImpl, UndefinedTensorImpl> tensor_impl)
+      : TensorBase(std::move(tensor_impl)) {}
+  Tensor(const Tensor &tensor) = default;
+  Tensor(Tensor &&tensor) = default;
+
+  explicit Tensor(const TensorBase &base): TensorBase(base) {}
+  c10::MaybeOwned<Tensor> expect_contiguous(MemoryFormat memory_format=MemoryFormat::Contiguous) const &;
+  c10::MaybeOwned<Tensor> expect_contiguous(MemoryFormat memory_format=MemoryFormat::Contiguous) && = delete;
+
+  Tensor& operator=(const TensorBase& x) & {
+    impl_ = x.getIntrusivePtr();
+    return *this;
+  }
+  Tensor& operator=(TensorBase&& x) & { }
+  Tensor& operator=(const Tensor &x) & { }
+  Tensor& operator=(Tensor &&x) & { }
+  Tensor& operator=(Scalar v) && { }
+  Tensor& operator=(const Tensor &rhs) && { }
+  Tensor& operator=(Tensor&& rhs) && { }
+
+  void backward(const Tensor & gradient={}, c10::optional<bool> retain_graph=c10::nullopt, bool create_graph=false, c10::optional<TensorList> inputs=c10::nullopt) const { }
+  Tensor data() const {
+    return TensorBase::data();
+  }
+}
+```
 
 Tensor 的继承关系
 
@@ -374,4 +457,318 @@ class UniqueVoidPtr {
 * specialized to void 
 * specialized for a function pointer deleter `void(void* ctx)`
 * deleter is guaranteed to be called when the unique pointer is destructed and the context is non-null
+
+PyTorch Tensor 相关主要数据结构和关系
+
+![1](1.png)
+
+## function torch.tensor
+
+```python
+torch.tensor(1.0)
+```
+
+pytorch 使用 [PyMethodDef](https://docs.python.org/3/c-api/structures.html#c.PyMethodDef)
+暴露 python tensor, 对应类型 THPVariable_tensor.
+
+```cpp
+// torch/csrc/autograd/python_torch_functions_manual.cpp
+
+static PyMethodDef torch_functions_manual[] = {
+    {"tensor",
+     castPyCFunctionWithKeywords(THPVariable_tensor),
+     METH_VARARGS | METH_KEYWORDS | METH_STATIC,
+     nullptr},
+}
+
+// implemented on python object to allow torch.tensor to be constructed with
+// arbitrarily nested python objects - list, tuple, np array, scalar, etc.
+static PyObject* THPVariable_tensor( PyObject* self, PyObject* args, PyObject* kwargs) {
+  jit::tracer::warn("torch.tensor", jit::tracer::WARN_CONSTRUCTOR);
+  return THPVariable_Wrap(torch::utils::tensor_ctor(
+      torch::tensors::get_default_dispatch_key(),
+      torch::tensors::get_default_scalar_type(),
+      r));
+}
+```
+
+* torch::utils::tensor_ctor() 返回 cpp tensor
+* torch::tensors::get_default_dispatch_key() 获取默认 dispatch key
+* torch::tensors::get_default_scalar_type() 获取默认数据类型
+* THPVariable_Wrap 把 tensor 封装成 python 可使用的 THPVariable
+
+![1](3.png)
+
+### tensor_new
+
+```cpp
+// torch/csrc/utils/tensor_new.cpp
+
+Tensor tensor_ctor(
+    c10::DispatchKey dispatch_key,
+    at::ScalarType scalar_type,
+    PythonArgs& r) {
+  if (r.idx == 0) {
+    PyObject* data = r.pyobject(0);
+    bool type_inference = r.isNone(1);
+    bool pin_memory = r.toBool(3);
+    bool args_requires_grad = r.toBool(4);
+    auto new_tensor = internal_new_from_data(
+        typeIdWithDefault(r, 2, dispatch_key),
+        r.scalartypeWithDefault(1, scalar_type),
+        r.deviceOptional(2),
+        data,
+        /*copy_variables=*/true,
+        /*copy_numpy=*/true,
+        /*type_inference=*/type_inference,
+        pin_memory);
+    auto names = r.toDimnameListOptional(5);
+    if (names) {
+      at::namedinference::propagate_names(
+          new_tensor, *names, /*validate_names=*/true);
+    }
+    new_tensor.detach_(); // ensure new_tensor a leaf node
+    new_tensor.set_requires_grad(args_requires_grad);
+    return new_tensor;
+  }
+}
+```
+
+* 解析参数
+* 调用 internal_new_from_data 创建 cpp tensor，初始化 storage_
+* new_tensor.detach_() 确保是叶子结点，初始化 autograd_meta_
+
+### internal_new_from_data
+
+```cpp
+// torch/csrc/utils/tensor_new.cpp
+
+Tensor internal_new_from_data(
+    c10::TensorOptions options,
+    at::ScalarType scalar_type,
+    c10::optional<Device> device_opt,
+    PyObject* data,
+    bool copy_variables,
+    bool copy_numpy,
+    bool type_inference,
+    bool pin_memory = false) {
+  if (THPVariable_Check(data)) {
+    auto var = THPVariable_Unpack(data);
+    return var.to(...);
+  }
+
+  if (PyObject_HasAttrString(data, "__cuda_array_interface__")) {
+    auto tensor = tensor_from_cuda_array_interface(data);
+    return tensor.to(...);
+  }
+
+  if (is_numpy_available() && PyArray_Check(data)) {
+     auto tensor = tensor_from_numpy(data, /*warn_if_not_writeable=*/!copy_numpy);
+     return tensor.to(...);
+  }
+
+  auto device = device_opt.has_value() ? *device_opt : options.device();
+  auto sizes = compute_sizes(data, scalar_type);
+  ScalarType inferred_scalar_type = type_inference ? infer_scalar_type(data) : scalar_type;
+
+  Tensor tensor;
+  {
+    {
+      if (isStorage(data)) {
+        Storage storage = createStorageGetType(data, storage_scalar_type, is_typed_storage);
+        tensor = at::empty( sizes,
+            at::initialTensorOptions().dtype( is_typed_storage ? storage_scalar_type : inferred_scalar_type)
+                .pinned_memory(pin_memory)
+                .device(storage.device()));
+        tensor.set_(storage);
+
+      } else {
+        TensorOptions opts = at::initialTensorOptions().dtype(inferred_scalar_type);
+        tensor = at::empty(sizes, opts.pinned_memory(pin_memory));
+        recursive_store(
+              (char*)tensor.data_ptr(),
+              tensor.sizes(),
+              tensor.strides(),
+              0,
+              inferred_scalar_type,
+              tensor.dtype().itemsize(),
+              data);
+      }
+    }
+    maybe_initialize_cuda(device);
+    tensor = tensor.to(device, inferred_scalar_type, /*non_blocking=*/false, /*copy=*/false);
+  }
+
+  return at::lift_fresh(tensor);
+}
+```
+
+* at::empty() 创建 tensor
+* recursive_store() 初始化 tensor 数据
+
+其中 `detach_` 调用会调用 materialize_autograd_meta 初始化 autograd_meta_.
+
+```cpp
+// torch/csrc/autograd/variable.cpp
+
+AutogradMeta* materialize_autograd_meta(const at::TensorBase& self) {
+  auto p = self.unsafeGetTensorImpl();
+  if (!p->autograd_meta()) {
+    p->set_autograd_meta(std::make_unique<AutogradMeta>());
+  }
+  return get_autograd_meta(self);
+}
+```
+
+
+### PyMethodDef
+
+[PyMethodDef](https://docs.python.org/3/extending/extending.html) including
+
+* PyModuleDef
+* PyInit_\* and PyModule_Create
+
+```cpp
+// torch/csrc/autograd/python_variable.cpp
+
+bool THPVariable_initModule(PyObject* module) {
+  PyModule_AddObject(module, "_TensorMeta", (PyObject*)&THPVariableMetaType);
+
+  static std::vector<PyMethodDef> methods;
+  THPUtils_addPyMethodDefs(methods, torch::autograd::variable_methods);
+  THPUtils_addPyMethodDefs(methods, extra_methods);
+  THPVariableType.tp_methods = methods.data();
+  PyModule_AddObject(module, "_TensorBase", (PyObject*)&THPVariableType);
+  torch::autograd::initTorchFunctions(module);
+  torch::autograd::initTensorImplConversion(module);
+  return true;
+}
+```
+
+initTorchFunctions
+
+```cpp
+// torch/csrc/autograd/python_torch_functions_manual.cpp
+
+namespace torch {
+namespace autograd {
+
+static PyTypeObject THPVariableFunctions = {
+    PyVarObject_HEAD_INIT(
+        nullptr,
+        0) "torch._C._VariableFunctionsClass", /* tp_name */
+    0, /* tp_basicsize */
+    ...
+}
+
+void initTorchFunctions(PyObject* module) {
+  static std::vector<PyMethodDef> torch_functions;
+  gatherTorchFunctions(torch_functions);
+  THPVariableFunctions.tp_methods = torch_functions.data();
+
+  if (PyModule_AddObject(
+          module,
+          "_VariableFunctionsClass",
+          reinterpret_cast<PyObject*>(&THPVariableFunctions)) < 0) { }
+  THPVariableFunctionsModule =
+      PyType_GenericNew(&THPVariableFunctions, Py_None, Py_None);
+  if (PyModule_AddObject(
+          module, "_VariableFunctions", THPVariableFunctionsModule) < 0) { }
+}
+} // namespace autograd
+} // namespace torch
+````
+
+checkout it out
+
+```python
+torch._C._VariableFunctionsClass.__dict__['tensor']
+<staticmethod object at 0x7f55f7b45ed0>
+```
+
+gatherTorchFunctions 填充 torch_functions, 包括 tensor.
+
+```cpp
+// torch/csrc/autograd/python_torch_functions_manual.cpp
+
+void gatherTorchFunctions(std::vector<PyMethodDef>& torch_functions) {
+  constexpr size_t num_functions =
+      sizeof(torch_functions_manual) / sizeof(torch_functions_manual[0]);
+  torch_functions.assign(
+      torch_functions_manual, torch_functions_manual + num_functions);
+  gatherTorchFunctions_0(torch_functions);
+  gatherTorchFunctions_1(torch_functions);
+  gatherTorchFunctions_2(torch_functions);
+
+  static std::array<std::pair<const char*, const char*>, 4> aliases{
+      {// Canonical function, alias name
+       {"sspaddmm", "saddmm"},
+       {"mm", "spmm"},
+       {"mm", "dsmm"},
+       {"hspmm", "hsmm"}}};
+
+  for (const auto& alias : aliases) {
+    auto it = std::find_if(
+        torch_functions.begin(),
+        torch_functions.end(),
+        [&](const PyMethodDef& def) {
+          return strcmp(def.ml_name, alias.first) == 0;
+        });
+    TORCH_INTERNAL_ASSERT(
+        it != torch_functions.end(),
+        "Failed to create function alias from ",
+        alias.first,
+        " to ",
+        alias.second);
+    PyMethodDef alias_def = *it;
+    alias_def.ml_name = alias.second;
+
+    torch_functions.push_back(alias_def);
+  }
+
+  torch_functions.push_back({nullptr});
+}
+```
+
+`torch_functions.assign(torch_functions_manual, ...);`
+
+> 很多 functions 由
+`tools/autograd/gen_python_functions.py`
+自动生成的文件
+`torch/csrc/autograd/generated/python_torch_functions_0.cpp`
+定义。文件中的这些 functions 由同文件中的函数
+`gatherTorchFunctions_0` 添加到 `torch_functions` 从而添加进 `PyModuleDef`.
+
+```python
+# tools/autograd/gen_python_functions.py 
+
+# These functions require manual Python bindings or are not exposed to Python
+_SKIP_PYTHON_BINDINGS = [
+    "tensor",
+]
+
+def gen( out: str, native_yaml_path: str, tags_yaml_path: str, deprecated_yaml_path: str, template_path: str, *, symint: bool = True,):
+    create_python_bindings( None, "python_variable_methods.cpp",)
+    create_python_bindings_sharded( "torch", "python_torch_functions.cpp",)
+    create_python_bindings( "torch.nn", "python_nn_functions.cpp",)
+    create_python_bindings( "torch.fft", "python_fft_functions.cpp",)
+    create_python_bindings( "torch.linalg", "python_linalg_functions.cpp",)
+    create_python_bindings( "torch.nested", "python_nested_functions.cpp",)
+    create_python_bindings( "torch.sparse", "python_sparse_functions.cpp",)
+    create_python_bindings( "torch.special", "python_special_functions.cpp",)
+    create_python_return_type_bindings( fm, functions, lambda fn: True, "python_return_types.cpp")
+```
+
+## Tensor API dependency
+
+The dependency of tensor related API
+
+![Tensor View API Dependence](tensor-api.png)
+
+
+## View
+
+Tensor view explication
+
+![Tensor View API Dependence](tensor-view.png)
 

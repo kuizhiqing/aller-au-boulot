@@ -17,6 +17,7 @@
 - [pytorch](pytorch/overview.md)
   - [tensor](pytorch/tensor.md)
   - [autograd](pytorch/autograd.md)
+  - [operator](pytorch/operator.md)
   - [profiler](pytorch/profiler.md)
   - [hook](pytorch/hook.md)
   - [elastic](pytorch/elastic.md)
