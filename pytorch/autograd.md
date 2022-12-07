@@ -254,6 +254,20 @@ struct TORCH_API add_Tensor {
 };
 ```
 
+```cpp
+// torch/include/ATen/core/TensorBody.h
+
+// aten::add.Tensor(Tensor self, Tensor other, *, Scalar alpha=1) -> Tensor
+inline at::Tensor Tensor::add(const at::Tensor & other, const at::Scalar & alpha) const {
+    return at::_ops::add_Tensor::call(const_cast<Tensor&>(*this), other, alpha);
+}
+
+// aten::add_.Tensor(Tensor(a!) self, Tensor other, *, Scalar alpha=1) -> Tensor(a!)
+inline at::Tensor & Tensor::add_(const at::Tensor & other, const at::Scalar & alpha) const {
+    return at::_ops::add__Tensor::call(const_cast<Tensor&>(*this), other, alpha);
+}
+```
+
 AddBackward0
 
 ```cpp
