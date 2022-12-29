@@ -13,6 +13,7 @@
     - [dgc](survey/gradient_compression/dgc.md)
     - [csc](survey/gradient_compression/csc.md)
   - [adaptive training](survey/adaptive_training.md)
+  - [flash attention](survey/flash_attention.md)
 
 - [pytorch](pytorch/overview.md)
   - [tensor](pytorch/tensor.md)

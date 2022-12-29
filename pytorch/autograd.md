@@ -413,6 +413,78 @@ void set_gradient_edge(const Variable& self, Edge edge) {
 }
 ```
 
+```cpp
+// torch/csrc/autograd/generated/python_variable_methods.cpp
+
+static PyObject * THPVariable_add(PyObject* self_, PyObject* args, PyObject* kwargs)
+{
+  const Tensor& self = THPVariable_Unpack(self_);
+  static PythonArgParser parser({
+    "add(Scalar alpha, Tensor other)|deprecated",
+    "add(Tensor other, *, Scalar alpha=1)",
+  }, /*traceable=*/true);
+    
+  ParsedArgs<2> parsed_args;
+  auto _r = parser.parse(self_, args, kwargs, parsed_args);
+  if(_r.has_torch_function()) {
+    return handle_torch_function(_r, self_, args, kwargs, THPVariableClass, "torch.Tensor");
+  }
+  switch (_r.idx) {
+    case 0: {
+      // [deprecated] aten::add(Tensor self, Scalar alpha, Tensor other) -> Tensor
+      
+      auto dispatch_add = [](const at::Tensor & self, const at::Scalar & alpha, const at::Tensor & other) -> at::Tensor {
+        pybind11::gil_scoped_release no_gil;
+        return self.add(other, alpha);
+      };
+      return wrap(dispatch_add(self, _r.scalar(0), _r.tensor(1)));
+    } 
+    case 1: {
+      // aten::add.Tensor(Tensor self, Tensor other, *, Scalar alpha=1) -> Tensor
+      
+      auto dispatch_add = [](const at::Tensor & self, const at::Tensor & other, const at::Scalar & alpha) -> at::Tensor {
+        pybind11::gil_scoped_release no_gil;
+        return self.add(other, alpha);
+      };
+      return wrap(dispatch_add(self, _r.tensor(0), _r.scalar(1)));
+    }
+  }
+}
+```
+
+```cpp
+// aten/src/ATen/core/dispatch/Dispatcher.h
+
+// See [Note: Argument forwarding in the dispatcher] for why Args doesn't use &&
+template<class Return, class... Args>
+inline Return Dispatcher::redispatch(const TypedOperatorHandle<Return (Args...)>& op, DispatchKeySet currentDispatchKeySet, Args... args) const {
+  detail::unused_arg_(args...);  // workaround for a false-positive warning about unused parameters in gcc 5
+  // do not use RecordFunction on redispatch
+#ifndef NDEBUG
+  DispatchTraceNestingGuard debug_guard;
+  if (show_dispatch_trace()) {
+      auto nesting_value = dispatch_trace_nesting_value();
+      for (int64_t i = 0; i < nesting_value; ++i) std::cerr << " ";
+      std::cerr << "[redispatch] op=[" << op.operator_name() << "], key=[" << toString(currentDispatchKeySet.highestPriorityTypeId()) << "]" << std::endl;
+  }
+#endif
+  const KernelFunction& kernel = op.operatorDef_->op.lookup(currentDispatchKeySet);
+  return kernel.template call<Return, Args...>(op, currentDispatchKeySet, std::forward<Args>(args)...);
+}
+```
+
+```cpp
+// aten/src/ATen/native/BinaryOps.cpp
+
+Tensor add(const Tensor& self, const Scalar& other, const Scalar& alpha) {
+  return at::add(self, wrapped_scalar_tensor(other), alpha);
+}
+
+Tensor& add_(Tensor& self, const Scalar& other, const Scalar& alpha) {
+  return self.add_(wrapped_scalar_tensor(other), alpha);
+}
+```
+
 ### torch.mul
 
 流程类似
