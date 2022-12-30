@@ -1,0 +1,475 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>flash attention - Aller au boulot</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="Projects excelling">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><a href="../index.html"><strong aria-hidden="true">1.</strong> welcome</a></li><li class="chapter-item expanded "><a href="../survey/survey.html"><strong aria-hidden="true">2.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/pollux.html"><strong aria-hidden="true">2.1.</strong> pollux</a></li><li class="chapter-item "><a href="../survey/adasum.html"><strong aria-hidden="true">2.2.</strong> adasum</a></li><li class="chapter-item "><a href="../survey/adaptation_learning.html"><strong aria-hidden="true">2.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="../survey/gradient_descent.html"><strong aria-hidden="true">2.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="../survey/auto_parallel.html"><strong aria-hidden="true">2.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="../survey/scheduling.html"><strong aria-hidden="true">2.6.</strong> scheduling</a></li><li class="chapter-item "><a href="../survey/gradient_compression/gradient_compression.html"><strong aria-hidden="true">2.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/gradient_compression/dgc.html"><strong aria-hidden="true">2.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="../survey/gradient_compression/csc.html"><strong aria-hidden="true">2.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="../survey/adaptive_training.html"><strong aria-hidden="true">2.8.</strong> adaptive training</a></li><li class="chapter-item expanded "><a href="../survey/flash_attention.html" class="active"><strong aria-hidden="true">2.9.</strong> flash attention</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">3.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">3.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/autograd.html"><strong aria-hidden="true">3.2.</strong> autograd</a></li><li class="chapter-item "><a href="../pytorch/operator.html"><strong aria-hidden="true">3.3.</strong> operator</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">3.4.</strong> profiler</a></li><li class="chapter-item "><a href="../pytorch/hook.html"><strong aria-hidden="true">3.5.</strong> hook</a></li><li class="chapter-item "><a href="../pytorch/elastic.html"><strong aria-hidden="true">3.6.</strong> elastic</a></li><li class="chapter-item "><a href="../pytorch/patch.html"><strong aria-hidden="true">3.7.</strong> patch</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">4.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps/ps-code-overview.html"><strong aria-hidden="true">4.1.</strong> ps</a></li><li class="chapter-item "><a href="../paddle/framework.html"><strong aria-hidden="true">4.2.</strong> framework</a></li><li class="chapter-item "><a href="../paddle/cinn.html"><strong aria-hidden="true">4.3.</strong> cinn</a></li></ol></li><li class="chapter-item "><a href="../horovod/horovod.html"><strong aria-hidden="true">5.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">5.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">5.2.</strong> workflow</a></li><li class="chapter-item "><a href="../horovod/object.html"><strong aria-hidden="true">5.3.</strong> object</a></li><li class="chapter-item "><a href="../horovod/develop.html"><strong aria-hidden="true">5.4.</strong> develop</a></li><li class="chapter-item "><a href="../horovod/pytorch.html"><strong aria-hidden="true">5.5.</strong> pytorch</a></li><li class="chapter-item "><a href="../horovod/tensorflow.html"><strong aria-hidden="true">5.6.</strong> tensorflow</a></li><li class="chapter-item "><a href="../horovod/elastic.html"><strong aria-hidden="true">5.7.</strong> elastic</a></li></ol></li><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">6.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">6.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">6.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">6.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">6.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">7.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">7.1.</strong> concurrent execution</a></li><li class="chapter-item "><a href="../python/multiprocessing.html"><strong aria-hidden="true">7.2.</strong> multiprocessing</a></li><li class="chapter-item "><a href="../python/decorator.html"><strong aria-hidden="true">7.3.</strong> decorator</a></li></ol></li><li class="chapter-item "><a href="../kubernetes/kubernetes.html"><strong aria-hidden="true">8.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../kubernetes/scheduler.html"><strong aria-hidden="true">8.1.</strong> scheduler</a></li><li class="chapter-item "><a href="../kubernetes/operator.html"><strong aria-hidden="true">8.2.</strong> operator</a></li><li class="chapter-item "><a href="../kubernetes/device_plugin.html"><strong aria-hidden="true">8.3.</strong> device plugin</a></li><li class="chapter-item "><a href="../kubernetes/docker.html"><strong aria-hidden="true">8.4.</strong> docker</a></li></ol></li><li class="chapter-item "><a href="../tvm/tvm.html"><strong aria-hidden="true">9.</strong> tvm</a></li><li class="chapter-item "><a href="../gloo/gloo.html"><strong aria-hidden="true">10.</strong> gloo</a></li><li class="chapter-item "><a href="../nccl/nccl.html"><strong aria-hidden="true">11.</strong> nccl</a></li><li class="chapter-item "><a href="../mpi/mpi.html"><strong aria-hidden="true">12.</strong> mpi</a></li><li class="chapter-item "><a href="../nlp/nlp.html"><strong aria-hidden="true">13.</strong> nlp</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../nlp/transformer.html"><strong aria-hidden="true">13.1.</strong> transformer</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">Aller au boulot</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/kuizhiqing/aller-au-boulot" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="flash-attention"><a class="header" href="#flash-attention">Flash Attention</a></h1>
+<h2 id="key-idea"><a class="header" href="#key-idea">Key Idea</a></h2>
+<ul>
+<li>memory hierachy: GPU HBM (40G, 1.5TB/s) -&gt; GPU SRAM (20MB, 19TB/s)</li>
+<li>tiling: split the input into blocks and make several passes over blocks, fit GPU SRAM</li>
+<li>recompute: recompute attention on-chip in the backward pass instead of retrieve from HBM</li>
+</ul>
+<p><strong>Conclusion</strong>: increase FLOPs, decrease Wall-clock time</p>
+<h2 id="code-details"><a class="header" href="#code-details">Code Details</a></h2>
+<h3 id="modules"><a class="header" href="#modules">Modules</a></h3>
+<p><strong>flash_attn</strong></p>
+<pre><code class="language-cpp">// csrc/flash_attn/fmha_api.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+    m.doc() = &quot;Fused Multi-head Self-attention&quot;;
+    m.def(&quot;fwd&quot;, &amp;mha_fwd, &quot;Forward pass&quot;);
+    m.def(&quot;bwd&quot;, &amp;mha_bwd, &quot;Backward pass&quot;);
+    m.def(&quot;fwd_block&quot;, &amp;mha_fwd_block, &quot;Forward pass (blocksparse)&quot;);
+    m.def(&quot;bwd_block&quot;, &amp;mha_bwd_block, &quot;Backward pass (blocksparse)&quot;);
+}
+</code></pre>
+<p><strong>fused_dense_lib</strong></p>
+<pre><code class="language-cpp">// csrc/fused_dense_lib/fused_dense.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+  m.def(&quot;linear_bias_forward&quot;, &amp;linear_bias_forward, &quot;linear bias forward&quot;);
+  m.def(&quot;linear_bias_backward&quot;, &amp;linear_bias_backward, &quot;linear bias backward&quot;);
+  m.def(&quot;linear_bias_wgrad&quot;, &amp;linear_bias_wgrad, &quot;linear bias wgrad&quot;);
+  m.def(&quot;linear_bias_residual_backward&quot;, &amp;linear_bias_residual_backward, &quot;linear bias residual backward&quot;);
+  m.def(&quot;linear_gelu_forward&quot;, &amp;linear_gelu_forward, &quot;linear gelu forward&quot;);
+  m.def(&quot;linear_gelu_linear_backward&quot;, &amp;linear_gelu_linear_backward, &quot;linear gelu linear backward&quot;);
+  m.def(&quot;linear_residual_gelu_linear_backward&quot;, &amp;linear_residual_gelu_linear_backward, &quot;linear residual gelu linear backward&quot;);
+}
+</code></pre>
+<p><strong>fused_softmax</strong></p>
+<pre><code class="language-cpp">// csrc/fused_softmax/fused_softmax.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+  m.def(&quot;scaled_masked_softmax_forward&quot;, &amp;multihead_attn::fused_softmax::scaled_masked_softmax::fwd, &quot;Self Multihead Attention scaled, time masked softmax -- Forward.&quot;);
+  m.def(&quot;scaled_masked_softmax_backward&quot;, &amp;multihead_attn::fused_softmax::scaled_masked_softmax::bwd, &quot;Self Multihead Attention scaled, time masked softmax -- Backward.&quot;);
+  m.def(&quot;scaled_masked_softmax_get_batch_per_block&quot;, &amp;multihead_attn::fused_softmax::scaled_masked_softmax::get_batch_per_block, &quot;Return Batch per block size.&quot;);
+  m.def(&quot;scaled_upper_triang_masked_softmax_forward&quot;, &amp;multihead_attn::fused_softmax::scaled_upper_triang_masked_softmax::fwd, &quot;Self Multihead Attention scaled, time masked softmax -- Forward.&quot;);
+  m.def(&quot;scaled_upper_triang_masked_softmax_backward&quot;, &amp;multihead_attn::fused_softmax::scaled_upper_triang_masked_softmax::bwd, &quot;Self Multihead Attention scaled, time masked softmax -- Backward.&quot;);
+}
+</code></pre>
+<p><strong>layer_norm</strong></p>
+<pre><code class="language-cpp">// csrc/fused_softmax/fused_softmax.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+  m.doc() = &quot;CUDA DropoutAddLayerNorm&quot;;
+  m.def(&quot;dropout_add_ln_fwd&quot;, &amp;dropout_add_ln_fwd, &quot;Run Dropout + Add + LayerNorm forward kernel&quot;);
+  m.def(&quot;dropout_add_ln_bwd&quot;, &amp;dropout_add_ln_bwd, &quot;Run Dropout + Add + LayerNorm backward kernel&quot;);
+}
+</code></pre>
+<p><strong>rotary</strong></p>
+<pre><code class="language-cpp">// csrc/rotary/rotary.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+  m.def(&quot;apply_rotary&quot;, &amp;apply_rotary, &quot;Apply rotary embedding&quot;);
+}
+</code></pre>
+<p><strong>xentropy</strong></p>
+<pre><code class="language-cpp">// csrc/xentropy/interface.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+    m.def(&quot;forward&quot;, &amp;softmax_xentropy_forward, &quot;Softmax cross entropy loss with label smoothing forward (CUDA)&quot;);
+    m.def(&quot;backward&quot;, &amp;softmax_xentropy_backward, &quot;Softmax cross entropy loss with label smoothing backward (CUDA)&quot;);
+}
+</code></pre>
+<h3 id="flash-attention-1"><a class="header" href="#flash-attention-1">Flash Attention</a></h3>
+<h4 id="python-api-call-chains-overview"><a class="header" href="#python-api-call-chains-overview">Python API call chains overview</a></h4>
+<pre><code>FlashSelfAttention
+    flash_attn_func
+        flash_attn_unpadded_qkvpacked_func
+            FlashAttnQKVPackedFunc
+                _flash_attn_forward  = flash_attn_cuda.fwd
+                _flash_attn_backward = flash_attn_cuda.bwd
+    
+FlashCrossAttention
+    flash_attn_unpadded_kvpacked_func
+        FlashAttnKVPackedFunc
+            _flash_attn_forward
+            _flash_attn_backward
+    
+# ----
+    flash_attn_unpadded_qkvpacked_split_func
+        FlashAttnQKVPackedSplitFunc
+            _flash_attn_forward
+            _flash_attn_backward
+</code></pre>
+<pre><code>FlashBlocksparseAttention
+    flash_blocksparse_attn_func 
+        FlashBlocksparseAttnFun 
+            _flash_blocksparse_attn_forward  = flash_attn_cuda.fwd_block
+            _flash_blocksparse_attn_backward = flash_attn_cuda.bwd_block
+</code></pre>
+<h4 id="flashselfattention"><a class="header" href="#flashselfattention">FlashSelfAttention</a></h4>
+<pre><code class="language-python"># flash_attn/flash_attn_interface.py
+
+def flash_attn_unpadded_qkvpacked_func(qkv, cu_seqlens, max_seqlen, dropout_p, softmax_scale=None, causal=False, return_attn_probs=False):
+    return FlashAttnQKVPackedFunc.apply(qkv, cu_seqlens, max_seqlen, dropout_p, softmax_scale, causal, return_attn_probs)
+
+class FlashAttnQKVPackedFunc(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, qkv, cu_seqlens, max_seqlen, dropout_p, softmax_scale, causal, return_softmax):
+        rng_state = torch.cuda.get_rng_state() if dropout_p &gt; 0 else None
+        out, softmax_lse, S_dmask = _flash_attn_forward(...)
+        return (out, softmax_lse, S_dmask)
+
+    @staticmethod
+    def backward(ctx, dout, *args):
+        _flash_attn_backward(...)
+        return dqkv, None, None, None, None, None, None
+
+def _flash_attn_forward(q, k, v, out, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k,
+                        dropout_p, softmax_scale, causal, return_softmax, num_splits=0,
+                        generator=None):
+    softmax_lse, *rest = flash_attn_cuda.fwd(...)
+    return out, softmax_lse, S_dmask
+
+
+def _flash_attn_backward(dout, q, k, v, out, softmax_lse, dq, dk, dv, cu_seqlens_q, cu_seqlens_k,
+                         max_seqlen_q, max_seqlen_k, dropout_p, softmax_scale, causal, num_splits=0,
+                         generator=None):
+    _, _, _, softmax_d = flash_attn_cuda.bwd(...)
+    return dq, dk, dv, softmax_d
+</code></pre>
+<p>mha_fwd + mha_bwd </p>
+<pre><code class="language-cpp">// csrc/flash_attn/fmha_api.cpp
+
+std::vector&lt;at::Tensor&gt;
+mha_fwd(const at::Tensor &amp;q,         // total_q x num_heads x head_size, total_q := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;k,         // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;v,         // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        at::Tensor &amp;out,             // total_q x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;cu_seqlens_q,  // b+1
+        const at::Tensor &amp;cu_seqlens_k,  // b+1
+        const int max_seqlen_q_,
+        const int max_seqlen_k_,
+        const float p_dropout,
+        const float softmax_scale,
+        const bool zero_tensors,
+        const bool is_causal,
+        const bool return_softmax,
+        const int num_splits,
+        c10::optional&lt;at::Generator&gt; gen_) {
+
+    Launch_params&lt;FMHA_fprop_params&gt; launch_params(dprops, stream, is_dropout, return_softmax);
+    run_fmha_fwd(launch_params);
+    return result;
+}
+
+void run_fmha_fwd(Launch_params&lt;FMHA_fprop_params&gt; &amp;launch_params) {
+    if (launch_params.params.d &lt;= 32) {
+        run_fmha_fwd_hdim32(launch_params);
+    } else if (launch_params.params.d &lt;= 64) {
+        run_fmha_fwd_hdim64(launch_params);
+    } else if (launch_params.params.d &lt;= 128) {
+        run_fmha_fwd_hdim128(launch_params);
+    }
+}
+
+std::vector&lt;at::Tensor&gt;
+mha_bwd(const at::Tensor &amp;dout,  // total_q x num_heads, x head_size
+        const at::Tensor &amp;q,   // total_q x num_heads x head_size, total_q := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;k,   // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;v,   // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;out,   // total_q x num_heads x head_size
+        const at::Tensor &amp;softmax_lse_,     // b x h x s softmax logsumexp
+        at::Tensor &amp;dq,   // total_q x num_heads x head_size, total_q := \sum_{i=0}^{b} s_i
+        at::Tensor &amp;dk,   // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        at::Tensor &amp;dv,   // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;cu_seqlens_q,  // b+1
+        const at::Tensor &amp;cu_seqlens_k,  // b+1
+        const int max_seqlen_q_,
+        const int max_seqlen_k_,          // max sequence length to choose the kernel
+        const float p_dropout,         // probability to drop
+        const float softmax_scale,
+        const bool zero_tensors,
+        const bool is_causal,
+        const int num_splits,
+        c10::optional&lt;at::Generator&gt; gen_
+) {
+    auto launch = &amp;run_fmha_bwd;
+
+    FMHA_dgrad_params params;
+
+    set_params_dgrad(params, ...  num_splits);
+
+    launch(params, stream, /*configure=*/true);
+
+    launch(params, stream, /*configure=*/false);
+
+
+    return { dq, dk, dv, softmax_d };
+}
+
+void run_fmha_bwd(FMHA_dgrad_params &amp;params, cudaStream_t stream, const bool configure) {
+  if (params.d &lt;= 32) {
+      run_fmha_bwd_hdim32(params, stream, configure);
+  } else if (params.d &lt;= 64) {
+      run_fmha_bwd_hdim64(params, stream, configure);
+  } else if (params.d &lt;= 128) {
+      run_fmha_bwd_hdim128(params, stream, configure);
+  }
+}
+
+
+</code></pre>
+<pre><code class="language-cpp">// csrc/flash_attn/src/fmha_fwd_hdim32.cu 
+
+#include &quot;fmha_fwd_launch_template.h&quot;
+
+void run_fmha_fwd_hdim32(Launch_params&lt;FMHA_fprop_params&gt; &amp;launch_params) {
+    FP16_SWITCH(launch_params.params.is_bf16, ({
+        if (launch_params.params.seqlen_k == 128) {
+            using Kernel_traits = FMHA_kernel_traits&lt;128, 32, 16, 1, 4, 0x08u, elem_type&gt;;
+            run_fmha_fwd_loop&lt;Kernel_traits&gt;(launch_params);
+        } else if (launch_params.params.seqlen_k &gt;= 256) {
+            using Kernel_traits = FMHA_kernel_traits&lt;256, 32, 16, 1, 4, 0x08u, elem_type&gt;;
+            run_fmha_fwd_loop&lt;Kernel_traits&gt;(launch_params);
+        }
+    }));
+}
+</code></pre>
+<p>run_fmha_fwd_loop -&gt; fmha_fwd_loop_kernel</p>
+<pre><code class="language-cpp">// csrc/flash_attn/src/fmha_fwd_launch_template.h
+
+template&lt;typename Kernel_traits&gt;
+void run_fmha_fwd_loop(Launch_params&lt;FMHA_fprop_params&gt; &amp;launch_params) {
+    BOOL_SWITCH(launch_params.is_dropout, IsDropoutConst, ({
+        auto kernel = launch_params.params.is_causal
+            ? (launch_params.return_softmax
+               ? &amp;fmha_fwd_loop_kernel&lt;Kernel_traits, IsDropoutConst, true, true&gt;
+               : &amp;fmha_fwd_loop_kernel&lt;Kernel_traits, IsDropoutConst, true, false&gt;)
+            : (launch_params.return_softmax
+               ? &amp;fmha_fwd_loop_kernel&lt;Kernel_traits, IsDropoutConst, false, true&gt;
+               : &amp;fmha_fwd_loop_kernel&lt;Kernel_traits, IsDropoutConst, false, false&gt;);
+        if( smem_size &gt;= 48 * 1024 ) {
+            FMHA_CHECK_CUDA(cudaFuncSetAttribute(
+                kernel, cudaFuncAttributeMaxDynamicSharedMemorySize, smem_size));
+        }
+        kernel&lt;&lt;&lt;grid, Kernel_traits::THREADS, smem_size, launch_params.stream&gt;&gt;&gt;(
+            launch_params.params);
+    }));
+}
+
+template&lt;typename Kernel_traits, bool Is_dropout, bool Is_causal, bool Return_softmax&gt;
+__global__ void fmha_fwd_loop_kernel(FMHA_fprop_params params) {
+    fmha::device_1xN_loop&lt;Kernel_traits, Is_dropout, Is_causal, Return_softmax&gt;(params);
+}
+</code></pre>
+<p>device_1xN_loop</p>
+<pre><code class="language-cpp">// csrc/flash_attn/src/fmha_fprop_kernel_1xN.h
+
+#include &quot;fmha_kernel.h&quot;
+#include &lt;fmha/kernel_traits.h&gt;
+#include &lt;fmha/gemm.h&gt;
+#include &lt;fmha/utils.h&gt;
+
+template&lt;typename Kernel_traits, bool Is_dropout, bool Is_causal, bool Return_softmax, typename Params&gt;
+inline __device__ void device_1xN_loop(const Params &amp;params) {
+
+    // The block index for the batch.
+    const int bidb = blockIdx.x;
+    // The block index for the head.
+    const int bidh = blockIdx.y;
+    // The thread index.
+    const int tidx = threadIdx.x;
+
+    fmha::device_1xN_&lt;Kernel_traits, Is_dropout, Is_causal, Return_softmax, true, true&gt;(params, bidb, bidh, STEPS, ph, 0);
+}
+
+template&lt;typename Kernel_traits, bool Is_dropout, bool Is_causal, bool Return_softmax, bool Is_first, bool Is_last, typename Params, typename Prng&gt;
+inline __device__ void device_1xN_(const Params &amp;params, const int bidb, const int bidh, int steps, Prng &amp;ph, const int loop_step_idx) {
+    ...
+}
+</code></pre>
+<p>Dependencies</p>
+<pre><code>csrc/flash_attn/src/fmha
+|-- gemm.h
+|-- gmem_tile.h
+|-- kernel_traits.h
+|-- mask.h
+|-- smem_tile.h
+|-- softmax.h
+`-- utils.h
+</code></pre>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="https://github.com/HazyResearch/flash-attention">github</a></li>
+<li><a href="https://arxiv.org/abs/2205.14135">arxiv</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../survey/adaptive_training.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../pytorch/overview.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../survey/adaptive_training.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../pytorch/overview.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

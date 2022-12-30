@@ -5,8 +5,10 @@
         <meta charset="UTF-8">
         <title>Aller au boulot</title>
         <meta name="robots" content="noindex" />
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        
         <meta name="description" content="Projects excelling">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -17,25 +19,28 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -51,7 +56,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -63,7 +68,7 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -76,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="index.html"><strong aria-hidden="true">1.</strong> welcome</a></li><li class="chapter-item "><a href="survey/survey.html"><strong aria-hidden="true">2.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="survey/pollux.html"><strong aria-hidden="true">2.1.</strong> pollux</a></li><li class="chapter-item "><a href="survey/adasum.html"><strong aria-hidden="true">2.2.</strong> adasum</a></li><li class="chapter-item "><a href="survey/adaptation_learning.html"><strong aria-hidden="true">2.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="survey/gradient_descent.html"><strong aria-hidden="true">2.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="survey/auto_parallel.html"><strong aria-hidden="true">2.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="survey/scheduling.html"><strong aria-hidden="true">2.6.</strong> scheduling</a></li><li class="chapter-item "><a href="survey/gradient_compression/gradient_compression.html"><strong aria-hidden="true">2.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="survey/gradient_compression/dgc.html"><strong aria-hidden="true">2.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="survey/gradient_compression/csc.html"><strong aria-hidden="true">2.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="survey/adaptive_training.html"><strong aria-hidden="true">2.8.</strong> adaptive training</a></li></ol></li><li class="chapter-item "><a href="pytorch/overview.html"><strong aria-hidden="true">3.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="pytorch/tensor.html"><strong aria-hidden="true">3.1.</strong> tensor</a></li><li class="chapter-item "><a href="pytorch/autograd.html"><strong aria-hidden="true">3.2.</strong> autograd</a></li><li class="chapter-item "><a href="pytorch/operator.html"><strong aria-hidden="true">3.3.</strong> operator</a></li><li class="chapter-item "><a href="pytorch/profiler.html"><strong aria-hidden="true">3.4.</strong> profiler</a></li><li class="chapter-item "><a href="pytorch/hook.html"><strong aria-hidden="true">3.5.</strong> hook</a></li><li class="chapter-item "><a href="pytorch/elastic.html"><strong aria-hidden="true">3.6.</strong> elastic</a></li><li class="chapter-item "><a href="pytorch/patch.html"><strong aria-hidden="true">3.7.</strong> patch</a></li></ol></li><li class="chapter-item "><a href="paddle/paddle.html"><strong aria-hidden="true">4.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="paddle/ps/ps-code-overview.html"><strong aria-hidden="true">4.1.</strong> ps</a></li><li class="chapter-item "><a href="paddle/framework.html"><strong aria-hidden="true">4.2.</strong> framework</a></li><li class="chapter-item "><a href="paddle/cinn.html"><strong aria-hidden="true">4.3.</strong> cinn</a></li></ol></li><li class="chapter-item "><a href="horovod/horovod.html"><strong aria-hidden="true">5.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="horovod/run.html"><strong aria-hidden="true">5.1.</strong> run</a></li><li class="chapter-item "><a href="horovod/workflow.html"><strong aria-hidden="true">5.2.</strong> workflow</a></li><li class="chapter-item "><a href="horovod/object.html"><strong aria-hidden="true">5.3.</strong> object</a></li><li class="chapter-item "><a href="horovod/develop.html"><strong aria-hidden="true">5.4.</strong> develop</a></li><li class="chapter-item "><a href="horovod/pytorch.html"><strong aria-hidden="true">5.5.</strong> pytorch</a></li><li class="chapter-item "><a href="horovod/tensorflow.html"><strong aria-hidden="true">5.6.</strong> tensorflow</a></li><li class="chapter-item "><a href="horovod/elastic.html"><strong aria-hidden="true">5.7.</strong> elastic</a></li></ol></li><li class="chapter-item "><a href="ray/ray.html"><strong aria-hidden="true">6.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="ray/overview.html"><strong aria-hidden="true">6.1.</strong> overview</a></li><li class="chapter-item "><a href="ray/gcs.html"><strong aria-hidden="true">6.2.</strong> gcs</a></li><li class="chapter-item "><a href="ray/raylet.html"><strong aria-hidden="true">6.3.</strong> raylet</a></li><li class="chapter-item "><a href="ray/api.html"><strong aria-hidden="true">6.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="python/python.html"><strong aria-hidden="true">7.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="python/concurrent.html"><strong aria-hidden="true">7.1.</strong> concurrent execution</a></li><li class="chapter-item "><a href="python/multiprocessing.html"><strong aria-hidden="true">7.2.</strong> multiprocessing</a></li><li class="chapter-item "><a href="python/decorator.html"><strong aria-hidden="true">7.3.</strong> decorator</a></li></ol></li><li class="chapter-item "><a href="kubernetes/kubernetes.html"><strong aria-hidden="true">8.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="kubernetes/scheduler.html"><strong aria-hidden="true">8.1.</strong> scheduler</a></li><li class="chapter-item "><a href="kubernetes/operator.html"><strong aria-hidden="true">8.2.</strong> operator</a></li><li class="chapter-item "><a href="kubernetes/device_plugin.html"><strong aria-hidden="true">8.3.</strong> device plugin</a></li><li class="chapter-item "><a href="kubernetes/docker.html"><strong aria-hidden="true">8.4.</strong> docker</a></li></ol></li><li class="chapter-item "><a href="tvm/tvm.html"><strong aria-hidden="true">9.</strong> tvm</a></li><li class="chapter-item "><a href="gloo/gloo.html"><strong aria-hidden="true">10.</strong> gloo</a></li><li class="chapter-item "><a href="nccl/nccl.html"><strong aria-hidden="true">11.</strong> nccl</a></li><li class="chapter-item "><a href="mpi/mpi.html"><strong aria-hidden="true">12.</strong> mpi</a></li><li class="chapter-item "><a href="nlp/nlp.html"><strong aria-hidden="true">13.</strong> nlp</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="nlp/transformer.html"><strong aria-hidden="true">13.1.</strong> transformer</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="index.html"><strong aria-hidden="true">1.</strong> welcome</a></li><li class="chapter-item "><a href="survey/survey.html"><strong aria-hidden="true">2.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="survey/pollux.html"><strong aria-hidden="true">2.1.</strong> pollux</a></li><li class="chapter-item "><a href="survey/adasum.html"><strong aria-hidden="true">2.2.</strong> adasum</a></li><li class="chapter-item "><a href="survey/adaptation_learning.html"><strong aria-hidden="true">2.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="survey/gradient_descent.html"><strong aria-hidden="true">2.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="survey/auto_parallel.html"><strong aria-hidden="true">2.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="survey/scheduling.html"><strong aria-hidden="true">2.6.</strong> scheduling</a></li><li class="chapter-item "><a href="survey/gradient_compression/gradient_compression.html"><strong aria-hidden="true">2.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="survey/gradient_compression/dgc.html"><strong aria-hidden="true">2.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="survey/gradient_compression/csc.html"><strong aria-hidden="true">2.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="survey/adaptive_training.html"><strong aria-hidden="true">2.8.</strong> adaptive training</a></li><li class="chapter-item "><a href="survey/flash_attention.html"><strong aria-hidden="true">2.9.</strong> flash attention</a></li></ol></li><li class="chapter-item "><a href="pytorch/overview.html"><strong aria-hidden="true">3.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="pytorch/tensor.html"><strong aria-hidden="true">3.1.</strong> tensor</a></li><li class="chapter-item "><a href="pytorch/autograd.html"><strong aria-hidden="true">3.2.</strong> autograd</a></li><li class="chapter-item "><a href="pytorch/operator.html"><strong aria-hidden="true">3.3.</strong> operator</a></li><li class="chapter-item "><a href="pytorch/profiler.html"><strong aria-hidden="true">3.4.</strong> profiler</a></li><li class="chapter-item "><a href="pytorch/hook.html"><strong aria-hidden="true">3.5.</strong> hook</a></li><li class="chapter-item "><a href="pytorch/elastic.html"><strong aria-hidden="true">3.6.</strong> elastic</a></li><li class="chapter-item "><a href="pytorch/patch.html"><strong aria-hidden="true">3.7.</strong> patch</a></li></ol></li><li class="chapter-item "><a href="paddle/paddle.html"><strong aria-hidden="true">4.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="paddle/ps/ps-code-overview.html"><strong aria-hidden="true">4.1.</strong> ps</a></li><li class="chapter-item "><a href="paddle/framework.html"><strong aria-hidden="true">4.2.</strong> framework</a></li><li class="chapter-item "><a href="paddle/cinn.html"><strong aria-hidden="true">4.3.</strong> cinn</a></li></ol></li><li class="chapter-item "><a href="horovod/horovod.html"><strong aria-hidden="true">5.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="horovod/run.html"><strong aria-hidden="true">5.1.</strong> run</a></li><li class="chapter-item "><a href="horovod/workflow.html"><strong aria-hidden="true">5.2.</strong> workflow</a></li><li class="chapter-item "><a href="horovod/object.html"><strong aria-hidden="true">5.3.</strong> object</a></li><li class="chapter-item "><a href="horovod/develop.html"><strong aria-hidden="true">5.4.</strong> develop</a></li><li class="chapter-item "><a href="horovod/pytorch.html"><strong aria-hidden="true">5.5.</strong> pytorch</a></li><li class="chapter-item "><a href="horovod/tensorflow.html"><strong aria-hidden="true">5.6.</strong> tensorflow</a></li><li class="chapter-item "><a href="horovod/elastic.html"><strong aria-hidden="true">5.7.</strong> elastic</a></li></ol></li><li class="chapter-item "><a href="ray/ray.html"><strong aria-hidden="true">6.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="ray/overview.html"><strong aria-hidden="true">6.1.</strong> overview</a></li><li class="chapter-item "><a href="ray/gcs.html"><strong aria-hidden="true">6.2.</strong> gcs</a></li><li class="chapter-item "><a href="ray/raylet.html"><strong aria-hidden="true">6.3.</strong> raylet</a></li><li class="chapter-item "><a href="ray/api.html"><strong aria-hidden="true">6.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="python/python.html"><strong aria-hidden="true">7.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="python/concurrent.html"><strong aria-hidden="true">7.1.</strong> concurrent execution</a></li><li class="chapter-item "><a href="python/multiprocessing.html"><strong aria-hidden="true">7.2.</strong> multiprocessing</a></li><li class="chapter-item "><a href="python/decorator.html"><strong aria-hidden="true">7.3.</strong> decorator</a></li></ol></li><li class="chapter-item "><a href="kubernetes/kubernetes.html"><strong aria-hidden="true">8.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="kubernetes/scheduler.html"><strong aria-hidden="true">8.1.</strong> scheduler</a></li><li class="chapter-item "><a href="kubernetes/operator.html"><strong aria-hidden="true">8.2.</strong> operator</a></li><li class="chapter-item "><a href="kubernetes/device_plugin.html"><strong aria-hidden="true">8.3.</strong> device plugin</a></li><li class="chapter-item "><a href="kubernetes/docker.html"><strong aria-hidden="true">8.4.</strong> docker</a></li></ol></li><li class="chapter-item "><a href="tvm/tvm.html"><strong aria-hidden="true">9.</strong> tvm</a></li><li class="chapter-item "><a href="gloo/gloo.html"><strong aria-hidden="true">10.</strong> gloo</a></li><li class="chapter-item "><a href="nccl/nccl.html"><strong aria-hidden="true">11.</strong> nccl</a></li><li class="chapter-item "><a href="mpi/mpi.html"><strong aria-hidden="true">12.</strong> mpi</a></li><li class="chapter-item "><a href="nlp/nlp.html"><strong aria-hidden="true">13.</strong> nlp</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="nlp/transformer.html"><strong aria-hidden="true">13.1.</strong> transformer</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -84,7 +89,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -94,7 +99,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -111,11 +116,13 @@
                         <a href="https://github.com/kuizhiqing/aller-au-boulot" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
+
                     </div>
                 </div>
 
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -1218,15 +1225,311 @@ class DGCSGDMemory(Memory):
 <h1 id="adaptive-training"><a class="header" href="#adaptive-training">adaptive training</a></h1>
 <embed src="assets/adaptive_training.pdf" width="100%" height="600" type="application/pdf" allowfullscreen>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="flash-attention"><a class="header" href="#flash-attention">Flash Attention</a></h1>
+<h2 id="key-idea"><a class="header" href="#key-idea">Key Idea</a></h2>
+<ul>
+<li>memory hierachy: GPU HBM (40G, 1.5TB/s) -&gt; GPU SRAM (20MB, 19TB/s)</li>
+<li>tiling: split the input into blocks and make several passes over blocks, fit GPU SRAM</li>
+<li>recompute: recompute attention on-chip in the backward pass instead of retrieve from HBM</li>
+</ul>
+<p><strong>Conclusion</strong>: increase FLOPs, decrease Wall-clock time</p>
+<h2 id="code-details"><a class="header" href="#code-details">Code Details</a></h2>
+<h3 id="modules"><a class="header" href="#modules">Modules</a></h3>
+<p><strong>flash_attn</strong></p>
+<pre><code class="language-cpp">// csrc/flash_attn/fmha_api.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+    m.doc() = &quot;Fused Multi-head Self-attention&quot;;
+    m.def(&quot;fwd&quot;, &amp;mha_fwd, &quot;Forward pass&quot;);
+    m.def(&quot;bwd&quot;, &amp;mha_bwd, &quot;Backward pass&quot;);
+    m.def(&quot;fwd_block&quot;, &amp;mha_fwd_block, &quot;Forward pass (blocksparse)&quot;);
+    m.def(&quot;bwd_block&quot;, &amp;mha_bwd_block, &quot;Backward pass (blocksparse)&quot;);
+}
+</code></pre>
+<p><strong>fused_dense_lib</strong></p>
+<pre><code class="language-cpp">// csrc/fused_dense_lib/fused_dense.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+  m.def(&quot;linear_bias_forward&quot;, &amp;linear_bias_forward, &quot;linear bias forward&quot;);
+  m.def(&quot;linear_bias_backward&quot;, &amp;linear_bias_backward, &quot;linear bias backward&quot;);
+  m.def(&quot;linear_bias_wgrad&quot;, &amp;linear_bias_wgrad, &quot;linear bias wgrad&quot;);
+  m.def(&quot;linear_bias_residual_backward&quot;, &amp;linear_bias_residual_backward, &quot;linear bias residual backward&quot;);
+  m.def(&quot;linear_gelu_forward&quot;, &amp;linear_gelu_forward, &quot;linear gelu forward&quot;);
+  m.def(&quot;linear_gelu_linear_backward&quot;, &amp;linear_gelu_linear_backward, &quot;linear gelu linear backward&quot;);
+  m.def(&quot;linear_residual_gelu_linear_backward&quot;, &amp;linear_residual_gelu_linear_backward, &quot;linear residual gelu linear backward&quot;);
+}
+</code></pre>
+<p><strong>fused_softmax</strong></p>
+<pre><code class="language-cpp">// csrc/fused_softmax/fused_softmax.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+  m.def(&quot;scaled_masked_softmax_forward&quot;, &amp;multihead_attn::fused_softmax::scaled_masked_softmax::fwd, &quot;Self Multihead Attention scaled, time masked softmax -- Forward.&quot;);
+  m.def(&quot;scaled_masked_softmax_backward&quot;, &amp;multihead_attn::fused_softmax::scaled_masked_softmax::bwd, &quot;Self Multihead Attention scaled, time masked softmax -- Backward.&quot;);
+  m.def(&quot;scaled_masked_softmax_get_batch_per_block&quot;, &amp;multihead_attn::fused_softmax::scaled_masked_softmax::get_batch_per_block, &quot;Return Batch per block size.&quot;);
+  m.def(&quot;scaled_upper_triang_masked_softmax_forward&quot;, &amp;multihead_attn::fused_softmax::scaled_upper_triang_masked_softmax::fwd, &quot;Self Multihead Attention scaled, time masked softmax -- Forward.&quot;);
+  m.def(&quot;scaled_upper_triang_masked_softmax_backward&quot;, &amp;multihead_attn::fused_softmax::scaled_upper_triang_masked_softmax::bwd, &quot;Self Multihead Attention scaled, time masked softmax -- Backward.&quot;);
+}
+</code></pre>
+<p><strong>layer_norm</strong></p>
+<pre><code class="language-cpp">// csrc/fused_softmax/fused_softmax.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+  m.doc() = &quot;CUDA DropoutAddLayerNorm&quot;;
+  m.def(&quot;dropout_add_ln_fwd&quot;, &amp;dropout_add_ln_fwd, &quot;Run Dropout + Add + LayerNorm forward kernel&quot;);
+  m.def(&quot;dropout_add_ln_bwd&quot;, &amp;dropout_add_ln_bwd, &quot;Run Dropout + Add + LayerNorm backward kernel&quot;);
+}
+</code></pre>
+<p><strong>rotary</strong></p>
+<pre><code class="language-cpp">// csrc/rotary/rotary.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+  m.def(&quot;apply_rotary&quot;, &amp;apply_rotary, &quot;Apply rotary embedding&quot;);
+}
+</code></pre>
+<p><strong>xentropy</strong></p>
+<pre><code class="language-cpp">// csrc/xentropy/interface.cpp
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+    m.def(&quot;forward&quot;, &amp;softmax_xentropy_forward, &quot;Softmax cross entropy loss with label smoothing forward (CUDA)&quot;);
+    m.def(&quot;backward&quot;, &amp;softmax_xentropy_backward, &quot;Softmax cross entropy loss with label smoothing backward (CUDA)&quot;);
+}
+</code></pre>
+<h3 id="flash-attention-1"><a class="header" href="#flash-attention-1">Flash Attention</a></h3>
+<h4 id="python-api-call-chains-overview"><a class="header" href="#python-api-call-chains-overview">Python API call chains overview</a></h4>
+<pre><code>FlashSelfAttention
+    flash_attn_func
+        flash_attn_unpadded_qkvpacked_func
+            FlashAttnQKVPackedFunc
+                _flash_attn_forward  = flash_attn_cuda.fwd
+                _flash_attn_backward = flash_attn_cuda.bwd
+    
+FlashCrossAttention
+    flash_attn_unpadded_kvpacked_func
+        FlashAttnKVPackedFunc
+            _flash_attn_forward
+            _flash_attn_backward
+    
+# ----
+    flash_attn_unpadded_qkvpacked_split_func
+        FlashAttnQKVPackedSplitFunc
+            _flash_attn_forward
+            _flash_attn_backward
+</code></pre>
+<pre><code>FlashBlocksparseAttention
+    flash_blocksparse_attn_func 
+        FlashBlocksparseAttnFun 
+            _flash_blocksparse_attn_forward  = flash_attn_cuda.fwd_block
+            _flash_blocksparse_attn_backward = flash_attn_cuda.bwd_block
+</code></pre>
+<h4 id="flashselfattention"><a class="header" href="#flashselfattention">FlashSelfAttention</a></h4>
+<pre><code class="language-python"># flash_attn/flash_attn_interface.py
+
+def flash_attn_unpadded_qkvpacked_func(qkv, cu_seqlens, max_seqlen, dropout_p, softmax_scale=None, causal=False, return_attn_probs=False):
+    return FlashAttnQKVPackedFunc.apply(qkv, cu_seqlens, max_seqlen, dropout_p, softmax_scale, causal, return_attn_probs)
+
+class FlashAttnQKVPackedFunc(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, qkv, cu_seqlens, max_seqlen, dropout_p, softmax_scale, causal, return_softmax):
+        rng_state = torch.cuda.get_rng_state() if dropout_p &gt; 0 else None
+        out, softmax_lse, S_dmask = _flash_attn_forward(...)
+        return (out, softmax_lse, S_dmask)
+
+    @staticmethod
+    def backward(ctx, dout, *args):
+        _flash_attn_backward(...)
+        return dqkv, None, None, None, None, None, None
+
+def _flash_attn_forward(q, k, v, out, cu_seqlens_q, cu_seqlens_k, max_seqlen_q, max_seqlen_k,
+                        dropout_p, softmax_scale, causal, return_softmax, num_splits=0,
+                        generator=None):
+    softmax_lse, *rest = flash_attn_cuda.fwd(...)
+    return out, softmax_lse, S_dmask
+
+
+def _flash_attn_backward(dout, q, k, v, out, softmax_lse, dq, dk, dv, cu_seqlens_q, cu_seqlens_k,
+                         max_seqlen_q, max_seqlen_k, dropout_p, softmax_scale, causal, num_splits=0,
+                         generator=None):
+    _, _, _, softmax_d = flash_attn_cuda.bwd(...)
+    return dq, dk, dv, softmax_d
+</code></pre>
+<p>mha_fwd + mha_bwd </p>
+<pre><code class="language-cpp">// csrc/flash_attn/fmha_api.cpp
+
+std::vector&lt;at::Tensor&gt;
+mha_fwd(const at::Tensor &amp;q,         // total_q x num_heads x head_size, total_q := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;k,         // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;v,         // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        at::Tensor &amp;out,             // total_q x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;cu_seqlens_q,  // b+1
+        const at::Tensor &amp;cu_seqlens_k,  // b+1
+        const int max_seqlen_q_,
+        const int max_seqlen_k_,
+        const float p_dropout,
+        const float softmax_scale,
+        const bool zero_tensors,
+        const bool is_causal,
+        const bool return_softmax,
+        const int num_splits,
+        c10::optional&lt;at::Generator&gt; gen_) {
+
+    Launch_params&lt;FMHA_fprop_params&gt; launch_params(dprops, stream, is_dropout, return_softmax);
+    run_fmha_fwd(launch_params);
+    return result;
+}
+
+void run_fmha_fwd(Launch_params&lt;FMHA_fprop_params&gt; &amp;launch_params) {
+    if (launch_params.params.d &lt;= 32) {
+        run_fmha_fwd_hdim32(launch_params);
+    } else if (launch_params.params.d &lt;= 64) {
+        run_fmha_fwd_hdim64(launch_params);
+    } else if (launch_params.params.d &lt;= 128) {
+        run_fmha_fwd_hdim128(launch_params);
+    }
+}
+
+std::vector&lt;at::Tensor&gt;
+mha_bwd(const at::Tensor &amp;dout,  // total_q x num_heads, x head_size
+        const at::Tensor &amp;q,   // total_q x num_heads x head_size, total_q := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;k,   // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;v,   // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;out,   // total_q x num_heads x head_size
+        const at::Tensor &amp;softmax_lse_,     // b x h x s softmax logsumexp
+        at::Tensor &amp;dq,   // total_q x num_heads x head_size, total_q := \sum_{i=0}^{b} s_i
+        at::Tensor &amp;dk,   // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        at::Tensor &amp;dv,   // total_k x num_heads x head_size, total_k := \sum_{i=0}^{b} s_i
+        const at::Tensor &amp;cu_seqlens_q,  // b+1
+        const at::Tensor &amp;cu_seqlens_k,  // b+1
+        const int max_seqlen_q_,
+        const int max_seqlen_k_,          // max sequence length to choose the kernel
+        const float p_dropout,         // probability to drop
+        const float softmax_scale,
+        const bool zero_tensors,
+        const bool is_causal,
+        const int num_splits,
+        c10::optional&lt;at::Generator&gt; gen_
+) {
+    auto launch = &amp;run_fmha_bwd;
+
+    FMHA_dgrad_params params;
+
+    set_params_dgrad(params, ...  num_splits);
+
+    launch(params, stream, /*configure=*/true);
+
+    launch(params, stream, /*configure=*/false);
+
+
+    return { dq, dk, dv, softmax_d };
+}
+
+void run_fmha_bwd(FMHA_dgrad_params &amp;params, cudaStream_t stream, const bool configure) {
+  if (params.d &lt;= 32) {
+      run_fmha_bwd_hdim32(params, stream, configure);
+  } else if (params.d &lt;= 64) {
+      run_fmha_bwd_hdim64(params, stream, configure);
+  } else if (params.d &lt;= 128) {
+      run_fmha_bwd_hdim128(params, stream, configure);
+  }
+}
+
+
+</code></pre>
+<pre><code class="language-cpp">// csrc/flash_attn/src/fmha_fwd_hdim32.cu 
+
+#include &quot;fmha_fwd_launch_template.h&quot;
+
+void run_fmha_fwd_hdim32(Launch_params&lt;FMHA_fprop_params&gt; &amp;launch_params) {
+    FP16_SWITCH(launch_params.params.is_bf16, ({
+        if (launch_params.params.seqlen_k == 128) {
+            using Kernel_traits = FMHA_kernel_traits&lt;128, 32, 16, 1, 4, 0x08u, elem_type&gt;;
+            run_fmha_fwd_loop&lt;Kernel_traits&gt;(launch_params);
+        } else if (launch_params.params.seqlen_k &gt;= 256) {
+            using Kernel_traits = FMHA_kernel_traits&lt;256, 32, 16, 1, 4, 0x08u, elem_type&gt;;
+            run_fmha_fwd_loop&lt;Kernel_traits&gt;(launch_params);
+        }
+    }));
+}
+</code></pre>
+<p>run_fmha_fwd_loop -&gt; fmha_fwd_loop_kernel</p>
+<pre><code class="language-cpp">// csrc/flash_attn/src/fmha_fwd_launch_template.h
+
+template&lt;typename Kernel_traits&gt;
+void run_fmha_fwd_loop(Launch_params&lt;FMHA_fprop_params&gt; &amp;launch_params) {
+    BOOL_SWITCH(launch_params.is_dropout, IsDropoutConst, ({
+        auto kernel = launch_params.params.is_causal
+            ? (launch_params.return_softmax
+               ? &amp;fmha_fwd_loop_kernel&lt;Kernel_traits, IsDropoutConst, true, true&gt;
+               : &amp;fmha_fwd_loop_kernel&lt;Kernel_traits, IsDropoutConst, true, false&gt;)
+            : (launch_params.return_softmax
+               ? &amp;fmha_fwd_loop_kernel&lt;Kernel_traits, IsDropoutConst, false, true&gt;
+               : &amp;fmha_fwd_loop_kernel&lt;Kernel_traits, IsDropoutConst, false, false&gt;);
+        if( smem_size &gt;= 48 * 1024 ) {
+            FMHA_CHECK_CUDA(cudaFuncSetAttribute(
+                kernel, cudaFuncAttributeMaxDynamicSharedMemorySize, smem_size));
+        }
+        kernel&lt;&lt;&lt;grid, Kernel_traits::THREADS, smem_size, launch_params.stream&gt;&gt;&gt;(
+            launch_params.params);
+    }));
+}
+
+template&lt;typename Kernel_traits, bool Is_dropout, bool Is_causal, bool Return_softmax&gt;
+__global__ void fmha_fwd_loop_kernel(FMHA_fprop_params params) {
+    fmha::device_1xN_loop&lt;Kernel_traits, Is_dropout, Is_causal, Return_softmax&gt;(params);
+}
+</code></pre>
+<p>device_1xN_loop</p>
+<pre><code class="language-cpp">// csrc/flash_attn/src/fmha_fprop_kernel_1xN.h
+
+#include &quot;fmha_kernel.h&quot;
+#include &lt;fmha/kernel_traits.h&gt;
+#include &lt;fmha/gemm.h&gt;
+#include &lt;fmha/utils.h&gt;
+
+template&lt;typename Kernel_traits, bool Is_dropout, bool Is_causal, bool Return_softmax, typename Params&gt;
+inline __device__ void device_1xN_loop(const Params &amp;params) {
+
+    // The block index for the batch.
+    const int bidb = blockIdx.x;
+    // The block index for the head.
+    const int bidh = blockIdx.y;
+    // The thread index.
+    const int tidx = threadIdx.x;
+
+    fmha::device_1xN_&lt;Kernel_traits, Is_dropout, Is_causal, Return_softmax, true, true&gt;(params, bidb, bidh, STEPS, ph, 0);
+}
+
+template&lt;typename Kernel_traits, bool Is_dropout, bool Is_causal, bool Return_softmax, bool Is_first, bool Is_last, typename Params, typename Prng&gt;
+inline __device__ void device_1xN_(const Params &amp;params, const int bidb, const int bidh, int steps, Prng &amp;ph, const int loop_step_idx) {
+    ...
+}
+</code></pre>
+<p>Dependencies</p>
+<pre><code>csrc/flash_attn/src/fmha
+|-- gemm.h
+|-- gmem_tile.h
+|-- kernel_traits.h
+|-- mask.h
+|-- smem_tile.h
+|-- softmax.h
+`-- utils.h
+</code></pre>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="https://github.com/HazyResearch/flash-attention">github</a></li>
+<li><a href="https://arxiv.org/abs/2205.14135">arxiv</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="pytorch"><a class="header" href="#pytorch">pytorch</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="tensor"><a class="header" href="#tensor">Tensor</a></h1>
+<p>How <code>torch.tensor</code> works ?</p>
 <h2 id="init"><a class="header" href="#init">init</a></h2>
 <p>What's behind <code>import torch</code> ?</p>
 <pre><code class="language-python"># torch/__init__.py
 
 from torch._C import *
 </code></pre>
+<p>cf <a href="https://docs.python.org/3/extending/building.html">doc</a></p>
 <pre><code class="language-c">// torch/csrc/stub.c
 
 PyMODINIT_FUNC PyInit__C(void)
@@ -1242,13 +1545,7 @@ PyObject* initModule() {
   THPUtils_addPyMethodDefs(methods, TorchMethods);
   THPUtils_addPyMethodDefs(methods, torch::autograd::python_functions());
 
-  static struct PyModuleDef torchmodule = {
-     PyModuleDef_HEAD_INIT,
-     &quot;torch._C&quot;,
-     nullptr,
-     -1,
-     methods.data()
-  };
+  static struct PyModuleDef torchmodule = {PyModuleDef_HEAD_INIT, &quot;torch._C&quot;, nullptr, -1, methods.data()};
   ASSERT_TRUE(module = PyModule_Create(&amp;torchmodule));
   ASSERT_TRUE(THPGenerator_init(module));
   ASSERT_TRUE(THPException_init(module));
@@ -1269,9 +1566,306 @@ PyObject* initModule() {
   return module;
 }
 </code></pre>
-<p>Why <code>torch</code> have method <code>tensor</code> ?</p>
-<p>Since method <code>tensor</code> is in  <code>methods.data()</code>.</p>
-<p>But How ?</p>
+<h2 id="function-torchtensor"><a class="header" href="#function-torchtensor">function torch.tensor</a></h2>
+<pre><code class="language-python">torch.tensor(1.0)
+</code></pre>
+<p>pytorch 使用 <a href="https://docs.python.org/3/c-api/structures.html#c.PyMethodDef">PyMethodDef</a>
+暴露 python tensor, 对应类型 THPVariable_tensor.</p>
+<pre><code class="language-cpp">// torch/csrc/autograd/python_torch_functions_manual.cpp
+
+static PyMethodDef torch_functions_manual[] = {
+    {&quot;tensor&quot;,
+     castPyCFunctionWithKeywords(THPVariable_tensor),
+     METH_VARARGS | METH_KEYWORDS | METH_STATIC,
+     nullptr},
+}
+
+// implemented on python object to allow torch.tensor to be constructed with
+// arbitrarily nested python objects - list, tuple, np array, scalar, etc.
+static PyObject* THPVariable_tensor( PyObject* self, PyObject* args, PyObject* kwargs) {
+  jit::tracer::warn(&quot;torch.tensor&quot;, jit::tracer::WARN_CONSTRUCTOR);
+  return THPVariable_Wrap(torch::utils::tensor_ctor(
+      torch::tensors::get_default_dispatch_key(),
+      torch::tensors::get_default_scalar_type(),
+      r));
+}
+</code></pre>
+<ul>
+<li>torch::utils::tensor_ctor() 返回 cpp tensor</li>
+<li>torch::tensors::get_default_dispatch_key() 获取默认 dispatch key</li>
+<li>torch::tensors::get_default_scalar_type() 获取默认数据类型</li>
+<li>THPVariable_Wrap 把 tensor 封装成 python 可使用的 THPVariable</li>
+</ul>
+<p><img src="pytorch/3.png" alt="1" /></p>
+<h3 id="tensor_new"><a class="header" href="#tensor_new">tensor_new</a></h3>
+<pre><code class="language-cpp">// torch/csrc/utils/tensor_new.cpp
+
+Tensor tensor_ctor(
+    c10::DispatchKey dispatch_key,
+    at::ScalarType scalar_type,
+    PythonArgs&amp; r) {
+  if (r.idx == 0) {
+    PyObject* data = r.pyobject(0);
+    bool type_inference = r.isNone(1);
+    bool pin_memory = r.toBool(3);
+    bool args_requires_grad = r.toBool(4);
+    auto new_tensor = internal_new_from_data(
+        typeIdWithDefault(r, 2, dispatch_key),
+        r.scalartypeWithDefault(1, scalar_type),
+        r.deviceOptional(2),
+        data,
+        /*copy_variables=*/true,
+        /*copy_numpy=*/true,
+        /*type_inference=*/type_inference,
+        pin_memory);
+    auto names = r.toDimnameListOptional(5);
+    if (names) {
+      at::namedinference::propagate_names(
+          new_tensor, *names, /*validate_names=*/true);
+    }
+    new_tensor.detach_(); // ensure new_tensor a leaf node
+    new_tensor.set_requires_grad(args_requires_grad);
+    return new_tensor;
+  }
+}
+</code></pre>
+<ul>
+<li>解析参数</li>
+<li>调用 internal_new_from_data 创建 cpp tensor，初始化 storage_</li>
+<li>new_tensor.detach_() 确保是叶子结点，初始化 autograd_meta_</li>
+</ul>
+<h3 id="internal_new_from_data"><a class="header" href="#internal_new_from_data">internal_new_from_data</a></h3>
+<pre><code class="language-cpp">// torch/csrc/utils/tensor_new.cpp
+
+Tensor internal_new_from_data(
+    c10::TensorOptions options,
+    at::ScalarType scalar_type,
+    c10::optional&lt;Device&gt; device_opt,
+    PyObject* data,
+    bool copy_variables,
+    bool copy_numpy,
+    bool type_inference,
+    bool pin_memory = false) {
+  if (THPVariable_Check(data)) {
+    auto var = THPVariable_Unpack(data);
+    return var.to(...);
+  }
+
+  if (PyObject_HasAttrString(data, &quot;__cuda_array_interface__&quot;)) {
+    auto tensor = tensor_from_cuda_array_interface(data);
+    return tensor.to(...);
+  }
+
+  if (is_numpy_available() &amp;&amp; PyArray_Check(data)) {
+     auto tensor = tensor_from_numpy(data, /*warn_if_not_writeable=*/!copy_numpy);
+     return tensor.to(...);
+  }
+
+  auto device = device_opt.has_value() ? *device_opt : options.device();
+  auto sizes = compute_sizes(data, scalar_type);
+  ScalarType inferred_scalar_type = type_inference ? infer_scalar_type(data) : scalar_type;
+
+  Tensor tensor;
+  {
+    {
+      if (isStorage(data)) {
+        Storage storage = createStorageGetType(data, storage_scalar_type, is_typed_storage);
+        tensor = at::empty( sizes,
+            at::initialTensorOptions().dtype( is_typed_storage ? storage_scalar_type : inferred_scalar_type)
+                .pinned_memory(pin_memory)
+                .device(storage.device()));
+        tensor.set_(storage);
+
+      } else {
+        TensorOptions opts = at::initialTensorOptions().dtype(inferred_scalar_type);
+        tensor = at::empty(sizes, opts.pinned_memory(pin_memory));
+        recursive_store(
+              (char*)tensor.data_ptr(),
+              tensor.sizes(),
+              tensor.strides(),
+              0,
+              inferred_scalar_type,
+              tensor.dtype().itemsize(),
+              data);
+      }
+    }
+    maybe_initialize_cuda(device);
+    tensor = tensor.to(device, inferred_scalar_type, /*non_blocking=*/false, /*copy=*/false);
+  }
+
+  return at::lift_fresh(tensor);
+}
+</code></pre>
+<ul>
+<li>at::empty() 创建 tensor</li>
+<li>recursive_store() 初始化 tensor 数据</li>
+</ul>
+<p>其中 <code>detach_</code> 调用会调用 materialize_autograd_meta 初始化 autograd_meta_.</p>
+<pre><code class="language-cpp">// torch/csrc/autograd/variable.cpp
+
+AutogradMeta* materialize_autograd_meta(const at::TensorBase&amp; self) {
+  auto p = self.unsafeGetTensorImpl();
+  if (!p-&gt;autograd_meta()) {
+    p-&gt;set_autograd_meta(std::make_unique&lt;AutogradMeta&gt;());
+  }
+  return get_autograd_meta(self);
+}
+</code></pre>
+<h3 id="thpvariable_wrap"><a class="header" href="#thpvariable_wrap">THPVariable_Wrap</a></h3>
+<pre><code class="language-cpp">// torch/csrc/autograd/python_variable.cpp
+
+PyObject* THPVariable_Wrap(at::TensorBase var) {
+  return THPVariable_NewWithVar( (PyTypeObject*)THPVariableClass, std::move(var), status);
+}
+
+static PyObject* THPVariable_NewWithVar(PyTypeObject* type, Variable _var, c10::impl::PyInterpreterStatus status) {
+  PyObject* obj = type-&gt;tp_alloc(type, 0);
+  if (obj) {
+    auto v = (THPVariable*)obj;
+  }
+  return obj;
+}
+</code></pre>
+<h3 id="pymethoddef"><a class="header" href="#pymethoddef">PyMethodDef</a></h3>
+<p><a href="https://docs.python.org/3/extending/extending.html">PyMethodDef</a> including</p>
+<ul>
+<li>PyModuleDef</li>
+<li>PyInit_* and PyModule_Create</li>
+</ul>
+<pre><code class="language-cpp">// torch/csrc/autograd/python_variable.cpp
+
+bool THPVariable_initModule(PyObject* module) {
+  PyModule_AddObject(module, &quot;_TensorMeta&quot;, (PyObject*)&amp;THPVariableMetaType);
+
+  static std::vector&lt;PyMethodDef&gt; methods;
+  THPUtils_addPyMethodDefs(methods, torch::autograd::variable_methods);
+  THPUtils_addPyMethodDefs(methods, extra_methods);
+  THPVariableType.tp_methods = methods.data();
+  PyModule_AddObject(module, &quot;_TensorBase&quot;, (PyObject*)&amp;THPVariableType);
+  torch::autograd::initTorchFunctions(module);
+  torch::autograd::initTensorImplConversion(module);
+  return true;
+}
+</code></pre>
+<p>initTorchFunctions</p>
+<pre><code class="language-cpp">// torch/csrc/autograd/python_torch_functions_manual.cpp
+
+namespace torch {
+namespace autograd {
+
+static PyTypeObject THPVariableFunctions = {
+    PyVarObject_HEAD_INIT(
+        nullptr,
+        0) &quot;torch._C._VariableFunctionsClass&quot;, /* tp_name */
+    0, /* tp_basicsize */
+    ...
+}
+
+void initTorchFunctions(PyObject* module) {
+  static std::vector&lt;PyMethodDef&gt; torch_functions;
+  gatherTorchFunctions(torch_functions);
+  THPVariableFunctions.tp_methods = torch_functions.data();
+
+  if (PyModule_AddObject(
+          module,
+          &quot;_VariableFunctionsClass&quot;,
+          reinterpret_cast&lt;PyObject*&gt;(&amp;THPVariableFunctions)) &lt; 0) { }
+  THPVariableFunctionsModule =
+      PyType_GenericNew(&amp;THPVariableFunctions, Py_None, Py_None);
+  if (PyModule_AddObject(
+          module, &quot;_VariableFunctions&quot;, THPVariableFunctionsModule) &lt; 0) { }
+}
+} // namespace autograd
+} // namespace torch
+</code></pre>
+<p>checkout it out</p>
+<pre><code class="language-python">torch.tensor
+&lt;built-in method tensor of type object at 0x7f72955df1a0&gt;
+torch._C._VariableFunctions.tensor
+&lt;built-in method tensor of type object at 0x7f72955df1a0&gt;
+torch._C._VariableFunctionsClass.__dict__['tensor']
+&lt;staticmethod object at 0x7f7296e30a10&gt;
+</code></pre>
+<pre><code class="language-python"># torch/__init__.py
+
+for name in dir(_C._VariableFunctions):
+    if name.startswith('__') or name in PRIVATE_OPS:
+        continue
+    obj = getattr(_C._VariableFunctions, name)
+    obj.__module__ = 'torch'
+    globals()[name] = obj
+    if not name.startswith(&quot;_&quot;):
+        __all__.append(name)
+
+</code></pre>
+<p>gatherTorchFunctions 填充 torch_functions, 包括 tensor.</p>
+<pre><code class="language-cpp">// torch/csrc/autograd/python_torch_functions_manual.cpp
+
+void gatherTorchFunctions(std::vector&lt;PyMethodDef&gt;&amp; torch_functions) {
+  constexpr size_t num_functions =
+      sizeof(torch_functions_manual) / sizeof(torch_functions_manual[0]);
+  torch_functions.assign(
+      torch_functions_manual, torch_functions_manual + num_functions);
+  gatherTorchFunctions_0(torch_functions);
+  gatherTorchFunctions_1(torch_functions);
+  gatherTorchFunctions_2(torch_functions);
+
+  static std::array&lt;std::pair&lt;const char*, const char*&gt;, 4&gt; aliases{
+      {// Canonical function, alias name
+       {&quot;sspaddmm&quot;, &quot;saddmm&quot;},
+       {&quot;mm&quot;, &quot;spmm&quot;},
+       {&quot;mm&quot;, &quot;dsmm&quot;},
+       {&quot;hspmm&quot;, &quot;hsmm&quot;}}};
+
+  for (const auto&amp; alias : aliases) {
+    auto it = std::find_if(
+        torch_functions.begin(),
+        torch_functions.end(),
+        [&amp;](const PyMethodDef&amp; def) {
+          return strcmp(def.ml_name, alias.first) == 0;
+        });
+    TORCH_INTERNAL_ASSERT(
+        it != torch_functions.end(),
+        &quot;Failed to create function alias from &quot;,
+        alias.first,
+        &quot; to &quot;,
+        alias.second);
+    PyMethodDef alias_def = *it;
+    alias_def.ml_name = alias.second;
+
+    torch_functions.push_back(alias_def);
+  }
+
+  torch_functions.push_back({nullptr});
+}
+</code></pre>
+<p><code>torch_functions.assign(torch_functions_manual, ...);</code></p>
+<blockquote>
+<p>很多 functions 由
+<code>tools/autograd/gen_python_functions.py</code>
+自动生成的文件
+<code>torch/csrc/autograd/generated/python_torch_functions_0.cpp</code>
+定义。文件中的这些 functions 由同文件中的函数
+<code>gatherTorchFunctions_0</code> 添加到 <code>torch_functions</code> 从而添加进 <code>PyModuleDef</code>.</p>
+</blockquote>
+<pre><code class="language-python"># tools/autograd/gen_python_functions.py 
+
+# These functions require manual Python bindings or are not exposed to Python
+_SKIP_PYTHON_BINDINGS = [
+    &quot;tensor&quot;,
+]
+
+def gen( out: str, native_yaml_path: str, tags_yaml_path: str, deprecated_yaml_path: str, template_path: str, *, symint: bool = True,):
+    create_python_bindings( None, &quot;python_variable_methods.cpp&quot;,)
+    create_python_bindings_sharded( &quot;torch&quot;, &quot;python_torch_functions.cpp&quot;,)
+    create_python_bindings( &quot;torch.nn&quot;, &quot;python_nn_functions.cpp&quot;,)
+    create_python_bindings( &quot;torch.fft&quot;, &quot;python_fft_functions.cpp&quot;,)
+    create_python_bindings( &quot;torch.linalg&quot;, &quot;python_linalg_functions.cpp&quot;,)
+    create_python_bindings( &quot;torch.nested&quot;, &quot;python_nested_functions.cpp&quot;,)
+    create_python_bindings( &quot;torch.sparse&quot;, &quot;python_sparse_functions.cpp&quot;,)
+    create_python_bindings( &quot;torch.special&quot;, &quot;python_special_functions.cpp&quot;,)
+    create_python_return_type_bindings( fm, functions, lambda fn: True, &quot;python_return_types.cpp&quot;)
+</code></pre>
 <h2 id="class-torchtensor"><a class="header" href="#class-torchtensor">class torch.Tensor</a></h2>
 <p>What's behind <code>torch.Tensor</code> ?</p>
 <h3 id="from-py-to-cpp"><a class="header" href="#from-py-to-cpp">From py to cpp</a></h3>
@@ -1604,6 +2198,15 @@ struct C10_API StorageImpl : public c10::intrusive_ptr_target {
   bool resizable_;
   bool received_cuda_;
   Allocator* allocator_;
+}
+</code></pre>
+<pre><code class="language-cpp">// c10/core/Allocator.h
+
+class C10_API DataPtr {
+ private:
+  c10::detail::UniqueVoidPtr ptr_;
+  Device device_;
+}
 </code></pre>
 <p>UniqueVoidPtr </p>
 <pre><code class="language-cpp">// c10/util/UniqueVoidPtr.h
@@ -1628,277 +2231,146 @@ class UniqueVoidPtr {
 <li>specialized for a function pointer deleter <code>void(void* ctx)</code></li>
 <li>deleter is guaranteed to be called when the unique pointer is destructed and the context is non-null</li>
 </ul>
-<p>PyTorch Tensor 相关主要数据结构和关系</p>
-<p><img src="pytorch/1.png" alt="1" /></p>
-<h2 id="function-torchtensor"><a class="header" href="#function-torchtensor">function torch.tensor</a></h2>
-<pre><code class="language-python">torch.tensor(1.0)
+<h2 id="why-this-"><a class="header" href="#why-this-">Why this ?</a></h2>
+<pre><code class="language-bash">&gt;&gt;&gt; torch.Tensor(1)
+tensor([6.7871e-27])
+&gt;&gt;&gt; torch.Tensor(1.0)
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+TypeError: new(): data must be a sequence (got float)
 </code></pre>
-<p>pytorch 使用 <a href="https://docs.python.org/3/c-api/structures.html#c.PyMethodDef">PyMethodDef</a>
-暴露 python tensor, 对应类型 THPVariable_tensor.</p>
-<pre><code class="language-cpp">// torch/csrc/autograd/python_torch_functions_manual.cpp
-
-static PyMethodDef torch_functions_manual[] = {
-    {&quot;tensor&quot;,
-     castPyCFunctionWithKeywords(THPVariable_tensor),
-     METH_VARARGS | METH_KEYWORDS | METH_STATIC,
-     nullptr},
-}
-
-// implemented on python object to allow torch.tensor to be constructed with
-// arbitrarily nested python objects - list, tuple, np array, scalar, etc.
-static PyObject* THPVariable_tensor( PyObject* self, PyObject* args, PyObject* kwargs) {
-  jit::tracer::warn(&quot;torch.tensor&quot;, jit::tracer::WARN_CONSTRUCTOR);
-  return THPVariable_Wrap(torch::utils::tensor_ctor(
-      torch::tensors::get_default_dispatch_key(),
-      torch::tensors::get_default_scalar_type(),
-      r));
-}
-</code></pre>
-<ul>
-<li>torch::utils::tensor_ctor() 返回 cpp tensor</li>
-<li>torch::tensors::get_default_dispatch_key() 获取默认 dispatch key</li>
-<li>torch::tensors::get_default_scalar_type() 获取默认数据类型</li>
-<li>THPVariable_Wrap 把 tensor 封装成 python 可使用的 THPVariable</li>
-</ul>
-<p><img src="pytorch/3.png" alt="1" /></p>
-<h3 id="tensor_new"><a class="header" href="#tensor_new">tensor_new</a></h3>
-<pre><code class="language-cpp">// torch/csrc/utils/tensor_new.cpp
-
-Tensor tensor_ctor(
-    c10::DispatchKey dispatch_key,
-    at::ScalarType scalar_type,
-    PythonArgs&amp; r) {
-  if (r.idx == 0) {
-    PyObject* data = r.pyobject(0);
-    bool type_inference = r.isNone(1);
-    bool pin_memory = r.toBool(3);
-    bool args_requires_grad = r.toBool(4);
-    auto new_tensor = internal_new_from_data(
-        typeIdWithDefault(r, 2, dispatch_key),
-        r.scalartypeWithDefault(1, scalar_type),
-        r.deviceOptional(2),
-        data,
-        /*copy_variables=*/true,
-        /*copy_numpy=*/true,
-        /*type_inference=*/type_inference,
-        pin_memory);
-    auto names = r.toDimnameListOptional(5);
-    if (names) {
-      at::namedinference::propagate_names(
-          new_tensor, *names, /*validate_names=*/true);
-    }
-    new_tensor.detach_(); // ensure new_tensor a leaf node
-    new_tensor.set_requires_grad(args_requires_grad);
-    return new_tensor;
-  }
-}
-</code></pre>
-<ul>
-<li>解析参数</li>
-<li>调用 internal_new_from_data 创建 cpp tensor，初始化 storage_</li>
-<li>new_tensor.detach_() 确保是叶子结点，初始化 autograd_meta_</li>
-</ul>
-<h3 id="internal_new_from_data"><a class="header" href="#internal_new_from_data">internal_new_from_data</a></h3>
-<pre><code class="language-cpp">// torch/csrc/utils/tensor_new.cpp
-
-Tensor internal_new_from_data(
-    c10::TensorOptions options,
-    at::ScalarType scalar_type,
-    c10::optional&lt;Device&gt; device_opt,
-    PyObject* data,
-    bool copy_variables,
-    bool copy_numpy,
-    bool type_inference,
-    bool pin_memory = false) {
-  if (THPVariable_Check(data)) {
-    auto var = THPVariable_Unpack(data);
-    return var.to(...);
-  }
-
-  if (PyObject_HasAttrString(data, &quot;__cuda_array_interface__&quot;)) {
-    auto tensor = tensor_from_cuda_array_interface(data);
-    return tensor.to(...);
-  }
-
-  if (is_numpy_available() &amp;&amp; PyArray_Check(data)) {
-     auto tensor = tensor_from_numpy(data, /*warn_if_not_writeable=*/!copy_numpy);
-     return tensor.to(...);
-  }
-
-  auto device = device_opt.has_value() ? *device_opt : options.device();
-  auto sizes = compute_sizes(data, scalar_type);
-  ScalarType inferred_scalar_type = type_inference ? infer_scalar_type(data) : scalar_type;
-
-  Tensor tensor;
-  {
-    {
-      if (isStorage(data)) {
-        Storage storage = createStorageGetType(data, storage_scalar_type, is_typed_storage);
-        tensor = at::empty( sizes,
-            at::initialTensorOptions().dtype( is_typed_storage ? storage_scalar_type : inferred_scalar_type)
-                .pinned_memory(pin_memory)
-                .device(storage.device()));
-        tensor.set_(storage);
-
-      } else {
-        TensorOptions opts = at::initialTensorOptions().dtype(inferred_scalar_type);
-        tensor = at::empty(sizes, opts.pinned_memory(pin_memory));
-        recursive_store(
-              (char*)tensor.data_ptr(),
-              tensor.sizes(),
-              tensor.strides(),
-              0,
-              inferred_scalar_type,
-              tensor.dtype().itemsize(),
-              data);
-      }
-    }
-    maybe_initialize_cuda(device);
-    tensor = tensor.to(device, inferred_scalar_type, /*non_blocking=*/false, /*copy=*/false);
-  }
-
-  return at::lift_fresh(tensor);
-}
-</code></pre>
-<ul>
-<li>at::empty() 创建 tensor</li>
-<li>recursive_store() 初始化 tensor 数据</li>
-</ul>
-<p>其中 <code>detach_</code> 调用会调用 materialize_autograd_meta 初始化 autograd_meta_.</p>
-<pre><code class="language-cpp">// torch/csrc/autograd/variable.cpp
-
-AutogradMeta* materialize_autograd_meta(const at::TensorBase&amp; self) {
-  auto p = self.unsafeGetTensorImpl();
-  if (!p-&gt;autograd_meta()) {
-    p-&gt;set_autograd_meta(std::make_unique&lt;AutogradMeta&gt;());
-  }
-  return get_autograd_meta(self);
-}
-</code></pre>
-<h3 id="pymethoddef"><a class="header" href="#pymethoddef">PyMethodDef</a></h3>
-<p><a href="https://docs.python.org/3/extending/extending.html">PyMethodDef</a> including</p>
-<ul>
-<li>PyModuleDef</li>
-<li>PyInit_* and PyModule_Create</li>
-</ul>
 <pre><code class="language-cpp">// torch/csrc/autograd/python_variable.cpp
 
-bool THPVariable_initModule(PyObject* module) {
-  PyModule_AddObject(module, &quot;_TensorMeta&quot;, (PyObject*)&amp;THPVariableMetaType);
-
-  static std::vector&lt;PyMethodDef&gt; methods;
-  THPUtils_addPyMethodDefs(methods, torch::autograd::variable_methods);
-  THPUtils_addPyMethodDefs(methods, extra_methods);
-  THPVariableType.tp_methods = methods.data();
-  PyModule_AddObject(module, &quot;_TensorBase&quot;, (PyObject*)&amp;THPVariableType);
-  torch::autograd::initTorchFunctions(module);
-  torch::autograd::initTensorImplConversion(module);
-  return true;
+PyObject* THPVariable_pynew(
+    PyTypeObject* type,
+    PyObject* args,
+    PyObject* kwargs) {
+  TORCH_CHECK(
+      type != &amp;THPVariableType,
+      &quot;Cannot directly construct _TensorBase; subclass it and then construct that&quot;);
+  auto tensor = torch::utils::base_tensor_ctor(args, kwargs);
+  return THPVariable_NewWithVar(
+      type,
+      std::move(tensor),
+      c10::impl::PyInterpreterStatus::MAYBE_UNINITIALIZED);
 }
 </code></pre>
-<p>initTorchFunctions</p>
-<pre><code class="language-cpp">// torch/csrc/autograd/python_torch_functions_manual.cpp
+<pre><code class="language-cpp">// torch/csrc/utils/tensor_new.cpp
 
-namespace torch {
-namespace autograd {
-
-static PyTypeObject THPVariableFunctions = {
-    PyVarObject_HEAD_INIT(
-        nullptr,
-        0) &quot;torch._C._VariableFunctionsClass&quot;, /* tp_name */
-    0, /* tp_basicsize */
-    ...
+Tensor base_tensor_ctor(PyObject* args, PyObject* kwargs) {
+  return legacy_tensor_generic_ctor_new(
+      torch::tensors::get_default_dispatch_key(),
+      torch::tensors::get_default_scalar_type(),
+      args,
+      kwargs,
+      CtorOrNew::BASE_CTOR);
 }
 
-void initTorchFunctions(PyObject* module) {
-  static std::vector&lt;PyMethodDef&gt; torch_functions;
-  gatherTorchFunctions(torch_functions);
-  THPVariableFunctions.tp_methods = torch_functions.data();
+Tensor legacy_tensor_generic_ctor_new(
+    c10::DispatchKey dispatch_key,
+    at::ScalarType scalar_type,
+    PyObject* args,
+    PyObject* kwargs,
+    CtorOrNew ctor_or_new) {
+  auto options = dispatchKeyToTensorOptions(dispatch_key);
+  static PythonArgParser parser({
+      &quot;new(*, Device? device=None)&quot;,
+      &quot;new(Storage storage)&quot;,
+      &quot;new(*, int64_t cdata)|hidden&quot;,
+      // This constructor is no longer legacy, it will also be usable for
+      // subclass initialization
+      &quot;new(Tensor other)&quot;,
+      &quot;new(Tensor other, *, Device? device=None)|hidden&quot;, // prevent Tensor
+                                                          // matching with
+                                                          // IntArrayRef,
+                                                          // PyObject*
+      &quot;new(IntArrayRef size, *, Device? device=None)&quot;,
+      &quot;new(PyObject* data, *, Device? device=None)&quot;,
+  });
 
-  if (PyModule_AddObject(
-          module,
-          &quot;_VariableFunctionsClass&quot;,
-          reinterpret_cast&lt;PyObject*&gt;(&amp;THPVariableFunctions)) &lt; 0) { }
-  THPVariableFunctionsModule =
-      PyType_GenericNew(&amp;THPVariableFunctions, Py_None, Py_None);
-  if (PyModule_AddObject(
-          module, &quot;_VariableFunctions&quot;, THPVariableFunctionsModule) &lt; 0) { }
-}
-} // namespace autograd
-} // namespace torch
-</code></pre>
-<p>checkout it out</p>
-<pre><code class="language-python">torch._C._VariableFunctionsClass.__dict__['tensor']
-&lt;staticmethod object at 0x7f55f7b45ed0&gt;
-</code></pre>
-<p>gatherTorchFunctions 填充 torch_functions, 包括 tensor.</p>
-<pre><code class="language-cpp">// torch/csrc/autograd/python_torch_functions_manual.cpp
-
-void gatherTorchFunctions(std::vector&lt;PyMethodDef&gt;&amp; torch_functions) {
-  constexpr size_t num_functions =
-      sizeof(torch_functions_manual) / sizeof(torch_functions_manual[0]);
-  torch_functions.assign(
-      torch_functions_manual, torch_functions_manual + num_functions);
-  gatherTorchFunctions_0(torch_functions);
-  gatherTorchFunctions_1(torch_functions);
-  gatherTorchFunctions_2(torch_functions);
-
-  static std::array&lt;std::pair&lt;const char*, const char*&gt;, 4&gt; aliases{
-      {// Canonical function, alias name
-       {&quot;sspaddmm&quot;, &quot;saddmm&quot;},
-       {&quot;mm&quot;, &quot;spmm&quot;},
-       {&quot;mm&quot;, &quot;dsmm&quot;},
-       {&quot;hspmm&quot;, &quot;hsmm&quot;}}};
-
-  for (const auto&amp; alias : aliases) {
-    auto it = std::find_if(
-        torch_functions.begin(),
-        torch_functions.end(),
-        [&amp;](const PyMethodDef&amp; def) {
-          return strcmp(def.ml_name, alias.first) == 0;
-        });
-    TORCH_INTERNAL_ASSERT(
-        it != torch_functions.end(),
-        &quot;Failed to create function alias from &quot;,
-        alias.first,
-        &quot; to &quot;,
-        alias.second);
-    PyMethodDef alias_def = *it;
-    alias_def.ml_name = alias.second;
-
-    torch_functions.push_back(alias_def);
+  if (isSparse(dispatchKeyToBackend(dispatch_key))) {
+    return legacy_sparse_tensor_generic_ctor_new(
+        dispatch_key, scalar_type, args, kwargs, ctor_or_new);
   }
 
-  torch_functions.push_back({nullptr});
+  if (ctor_or_new == CtorOrNew::NEW)
+    check_base_legacy_new(dispatch_key, c10::kStrided);
+
+  ParsedArgs&lt;2&gt; parsed_args;
+  auto r = parser.parse(args, kwargs, parsed_args);
+  if (r.idx == 0) {
+    auto deviceOptional = r.deviceOptional(0);
+    check_legacy_ctor_device(dispatch_key, deviceOptional);
+    at::OptionalDeviceGuard device_guard(deviceOptional);
+    return at::empty({0}, build_options(options, scalar_type));
+  } else if (r.idx == 1) {
+    at::ScalarType storage_scalar_type;
+    bool is_typed_storage = false;
+    at::Storage storage = r.storage(0, storage_scalar_type, is_typed_storage);
+    if (storage_scalar_type != at::ScalarType::Undefined &amp;&amp; is_typed_storage) {
+      TORCH_CHECK(
+          storage_scalar_type == scalar_type,
+          &quot;Expected a Storage of type &quot;,
+          scalar_type,
+          &quot; or an UntypedStorage, but got type &quot;,
+          storage_scalar_type,
+          &quot; for argument 1 'storage'&quot;);
+    }
+    return new_with_storage(options, scalar_type, storage);
+  } else if (r.idx == 2) {
+    auto cdata = reinterpret_cast&lt;void*&gt;(r.toInt64(0));
+    return at::unsafeTensorFromTH(cdata, true);
+  } else if (r.idx == 3) {
+    const auto&amp; other = r.tensor(0);
+    // BASE_CTOR (aka torch.Tensor) is now relaxed to accept any
+    // dtype; previously it was &quot;float&quot; biased
+    if (ctor_or_new != CtorOrNew::BASE_CTOR) {
+      options = options.dtype(scalar_type);
+      TORCH_CHECK_TYPE(
+          other.options().type_equal(options),
+          &quot;expected &quot;,
+          options,
+          &quot; (got &quot;,
+          other.options(),
+          &quot;)&quot;);
+    }
+    return other.alias();
+  } else if (r.idx == 4) {
+    if (ctor_or_new == CtorOrNew::CTOR || ctor_or_new == CtorOrNew::BASE_CTOR) {
+      TORCH_CHECK(
+          false,
+          &quot;Legacy tensor constructor of the form torch.Tensor(tensor, device=device) &quot;
+          &quot;is not supported.  Use torch.tensor(...) or torch.as_tensor(...) instead.&quot;);
+    } else {
+      TORCH_CHECK(
+          false,
+          &quot;Legacy tensor new of the form tensor.new(tensor, device=device) &quot;
+          &quot;is not supported.  Use torch.as_tensor(...) instead.&quot;);
+    }
+  } else if (r.idx == 5) {
+    PyObject* arg = r.pyobject(0);
+    auto deviceOptional = r.deviceOptional(1);
+    check_legacy_ctor_device(dispatch_key, deviceOptional);
+    if (!THPSize_Check(arg) &amp;&amp; PyTuple_GET_SIZE(args) &gt;= 1 &amp;&amp;
+        arg == PyTuple_GET_ITEM(args, 0)) {
+      // new(sequence) binds to this signature but should be treated differently
+      // unless the sequences is a torch.Size
+      return legacy_new_from_sequence(
+          options, scalar_type, deviceOptional, r.pyobject(0));
+    }
+    return new_with_sizes(
+        options, scalar_type, r.deviceOptional(1), r.intlist(0));
+  } else if (r.idx == 6) {
+    auto deviceOptional = r.deviceOptional(1);
+    check_legacy_ctor_device(dispatch_key, deviceOptional);
+    return legacy_new_from_sequence(
+        options, scalar_type, deviceOptional, r.pyobject(0));
+  }
+  throw std::runtime_error(&quot;new(): invalid arguments&quot;);
 }
 </code></pre>
-<p><code>torch_functions.assign(torch_functions_manual, ...);</code></p>
-<blockquote>
-<p>很多 functions 由
-<code>tools/autograd/gen_python_functions.py</code>
-自动生成的文件
-<code>torch/csrc/autograd/generated/python_torch_functions_0.cpp</code>
-定义。文件中的这些 functions 由同文件中的函数
-<code>gatherTorchFunctions_0</code> 添加到 <code>torch_functions</code> 从而添加进 <code>PyModuleDef</code>.</p>
-</blockquote>
-<pre><code class="language-python"># tools/autograd/gen_python_functions.py 
-
-# These functions require manual Python bindings or are not exposed to Python
-_SKIP_PYTHON_BINDINGS = [
-    &quot;tensor&quot;,
-]
-
-def gen( out: str, native_yaml_path: str, tags_yaml_path: str, deprecated_yaml_path: str, template_path: str, *, symint: bool = True,):
-    create_python_bindings( None, &quot;python_variable_methods.cpp&quot;,)
-    create_python_bindings_sharded( &quot;torch&quot;, &quot;python_torch_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.nn&quot;, &quot;python_nn_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.fft&quot;, &quot;python_fft_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.linalg&quot;, &quot;python_linalg_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.nested&quot;, &quot;python_nested_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.sparse&quot;, &quot;python_sparse_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.special&quot;, &quot;python_special_functions.cpp&quot;,)
-    create_python_return_type_bindings( fm, functions, lambda fn: True, &quot;python_return_types.cpp&quot;)
-</code></pre>
+<p>PyTorch Tensor 相关主要数据结构和关系</p>
+<p><img src="pytorch/1.png" alt="1" /></p>
 <h2 id="tensor-api-dependency"><a class="header" href="#tensor-api-dependency">Tensor API dependency</a></h2>
 <p>The dependency of tensor related API</p>
 <p><img src="pytorch/tensor-api.png" alt="Tensor View API Dependence" /></p>
@@ -2139,6 +2611,18 @@ struct TORCH_API add_Tensor {
   static at::Tensor redispatch(c10::DispatchKeySet dispatchKeySet, const at::Tensor &amp; self, const at::Tensor &amp; other, const at::Scalar &amp; alpha);
 };
 </code></pre>
+<pre><code class="language-cpp">// torch/include/ATen/core/TensorBody.h
+
+// aten::add.Tensor(Tensor self, Tensor other, *, Scalar alpha=1) -&gt; Tensor
+inline at::Tensor Tensor::add(const at::Tensor &amp; other, const at::Scalar &amp; alpha) const {
+    return at::_ops::add_Tensor::call(const_cast&lt;Tensor&amp;&gt;(*this), other, alpha);
+}
+
+// aten::add_.Tensor(Tensor(a!) self, Tensor other, *, Scalar alpha=1) -&gt; Tensor(a!)
+inline at::Tensor &amp; Tensor::add_(const at::Tensor &amp; other, const at::Scalar &amp; alpha) const {
+    return at::_ops::add__Tensor::call(const_cast&lt;Tensor&amp;&gt;(*this), other, alpha);
+}
+</code></pre>
 <p>AddBackward0</p>
 <pre><code class="language-cpp">// torch/csrc/autograd/generated/Functions.h
 
@@ -2260,6 +2744,72 @@ void set_gradient_edge(const Variable&amp; self, Edge edge) {
   }
 }
 </code></pre>
+<pre><code class="language-cpp">// torch/csrc/autograd/generated/python_variable_methods.cpp
+
+static PyObject * THPVariable_add(PyObject* self_, PyObject* args, PyObject* kwargs)
+{
+  const Tensor&amp; self = THPVariable_Unpack(self_);
+  static PythonArgParser parser({
+    &quot;add(Scalar alpha, Tensor other)|deprecated&quot;,
+    &quot;add(Tensor other, *, Scalar alpha=1)&quot;,
+  }, /*traceable=*/true);
+    
+  ParsedArgs&lt;2&gt; parsed_args;
+  auto _r = parser.parse(self_, args, kwargs, parsed_args);
+  if(_r.has_torch_function()) {
+    return handle_torch_function(_r, self_, args, kwargs, THPVariableClass, &quot;torch.Tensor&quot;);
+  }
+  switch (_r.idx) {
+    case 0: {
+      // [deprecated] aten::add(Tensor self, Scalar alpha, Tensor other) -&gt; Tensor
+      
+      auto dispatch_add = [](const at::Tensor &amp; self, const at::Scalar &amp; alpha, const at::Tensor &amp; other) -&gt; at::Tensor {
+        pybind11::gil_scoped_release no_gil;
+        return self.add(other, alpha);
+      };
+      return wrap(dispatch_add(self, _r.scalar(0), _r.tensor(1)));
+    } 
+    case 1: {
+      // aten::add.Tensor(Tensor self, Tensor other, *, Scalar alpha=1) -&gt; Tensor
+      
+      auto dispatch_add = [](const at::Tensor &amp; self, const at::Tensor &amp; other, const at::Scalar &amp; alpha) -&gt; at::Tensor {
+        pybind11::gil_scoped_release no_gil;
+        return self.add(other, alpha);
+      };
+      return wrap(dispatch_add(self, _r.tensor(0), _r.scalar(1)));
+    }
+  }
+}
+</code></pre>
+<pre><code class="language-cpp">// aten/src/ATen/core/dispatch/Dispatcher.h
+
+// See [Note: Argument forwarding in the dispatcher] for why Args doesn't use &amp;&amp;
+template&lt;class Return, class... Args&gt;
+inline Return Dispatcher::redispatch(const TypedOperatorHandle&lt;Return (Args...)&gt;&amp; op, DispatchKeySet currentDispatchKeySet, Args... args) const {
+  detail::unused_arg_(args...);  // workaround for a false-positive warning about unused parameters in gcc 5
+  // do not use RecordFunction on redispatch
+#ifndef NDEBUG
+  DispatchTraceNestingGuard debug_guard;
+  if (show_dispatch_trace()) {
+      auto nesting_value = dispatch_trace_nesting_value();
+      for (int64_t i = 0; i &lt; nesting_value; ++i) std::cerr &lt;&lt; &quot; &quot;;
+      std::cerr &lt;&lt; &quot;[redispatch] op=[&quot; &lt;&lt; op.operator_name() &lt;&lt; &quot;], key=[&quot; &lt;&lt; toString(currentDispatchKeySet.highestPriorityTypeId()) &lt;&lt; &quot;]&quot; &lt;&lt; std::endl;
+  }
+#endif
+  const KernelFunction&amp; kernel = op.operatorDef_-&gt;op.lookup(currentDispatchKeySet);
+  return kernel.template call&lt;Return, Args...&gt;(op, currentDispatchKeySet, std::forward&lt;Args&gt;(args)...);
+}
+</code></pre>
+<pre><code class="language-cpp">// aten/src/ATen/native/BinaryOps.cpp
+
+Tensor add(const Tensor&amp; self, const Scalar&amp; other, const Scalar&amp; alpha) {
+  return at::add(self, wrapped_scalar_tensor(other), alpha);
+}
+
+Tensor&amp; add_(Tensor&amp; self, const Scalar&amp; other, const Scalar&amp; alpha) {
+  return self.add_(wrapped_scalar_tensor(other), alpha);
+}
+</code></pre>
 <h3 id="torchmul"><a class="header" href="#torchmul">torch.mul</a></h3>
 <p>流程类似</p>
 <pre><code class="language-cpp">// torch/csrc/autograd/generated/VariableType_0.cpp
@@ -2358,6 +2908,14 @@ class TORCH_API SavedVariable {
 <p><img src="pytorch/5.png" alt="1" /></p>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="operator"><a class="header" href="#operator">operator</a></h1>
+<p>以 add 为例</p>
+<pre><code class="language-cpp">// 
+
+// aten::add.Tensor(Tensor self, Tensor other, *, Scalar alpha=1) -&gt; Tensor
+inline at::Tensor Tensor::add(const at::Tensor &amp; other, const at::Scalar &amp; alpha) const {
+    return at::_ops::add_Tensor::call(const_cast&lt;Tensor&amp;&gt;(*this), other, alpha);
+}
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="pytorch-profiler"><a class="header" href="#pytorch-profiler">PyTorch Profiler</a></h1>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
@@ -7030,6 +7588,16 @@ CoreWorker::CoreWorker(...) {
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="python"><a class="header" href="#python">python</a></h1>
+<p>Some interesting usage.</p>
+<pre><code class="language-python">import json
+from types import SimpleNamespace
+
+data = '{&quot;name&quot;: &quot;John Smith&quot;, &quot;hometown&quot;: {&quot;name&quot;: &quot;New York&quot;, &quot;id&quot;: 123}}'
+
+# Parse JSON into an object with attributes corresponding to dict keys.
+x = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+print(x.name, x.hometown.name, x.hometown.id)
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="concurrent-execution"><a class="header" href="#concurrent-execution">Concurrent Execution</a></h1>
 <p><strong>TL;DR;</strong></p>
@@ -8468,7 +9036,7 @@ for(int istep=0; istep&lt;NSTEP; istep++){
 <ul>
 <li><code>NCCL_GRAPH_DUMP_FILE</code> 可以保存网络拓扑信息到文件</li>
 </ul>
-<h2 id="references"><a class="header" href="#references">References</a></h2>
+<h2 id="references-1"><a class="header" href="#references-1">References</a></h2>
 <ul>
 <li><a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/examples.html">examples</a></li>
 </ul>
@@ -9054,7 +9622,7 @@ OpenAIGPTConfig {
   )
 )
 </code></pre>
-<h2 id="references-1"><a class="header" href="#references-1">References</a></h2>
+<h2 id="references-2"><a class="header" href="#references-2">References</a></h2>
 <ul>
 <li><a href="https://huggingface.co/docs/transformers/model_doc/bert">huggingface bert doc</a></li>
 </ul>
@@ -9063,28 +9631,39 @@ OpenAIGPTConfig {
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
             </nav>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript">
+
+        <script>
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
         </script>
+
     </body>
 </html>
