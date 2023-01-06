@@ -63,3 +63,7 @@
 
 - [nlp](nlp/nlp.md)
   - [transformer](nlp/transformer.md)
+
+- [tips](tips/tips.md)
+    - [enable_shared_from_this](tips/enable_shared_from_this.md)
+    - [ip_local_port_range](tips/ip_local_port_range.md)
