@@ -254,6 +254,8 @@ struct TORCH_API add_Tensor {
 };
 ```
 
+C API 入口
+
 ```cpp
 // torch/include/ATen/core/TensorBody.h
 

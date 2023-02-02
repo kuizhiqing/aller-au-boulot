@@ -8,6 +8,9 @@
 
 **Conclusion**: increase FLOPs, decrease Wall-clock time
 
+![FlashAttention](assets/flashattn_banner.jpg)
+
+
 ## Code Details
 
 ### Modules
@@ -332,8 +335,19 @@ csrc/flash_attn/src/fmha
 ```
 
 
+## Long sequences
+
+**WHY**
+原 flashattention 算法的并行依赖 bs * num_heads，A100 有 108  SMs，当 bs * num_heads > 80 时并行度利用率较高，但在长序列场景下，bs * num_heads 通常较小，无法充分利用 GPU 并行度。
+
+**HOW**
+前向：使用多个 thread blocks 并行处理同一个 attention head，head 按照 row 切分，可以无依赖并行
+反向：多个 thread blocks 并行处理，head 按照 column 切分，thread 间需要聚合 query gradient。（如果按 row 切则需要聚合 key 和 value 的 gradient）
+
 
 ## References
 
 * [github](https://github.com/HazyResearch/flash-attention)
 * [arxiv](https://arxiv.org/abs/2205.14135)
+* [efficient](https://github.com/facebookresearch/xformers)
+* [long sequences](https://crfm.stanford.edu/2023/01/13/flashattention.html)
