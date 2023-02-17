@@ -33,6 +33,7 @@
 
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
@@ -81,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="index.html"><strong aria-hidden="true">1.</strong> welcome</a></li><li class="chapter-item "><a href="survey/survey.html"><strong aria-hidden="true">2.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="survey/pollux.html"><strong aria-hidden="true">2.1.</strong> pollux</a></li><li class="chapter-item "><a href="survey/adasum.html"><strong aria-hidden="true">2.2.</strong> adasum</a></li><li class="chapter-item "><a href="survey/adaptation_learning.html"><strong aria-hidden="true">2.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="survey/gradient_descent.html"><strong aria-hidden="true">2.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="survey/auto_parallel.html"><strong aria-hidden="true">2.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="survey/scheduling.html"><strong aria-hidden="true">2.6.</strong> scheduling</a></li><li class="chapter-item "><a href="survey/gradient_compression/gradient_compression.html"><strong aria-hidden="true">2.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="survey/gradient_compression/dgc.html"><strong aria-hidden="true">2.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="survey/gradient_compression/csc.html"><strong aria-hidden="true">2.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="survey/adaptive_training.html"><strong aria-hidden="true">2.8.</strong> adaptive training</a></li><li class="chapter-item "><a href="survey/flash_attention.html"><strong aria-hidden="true">2.9.</strong> flash attention</a></li></ol></li><li class="chapter-item "><a href="pytorch/overview.html"><strong aria-hidden="true">3.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="pytorch/tensor.html"><strong aria-hidden="true">3.1.</strong> tensor</a></li><li class="chapter-item "><a href="pytorch/autograd.html"><strong aria-hidden="true">3.2.</strong> autograd</a></li><li class="chapter-item "><a href="pytorch/operator.html"><strong aria-hidden="true">3.3.</strong> operator</a></li><li class="chapter-item "><a href="pytorch/profiler.html"><strong aria-hidden="true">3.4.</strong> profiler</a></li><li class="chapter-item "><a href="pytorch/hook.html"><strong aria-hidden="true">3.5.</strong> hook</a></li><li class="chapter-item "><a href="pytorch/elastic.html"><strong aria-hidden="true">3.6.</strong> elastic</a></li><li class="chapter-item "><a href="pytorch/patch.html"><strong aria-hidden="true">3.7.</strong> patch</a></li></ol></li><li class="chapter-item "><a href="paddle/paddle.html"><strong aria-hidden="true">4.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="paddle/ps/ps-code-overview.html"><strong aria-hidden="true">4.1.</strong> ps</a></li><li class="chapter-item "><a href="paddle/framework.html"><strong aria-hidden="true">4.2.</strong> framework</a></li><li class="chapter-item "><a href="paddle/cinn.html"><strong aria-hidden="true">4.3.</strong> cinn</a></li></ol></li><li class="chapter-item "><a href="horovod/horovod.html"><strong aria-hidden="true">5.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="horovod/run.html"><strong aria-hidden="true">5.1.</strong> run</a></li><li class="chapter-item "><a href="horovod/workflow.html"><strong aria-hidden="true">5.2.</strong> workflow</a></li><li class="chapter-item "><a href="horovod/object.html"><strong aria-hidden="true">5.3.</strong> object</a></li><li class="chapter-item "><a href="horovod/develop.html"><strong aria-hidden="true">5.4.</strong> develop</a></li><li class="chapter-item "><a href="horovod/pytorch.html"><strong aria-hidden="true">5.5.</strong> pytorch</a></li><li class="chapter-item "><a href="horovod/tensorflow.html"><strong aria-hidden="true">5.6.</strong> tensorflow</a></li><li class="chapter-item "><a href="horovod/elastic.html"><strong aria-hidden="true">5.7.</strong> elastic</a></li></ol></li><li class="chapter-item "><a href="ray/ray.html"><strong aria-hidden="true">6.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="ray/overview.html"><strong aria-hidden="true">6.1.</strong> overview</a></li><li class="chapter-item "><a href="ray/gcs.html"><strong aria-hidden="true">6.2.</strong> gcs</a></li><li class="chapter-item "><a href="ray/raylet.html"><strong aria-hidden="true">6.3.</strong> raylet</a></li><li class="chapter-item "><a href="ray/api.html"><strong aria-hidden="true">6.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="python/python.html"><strong aria-hidden="true">7.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="python/concurrent.html"><strong aria-hidden="true">7.1.</strong> concurrent execution</a></li><li class="chapter-item "><a href="python/multiprocessing.html"><strong aria-hidden="true">7.2.</strong> multiprocessing</a></li><li class="chapter-item "><a href="python/decorator.html"><strong aria-hidden="true">7.3.</strong> decorator</a></li></ol></li><li class="chapter-item "><a href="kubernetes/kubernetes.html"><strong aria-hidden="true">8.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="kubernetes/scheduler.html"><strong aria-hidden="true">8.1.</strong> scheduler</a></li><li class="chapter-item "><a href="kubernetes/operator.html"><strong aria-hidden="true">8.2.</strong> operator</a></li><li class="chapter-item "><a href="kubernetes/device_plugin.html"><strong aria-hidden="true">8.3.</strong> device plugin</a></li><li class="chapter-item "><a href="kubernetes/docker.html"><strong aria-hidden="true">8.4.</strong> docker</a></li></ol></li><li class="chapter-item "><a href="tvm/tvm.html"><strong aria-hidden="true">9.</strong> tvm</a></li><li class="chapter-item "><a href="gloo/gloo.html"><strong aria-hidden="true">10.</strong> gloo</a></li><li class="chapter-item "><a href="nccl/nccl.html"><strong aria-hidden="true">11.</strong> nccl</a></li><li class="chapter-item "><a href="mpi/mpi.html"><strong aria-hidden="true">12.</strong> mpi</a></li><li class="chapter-item "><a href="nlp/nlp.html"><strong aria-hidden="true">13.</strong> nlp</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="nlp/transformer.html"><strong aria-hidden="true">13.1.</strong> transformer</a></li></ol></li><li class="chapter-item "><a href="tips/tips.html"><strong aria-hidden="true">14.</strong> tips</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="tips/enable_shared_from_this.html"><strong aria-hidden="true">14.1.</strong> enable_shared_from_this</a></li><li class="chapter-item "><a href="tips/ip_local_port_range.html"><strong aria-hidden="true">14.2.</strong> ip_local_port_range</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="index.html"><strong aria-hidden="true">1.</strong> welcome</a></li><li class="chapter-item "><a href="survey/survey.html"><strong aria-hidden="true">2.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="survey/pollux.html"><strong aria-hidden="true">2.1.</strong> pollux</a></li><li class="chapter-item "><a href="survey/adasum.html"><strong aria-hidden="true">2.2.</strong> adasum</a></li><li class="chapter-item "><a href="survey/adaptation_learning.html"><strong aria-hidden="true">2.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="survey/gradient_descent.html"><strong aria-hidden="true">2.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="survey/auto_parallel.html"><strong aria-hidden="true">2.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="survey/scheduling.html"><strong aria-hidden="true">2.6.</strong> scheduling</a></li><li class="chapter-item "><a href="survey/gradient_compression/gradient_compression.html"><strong aria-hidden="true">2.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="survey/gradient_compression/dgc.html"><strong aria-hidden="true">2.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="survey/gradient_compression/csc.html"><strong aria-hidden="true">2.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="survey/flash_attention.html"><strong aria-hidden="true">2.8.</strong> flash attention</a></li></ol></li><li class="chapter-item "><a href="pytorch/overview.html"><strong aria-hidden="true">3.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="pytorch/tensor.html"><strong aria-hidden="true">3.1.</strong> tensor</a></li><li class="chapter-item "><a href="pytorch/autograd.html"><strong aria-hidden="true">3.2.</strong> autograd</a></li><li class="chapter-item "><a href="pytorch/operator.html"><strong aria-hidden="true">3.3.</strong> operator</a></li><li class="chapter-item "><a href="pytorch/profiler.html"><strong aria-hidden="true">3.4.</strong> profiler</a></li><li class="chapter-item "><a href="pytorch/hook.html"><strong aria-hidden="true">3.5.</strong> hook</a></li><li class="chapter-item "><a href="pytorch/elastic.html"><strong aria-hidden="true">3.6.</strong> elastic</a></li><li class="chapter-item "><a href="pytorch/patch.html"><strong aria-hidden="true">3.7.</strong> patch</a></li></ol></li><li class="chapter-item "><a href="paddle/paddle.html"><strong aria-hidden="true">4.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="paddle/ps/ps-code-overview.html"><strong aria-hidden="true">4.1.</strong> ps</a></li><li class="chapter-item "><a href="paddle/framework.html"><strong aria-hidden="true">4.2.</strong> framework</a></li><li class="chapter-item "><a href="paddle/cinn.html"><strong aria-hidden="true">4.3.</strong> cinn</a></li></ol></li><li class="chapter-item "><a href="horovod/horovod.html"><strong aria-hidden="true">5.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="horovod/run.html"><strong aria-hidden="true">5.1.</strong> run</a></li><li class="chapter-item "><a href="horovod/workflow.html"><strong aria-hidden="true">5.2.</strong> workflow</a></li><li class="chapter-item "><a href="horovod/object.html"><strong aria-hidden="true">5.3.</strong> object</a></li><li class="chapter-item "><a href="horovod/develop.html"><strong aria-hidden="true">5.4.</strong> develop</a></li><li class="chapter-item "><a href="horovod/pytorch.html"><strong aria-hidden="true">5.5.</strong> pytorch</a></li><li class="chapter-item "><a href="horovod/tensorflow.html"><strong aria-hidden="true">5.6.</strong> tensorflow</a></li><li class="chapter-item "><a href="horovod/elastic.html"><strong aria-hidden="true">5.7.</strong> elastic</a></li></ol></li><li class="chapter-item "><a href="ray/ray.html"><strong aria-hidden="true">6.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="ray/overview.html"><strong aria-hidden="true">6.1.</strong> overview</a></li><li class="chapter-item "><a href="ray/gcs.html"><strong aria-hidden="true">6.2.</strong> gcs</a></li><li class="chapter-item "><a href="ray/raylet.html"><strong aria-hidden="true">6.3.</strong> raylet</a></li><li class="chapter-item "><a href="ray/api.html"><strong aria-hidden="true">6.4.</strong> api</a></li></ol></li><li class="chapter-item "><a href="python/python.html"><strong aria-hidden="true">7.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="python/concurrent.html"><strong aria-hidden="true">7.1.</strong> concurrent execution</a></li><li class="chapter-item "><a href="python/multiprocessing.html"><strong aria-hidden="true">7.2.</strong> multiprocessing</a></li><li class="chapter-item "><a href="python/decorator.html"><strong aria-hidden="true">7.3.</strong> decorator</a></li></ol></li><li class="chapter-item "><a href="kubernetes/kubernetes.html"><strong aria-hidden="true">8.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="kubernetes/scheduler.html"><strong aria-hidden="true">8.1.</strong> scheduler</a></li><li class="chapter-item "><a href="kubernetes/operator.html"><strong aria-hidden="true">8.2.</strong> operator</a></li><li class="chapter-item "><a href="kubernetes/device_plugin.html"><strong aria-hidden="true">8.3.</strong> device plugin</a></li><li class="chapter-item "><a href="kubernetes/docker.html"><strong aria-hidden="true">8.4.</strong> docker</a></li></ol></li><li class="chapter-item "><a href="nvidia/nvidia.html"><strong aria-hidden="true">9.</strong> nvidia</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="nccl/nccl.html"><strong aria-hidden="true">9.1.</strong> nccl</a></li></ol></li><li class="chapter-item "><a href="tvm/tvm.html"><strong aria-hidden="true">10.</strong> tvm</a></li><li class="chapter-item "><a href="gloo/gloo.html"><strong aria-hidden="true">11.</strong> gloo</a></li><li class="chapter-item "><a href="mpi/mpi.html"><strong aria-hidden="true">12.</strong> mpi</a></li><li class="chapter-item "><a href="nlp/nlp.html"><strong aria-hidden="true">13.</strong> nlp</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="nlp/transformer.html"><strong aria-hidden="true">13.1.</strong> transformer</a></li></ol></li><li class="chapter-item "><a href="tips/tips.html"><strong aria-hidden="true">14.</strong> tips</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="tips/enable_shared_from_this.html"><strong aria-hidden="true">14.1.</strong> enable_shared_from_this</a></li><li class="chapter-item "><a href="tips/ip_local_port_range.html"><strong aria-hidden="true">14.2.</strong> ip_local_port_range</a></li></ol></li><li class="chapter-item "><a href="github/github.html"><strong aria-hidden="true">15.</strong> github</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -1221,9 +1222,6 @@ class DGCSGDMemory(Memory):
 </ul>
 <p>DGC naively perform fine-grained (i.e., element-wise) top-k to select gradients, and thus the communication will suffer from increased allgather data volume as #nodes increases.</p>
 <p>CSC modified the process with coarse-grained sparsification: gradients are partioned into chunks, allreduce the gradient chunks selected based on allreduced L1-norm of each chunk, which gets rid of the allgather and solves the problem.</p>
-<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="adaptive-training"><a class="header" href="#adaptive-training">adaptive training</a></h1>
-<embed src="assets/adaptive_training.pdf" width="100%" height="600" type="application/pdf" allowfullscreen>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="flash-attention"><a class="header" href="#flash-attention">Flash Attention</a></h1>
 <h2 id="key-idea"><a class="header" href="#key-idea">Key Idea</a></h2>
@@ -8279,392 +8277,126 @@ func (jm *Controller) processNextWorkItem() bool {
 <li><strong>dockershim</strong></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="tvm"><a class="header" href="#tvm">TVM</a></h1>
-<h2 id="expression-1"><a class="header" href="#expression-1">Expression</a></h2>
-<p><strong>TE</strong>
-Tensor Expression, DSL (domain-specific language)</p>
-<p><strong>Relay</strong> TVM’s high-level model language</p>
-<p><strong>IR</strong> intermediate representation</p>
-<p><strong>TIR</strong> Tensor Intermediate Representation, TVM’s low-level intermediate representation</p>
-<p><strong>Schedule</strong> how to execute the computation</p>
-<p><strong>Stage</strong> schedule for one operation</p>
-<p><strong>TOPI</strong> TVM Operator Inventory, numpy-style generic operations and schedules </p>
-<h2 id="demo-5"><a class="header" href="#demo-5">Demo</a></h2>
-<pre><code class="language-python">from tvm.driver import tvmc
+<h1 id="nvidia"><a class="header" href="#nvidia">nvidia</a></h1>
+<div class="table-wrapper"><table><thead><tr><th>NAME</th><th>WHAT</th><th>SOURCE</th><th>HEADER</th><th>---</th></tr></thead><tbody>
+<tr><td>CUDA</td><td>Compute Unified Device Architecture</td><td>N</td><td>cuda.h</td><td>libcuda.so</td></tr>
+<tr><td>cuBLAS</td><td>Basic Linear Algebra Subroutine</td><td>N</td><td>cublas_v2.h</td><td>cublas.so</td></tr>
+<tr><td>CUTLASS</td><td>CUDA Templates for Linear Algebra Subroutines</td><td>Y</td><td>cutlass/cutlass.h</td><td></td></tr>
+<tr><td>CUB</td><td>Cooperative primitives for CUDA C++</td><td>Y</td><td>cub/cub.cuh</td><td></td></tr>
+<tr><td>Thrust</td><td>The C++ Parallel Algorithms Library</td><td>Y</td><td>thrust/.h</td><td></td></tr>
+<tr><td>cuSOLVER</td><td>LAPACK</td><td>N</td><td>cusolverDn.h</td><td>libcusolver.so</td></tr>
+</tbody></table>
+</div>
+<h2 id="cuda"><a class="header" href="#cuda">CUDA</a></h2>
+<p>一般 CUDA 指 CUDA Toolkit</p>
+<pre><code class="language-cpp">#include &quot;cuda.h&quot;
+#include &quot;cuda_runtime.h&quot;
+#include &lt;iostream&gt;
 
-#Step 1: Load
-model = tvmc.load('resnet50-v2-7.onnx', shape_dict={'data':[1, 3, 224, 224]}) 
-
-#Step 1.5: Optional Tune
-tuning_records = tvmc.tune(model, target=&quot;llvm&quot;) 
-
-#Step 2: Compile
-package = tvmc.compile(model, target=&quot;llvm&quot;, tuning_records = tuning_records) 
-
-#Step 3: Run
-result = tvmc.run(package, device=&quot;cpu&quot;) 
-
-print(result)
+int main() {
+  int rt_ver, dr_ver;
+  auto err1 = cudaRuntimeGetVersion(&amp;rt_ver);
+  if (err1 != cudaSuccess) {
+    std::cerr &lt;&lt; cudaGetErrorString(err1) &lt;&lt; std::endl;
+    return -1;
+  }
+  std::cout &lt;&lt; &quot;Runtime version: &quot; &lt;&lt; rt_ver &lt;&lt; std::endl;
+  auto err2 = cudaDriverGetVersion(&amp;dr_ver);
+  if (err2 != cudaSuccess) {
+    std::cerr &lt;&lt; cudaGetErrorString(err2) &lt;&lt; std::endl;
+    return -1;
+  }
+  std::cout &lt;&lt; &quot;Driver version: &quot; &lt;&lt; dr_ver &lt;&lt; std::endl;
+  return 0;
+}
 </code></pre>
-<ul>
-<li>IRModule: relay.Function + tir.PrimFunc</li>
-<li>tvmc.compile: relay::Function --&gt; tir::PrimFunc</li>
-</ul>
-<p><strong>Why TVM ?</strong></p>
-<p><code>tvmc.tune</code> make model run more fast.</p>
-<p><strong>How ?</strong></p>
-<p>ALL, especially,</p>
-<p>AutoTVM (template-based) or AutoScheduler (Ansor, template-free auto-tuning)</p>
-<h2 id="tvm-optimizaing-compiler-workflow"><a class="header" href="#tvm-optimizaing-compiler-workflow">TVM optimizaing compiler workflow</a></h2>
-<ol>
-<li>TF/PyTroch/ONNX</li>
-<li>Relay (High-level IR)</li>
-<li>TE (Computation definition)</li>
-<li>AutoTVM/AutoScheduler (Auto-tuining module)</li>
-<li>TE + Schedule (Optimization specification)</li>
-<li>TIR (Low-level IR)</li>
-<li>Machine Code</li>
-</ol>
-<p>流程解析</p>
-<ol>
-<li>TVM 数据输入格式，prefer ONNX</li>
-<li>TVM 高级 API 操作计算图</li>
-<li>Relay 通过 fuseops pass 生成子图，同时有 schedule primitives 对 low-level loop 进行优化，Tensor Operator Inventory (TOPI) 处理常规 op, 生成 TE</li>
-<li>通过 AutoTVM (template-based) 或 AutoScheduler (template-free auto-tuning) 寻找最佳 schedule</li>
-<li>生成 json 格式 tuning records, 包含最佳 schedule</li>
-<li>生成 TIR，支持主流 LLVM/NVCC</li>
-<li>生成机器码</li>
-</ol>
-<p>low-level loop optimizations: tiling, vectorization, parallelization, unrolling, and fusion</p>
-<h2 id="tvm-auto-scheduler-aka-ansor"><a class="header" href="#tvm-auto-scheduler-aka-ansor">TVM Auto-scheduler (a.k.a. Ansor)</a></h2>
-<p>package <code>tvm.auto_scheduler</code></p>
-<h2 id="schedule-primitives"><a class="header" href="#schedule-primitives">Schedule Primitives</a></h2>
-<p>How to get good performance kernel ?</p>
-<h2 id="te"><a class="header" href="#te">TE</a></h2>
-<pre><code class="language-python">import tvm
-from tvm import te
+<h2 id="cublas"><a class="header" href="#cublas">cuBLAS</a></h2>
+<p><strong>CUDA Basic Linear Algebra Subroutine library</strong></p>
+<h2 id="cutlass"><a class="header" href="#cutlass">CUTLASS</a></h2>
+<p><a href="https://github.com/NVIDIA/cutlass/blob/master/media/docs/quickstart.md">examples</a></p>
+<h2 id="cub"><a class="header" href="#cub">CUB</a></h2>
+<pre><code class="language-cpp">#include &lt;cub/cub.cuh&gt;
 
-m = te.var('m')
-n = te.var('n')
+// Block-sorting CUDA kernel
+__global__ void BlockSortKernel(int *d_in, int *d_out)
+{
+     using namespace cub;
 
-a = te.placeholder((m, n), name='A')
-b = te.placeholder((m, n), name='B')
+     // Specialize BlockRadixSort, BlockLoad, and BlockStore for 128 threads
+     // owning 16 integer items each
+     typedef BlockRadixSort&lt;int, 128, 16&gt;                     BlockRadixSort;
+     typedef BlockLoad&lt;int, 128, 16, BLOCK_LOAD_TRANSPOSE&gt;   BlockLoad;
+     typedef BlockStore&lt;int, 128, 16, BLOCK_STORE_TRANSPOSE&gt; BlockStore;
 
-c = te.compute((m, n), lambda i, j: a[i, j]*b[i, j], name='C')
+     // Allocate shared memory
+     __shared__ union {
+         typename BlockRadixSort::TempStorage  sort;
+         typename BlockLoad::TempStorage       load;
+         typename BlockStore::TempStorage      store;
+     } temp_storage;
 
-s = te.create_schedule([c.op])
+     int block_offset = blockIdx.x * (128 * 16);	  // OffsetT for this block's ment
 
-tgt = tvm.target.Target(target=&quot;llvm&quot;, host=&quot;llvm&quot;)
-mult = tvm.build(s, [a, b, c], target=tgt, name=&quot;mult&quot;)
+     // Obtain a segment of 2048 consecutive keys that are blocked across threads
+     int thread_keys[16];
+     BlockLoad(temp_storage.load).Load(d_in + block_offset, thread_keys);
+     __syncthreads();
 
-print(mult.get_source())
+     // Collectively sort the keys
+     BlockRadixSort(temp_storage.sort).Sort(thread_keys);
+     __syncthreads();
 
-print(tvm.lower(s, [a, b, c], simple_mode=True))
+     // Store the sorted segment
+     BlockStore(temp_storage.store).Store(d_out + block_offset, thread_keys);
+}
 </code></pre>
-<p><code>tvm.build</code> </p>
-<p>tvm.te.schedule.Schedule, tvm.tir.PrimFunc, IRModule, Mapping[str, IRModule] --&gt; <code>tvm.runtime.Module</code></p>
-<p>A module that combines both host and device code</p>
-<p><code>tvm.lower</code> </p>
-<p>tvm.te.schedule.Schedule, tvm.tir.PrimFunc, IRModule --&gt; <code>IRModule</code></p>
-<p>Demo for IRModule transform</p>
-<pre><code class="language-python">import tvm
-from tvm.ir.module import IRModule
-from tvm.script import tir as T
-import numpy as np
+<h2 id="cusolver"><a class="header" href="#cusolver">cuSolver</a></h2>
+<p><strong>cuSolverDN</strong>: Dense LAPACK</p>
+<p><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.9657709999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.771331em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">×</span><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span></span></span></span>, solve <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span></span></span></span>.</p>
+<p><strong>cuSolverSP</strong>: Sparse LAPACK</p>
+<p><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.9657709999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.771331em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">×</span><span class="mord mathnormal mtight">m</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span></span></span></span>, solve <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">m</span><span class="mord mathnormal">i</span><span class="mord mathnormal">n</span><span class="mord">∣</span><span class="mord">∣</span><span class="mord mathnormal">A</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">b</span><span class="mord">∣</span><span class="mord">∣</span></span></span></span></p>
+<p><strong>cuSolverRF</strong>: Refactorization</p>
+<p><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.9657709999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.771331em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">×</span><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.10764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, solve <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6891em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68611em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></span>.</p>
+<h2 id="thrust"><a class="header" href="#thrust">Thrust</a></h2>
+<pre><code class="language-cpp">#include &lt;thrust/host_vector.h&gt;
+#include &lt;thrust/device_vector.h&gt;
+#include &lt;thrust/generate.h&gt;
+#include &lt;thrust/sort.h&gt;
+#include &lt;thrust/copy.h&gt;
+#include &lt;thrust/random.h&gt;
 
-from tvm import te
+int main() {
+  // Generate 32M random numbers serially.
+  thrust::default_random_engine rng(1337);
+  thrust::uniform_int_distribution&lt;int&gt; dist;
+  thrust::host_vector&lt;int&gt; h_vec(32 &lt;&lt; 20);
+  thrust::generate(h_vec.begin(), h_vec.end(), [&amp;] { return dist(rng); });
 
-A = te.placeholder((8,), dtype=&quot;float32&quot;, name=&quot;A&quot;)
-B = te.compute((8,), lambda *i: A(*i) + 1.0, name=&quot;B&quot;)
-func = te.create_prim_func([A, B])
-ir_module = IRModule({&quot;main&quot;: func})
-print(ir_module.script())
-&quot;&quot;&quot;
-# from tvm.script import tir as T
-@tvm.script.ir_module
-class Module:
-    @T.prim_func
-    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
-        # function attr dict
-        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
-        # body
-        # with T.block(&quot;root&quot;)
-        for i0 in T.serial(8):
-            with T.block(&quot;B&quot;):
-                i0_1 = T.axis.spatial(8, i0)
-                T.reads(A[i0_1])
-                T.writes(B[i0_1])
-                B[i0_1] = A[i0_1] + T.float32(1)
-&quot;&quot;&quot;
-</code></pre>
-<pre><code class="language-python"># &lt;class 'tvm.driver.build_module.OperatorModule'&gt;
-mod = tvm.build(ir_module, target=&quot;llvm&quot;)  # The module for CPU backends.
+  // Transfer data to the device.
+  thrust::device_vector&lt;int&gt; d_vec = h_vec;
 
-# &lt;class 'tvm.tir.schedule.schedule.Schedule'&gt;
-sch = tvm.tir.Schedule(ir_module)
-block_b = sch.get_block(&quot;B&quot;)
-(i,) = sch.get_loops(block_b)
-</code></pre>
-<pre><code class="language-python">i_0, i_1, i_2 = sch.split(i, factors=[2, 2, 2])
-print(sch.mod.script())
-&quot;&quot;&quot;
-# from tvm.script import tir as T
-@tvm.script.ir_module
-class Module:
-    @T.prim_func
-    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
-        # function attr dict
-        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
-        # body
-        # with T.block(&quot;root&quot;)
-        for i0_0, i0_1, i0_2 in T.grid(2, 2, 2):
-            with T.block(&quot;B&quot;):
-                i0 = T.axis.spatial(8, i0_0 * 4 + i0_1 * 2 + i0_2)
-                T.reads(A[i0])
-                T.writes(B[i0])
-                B[i0] = A[i0] + T.float32(1)
-&quot;&quot;&quot;
-</code></pre>
-<pre><code class="language-python">sch.reorder(i_0, i_2, i_1)
-print(sch.mod.script())
-&quot;&quot;&quot;
-# from tvm.script import tir as T
-@tvm.script.ir_module
-class Module:
-    @T.prim_func
-    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
-        # function attr dict
-        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
-        # body
-        # with T.block(&quot;root&quot;)
-        for i0_0, i0_2, i0_1 in T.grid(2, 2, 2):
-            with T.block(&quot;B&quot;):
-                i0 = T.axis.spatial(8, i0_0 * 4 + i0_1 * 2 + i0_2)
-                T.reads(A[i0])
-                T.writes(B[i0])
-                B[i0] = A[i0] + T.float32(1)
-&quot;&quot;&quot;
-</code></pre>
-<pre><code class="language-python">sch.bind(i_0, &quot;blockIdx.x&quot;)
-sch.bind(i_2, &quot;threadIdx.x&quot;)
-print(sch.mod.script())
-&quot;&quot;&quot;
-# from tvm.script import tir as T
-@tvm.script.ir_module
-class Module:
-    @T.prim_func
-    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
-        # function attr dict
-        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
-        # body
-        # with T.block(&quot;root&quot;)
-        for i0_0 in T.thread_binding(2, thread=&quot;blockIdx.x&quot;):
-            for i0_2 in T.thread_binding(2, thread=&quot;threadIdx.x&quot;):
-                for i0_1 in T.serial(2):
-                    with T.block(&quot;B&quot;):
-                        i0 = T.axis.spatial(8, i0_0 * 4 + i0_1 * 2 + i0_2)
-                        T.reads(A[i0])
-                        T.writes(B[i0])
-                        B[i0] = A[i0] + T.float32(1)
-&quot;&quot;&quot;
-</code></pre>
-<h2 id="relay"><a class="header" href="#relay">Relay</a></h2>
-<p><strong>relay.build()</strong></p>
-<p>return</p>
-<ul>
-<li>execution graph in json format</li>
-<li>TVM module library of compiled functions specifically for this graph on the target hardware</li>
-<li>parameter blobs of the model</li>
-</ul>
-<p>During the compilation, </p>
-<ul>
-<li>Relay does the graph-level optimization,</li>
-<li>TVM does the tensor-level optimization,</li>
-</ul>
-<p>resulting in an optimized runtime module for model serving.</p>
-<h3 id="relay-vs-te"><a class="header" href="#relay-vs-te">Relay v.s. TE</a></h3>
-<pre><code class="language-python">tvm.tir.sqrt(x: tvm.ir.PrimExpr) -&gt; tvm.ir.PrimExpr
+  // Sort data on the device.
+  thrust::sort(d_vec.begin(), d_vec.end());
 
-# Alias of tvm.tir.sqrt()
-tvm.te.sqrt(x: tvm.ir.PrimExpr) -&gt; tvm.ir.PrimExpr
-
-tvm.relay.sqrt(data: tvm.ir.RelayExpr) -&gt; tvm.ir.RelayExpr)
+  // Transfer data back to host.
+  thrust::copy(d_vec.begin(), d_vec.end(), h_vec.begin());
+}
 </code></pre>
-<p>For tvm.ir.BaseExpr,</p>
-<ul>
-<li>PrimExpr is class of all primitive expressions, used in the low-level code optimizations and integer analysis.</li>
-<li>RelayExpr is class of all non-primitive expressions.</li>
-</ul>
-<h3 id="build-1"><a class="header" href="#build-1">Build</a></h3>
-<p><code>tvm.build</code> v.s. <code>tvm.relay.build</code></p>
-<pre><code class="language-python">tvm.relay.build(ir_mod: IRModule, target, target_host, executor=graph{}, runtime=cpp) 
-    -&gt; tvm.relay.backend.executor_factory.ExecutorFactoryModule
-
-tvm.build(inputs: Union[tvm.te.schedule.Schedule, tvm.tir.function.PrimFunc, tvm.ir.module.IRModule, Mapping[str, tvm.ir.module.IRModule]], args, target, target_host, runtime, binds) 
-    -&gt; tvm.driver.build_module.OperatorModule
-</code></pre>
-<h2 id="optimization"><a class="header" href="#optimization">Optimization</a></h2>
-<p><strong>Blocking</strong>, <strong>Cache</strong></p>
-<p>通过分 Block, 让留在 cache 中的中间计算结果能够发挥作用，从而提升性能。</p>
-<p><strong>Vectorization</strong>, <strong>Array Packing</strong></p>
-<p>连续的内存访问会比较高效，通过 <code>vectorize</code> 达到这样的目的。对矩阵的 Array Packing 也是在做这样的优化。</p>
-<p><strong>Parallelization</strong></p>
-<p>非依赖的情况下可以使用并行策略提高整体性能。</p>
-<h2 id="topi"><a class="header" href="#topi">TOPI</a></h2>
-<pre><code class="language-python">n = te.var(&quot;n&quot;)
-m = te.var(&quot;m&quot;)
-A = te.placeholder((n, m), name=&quot;A&quot;)
-</code></pre>
-<p>origin</p>
-<pre><code class="language-python">k = te.reduce_axis((0, m), &quot;k&quot;)
-B = te.compute((n,), lambda i: te.sum(A[i, k], axis=k), name=&quot;B&quot;)
-s = te.create_schedule(B.op)
-# print(tvm.lower(s, [A], simple_mode=True))
-</code></pre>
-<p>TOPI </p>
-<pre><code class="language-python">C = topi.sum(A, axis=1)
-ts = te.create_schedule(C.op)
-# print(tvm.lower(ts, [A], simple_mode=True))
-</code></pre>
-<h2 id="develop-2"><a class="header" href="#develop-2">Develop</a></h2>
-<ul>
-<li>write a pass with IR</li>
-<li>glue to lowering</li>
-</ul>
-<p>每一个 phase 做的 transformation 如下，</p>
-<ul>
-<li>Phase 0 generates the raw IR and loop levels.</li>
-<li>Phase 1 flattens the array storage.</li>
-<li>Phase 2 transforms loops, like unroll, vectorization and thread-binding.</li>
-<li>Phase 3 does some cleanup work.</li>
-</ul>
-<p>所以比如自定义的 vectorize 适合放在 phase 1 之后。</p>
-<pre><code class="language-python">with tvm.transform.PassContext(config={&quot;tir.add_lower_pass&quot;: [(1, vectorize)]}):
-    print(tvm.lower(sch, [a, b, c]))
-</code></pre>
+<h2 id="comparasion"><a class="header" href="#comparasion">Comparasion</a></h2>
+<p>NVIDIA HPC SDK vs CUDA Toolkit</p>
+<p>cuda.h vs cuda_runtime.h</p>
 <h2 id="reference-9"><a class="header" href="#reference-9">Reference</a></h2>
 <ul>
-<li><a href="https://tvm.apache.org/docs/">https://tvm.apache.org/docs/</a></li>
-<li><a href="https://tvm.apache.org/docs/how_to/work_with_schedules/schedule_primitives.html">schedule_primitives</a></li>
-<li><a href="https://tvm.apache.org/docs/tutorial/tensor_expr_get_started.html">optimization TE</a></li>
-<li><a href="https://tvm.apache.org/docs/how_to/extend_tvm/low_level_custom_pass.html">custom pass</a></li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="gloo"><a class="header" href="#gloo">Gloo</a></h1>
-<h2 id="tldr-1"><a class="header" href="#tldr-1">TL;DR;</a></h2>
-<p>Gloo 是集合通信和算法库。运行逻辑如下，</p>
-<ul>
-<li>定义网络设备信息创建通信媒介 Device;</li>
-<li>使用可以共同交换数据的 Store 实现 rendezvous;</li>
-<li>节点通过 (rank, size) 创建 Context, 使用 connectFullMesh 方法建立通信域：
-<ul>
-<li>向 Store 注册自身节点信息；</li>
-<li>从 Store 中获取全部节点信息；</li>
-<li>启动 n-1 个服务分别与其余节点建立连接;</li>
-</ul>
-</li>
-<li>通过 Context 使用集合通信功能。</li>
-</ul>
-<h2 id="concepts"><a class="header" href="#concepts">Concepts</a></h2>
-<p><strong>Device</strong></p>
-<p>Device 是通信设备的抽象。</p>
-<p><strong>Context</strong></p>
-<p>Context 负责建立管理通信域。</p>
-<p><strong>Store</strong> </p>
-<p>Store 是实现 rendezvous 的介质，是实现共识的媒介。</p>
-<p><strong>Address</strong> </p>
-<p><code>gloo::transport::tcp::Address</code> 是对网络地址的封装。</p>
-<p><strong>attr</strong></p>
-<p><code>gloo::transport::tcp::attr</code> 是对网络通信属性的结构体封装，ip、网卡等信息。</p>
-<h2 id="gloo-vs-mpi"><a class="header" href="#gloo-vs-mpi">Gloo v.s. MPI</a></h2>
-<h2 id="more"><a class="header" href="#more">More</a></h2>
-<p>ibverbs 是使用 IB(InfiniBand) 的 API.</p>
-<h2 id="workflow-1"><a class="header" href="#workflow-1">Workflow</a></h2>
-<pre><code class="language-cpp">int main(void) {
-
-  // Device
-  gloo::transport::tcp::attr attr;
-  auto dev = gloo::transport::tcp::CreateDevice(attr);
-  // Store
-  auto fileStore = gloo::rendezvous::FileStore(&quot;/tmp&quot;);
-  auto prefixStore = gloo::rendezvous::PrefixStore(prefix, fileStore);
-  // Context
-  auto context = std::make_shared&lt;gloo::rendezvous::Context&gt;(rank, size);
-
-  context-&gt;connectFullMesh(prefixStore, dev);
-}
-</code></pre>
-<pre><code class="language-cpp">// gloo/rendezvous/context.cc
-
-void Context::connectFullMesh(
-    rendezvous::Store&amp; store,
-    std::shared_ptr&lt;transport::Device&gt;&amp; dev) {
-
-  // localKey = 'rank_0'
-  // value = 'host-0'
-  store.set(localKey, value);
-  for (int i = 0; i &lt; size; i++) {
-    // i != rank
-    auto val = store.get(key);
-  }
-
-  auto transportContext = dev-&gt;createContext(rank, size);
-  for (int i = 0; i &lt; size; i++) {
-    // i != rank
-    auto&amp; pair = transportContext-&gt;createPair(i);
-  }
-
-  // '0'
-  // [host-0]:9000[host-1]:9001
-  store.set(storeKey.str(), allBytes);
-
-  for (int i = 0; i &lt; size; i++) {
-    // i != rank
-    store.wait({key.str()}, getTimeout());
-    auto allAddrs = store.get(key.str());
-    auto addr = extractAddress(allAddrs, i);
-    transportContext-&gt;getPair(i)-&gt;connect(addr);
-  }
-}
-
-</code></pre>
-<pre><code class="language-cpp">std::unique_ptr&lt;transport::Pair&gt;&amp; Context::createPair(int rank) {
-  pairs_[rank] = std::unique_ptr&lt;transport::Pair&gt;(
-      new tcp::Pair(this, device_.get(), rank, getTimeout()));
-  return pairs_[rank];
-}
-</code></pre>
-<p>创建 Pair 对象会在本地启动 tcp socket 服务。</p>
-<pre><code class="language-cpp">// gloo/transport/tcp/pair.cc
-
-Pair::Pair(
-    Context* context,
-    Device* device,
-    int rank,
-    std::chrono::milliseconds timeout) {
-  listen();
-}
-
-void Pair::listen() {
-  std::lock_guard&lt;std::mutex&gt; lock(m_);
-  int rv;
-
-  const auto&amp; attr = device_-&gt;attr_;
-  auto fd = socket(attr.ai_family, attr.ai_socktype, attr.ai_protocol);
-  rv = bind(fd, (const sockaddr*)&amp;attr.ai_addr, attr.ai_addrlen);
-  fd_ = fd;
-  rv = ::listen(fd_, 1);
-  self_ = Address::fromSockName(fd);
-
-  device_-&gt;registerDescriptor(fd_, EPOLLIN, this);
-
-  return;
-}
-</code></pre>
-<h2 id="reference-10"><a class="header" href="#reference-10">Reference</a></h2>
-<ul>
-<li><a href="https://github.com/facebookincubator/gloo">gloo</a></li>
-<li><a href="https://github.com/ray-project/pygloo">pygloo</a></li>
+<li><a href="https://docs.nvidia.com/cuda/index.html">CUDA</a></li>
+<li><a href="https://docs.nvidia.com/cuda/cublas/">cuBLAS</a></li>
+<li><a href="https://github.com/NVIDIA/cutlass">CUTLASS</a></li>
+<li><a href="https://nvlabs.github.io/cub/index.html">CUB doc</a></li>
+<li><a href="https://github.com/NVIDIA/cub">CUB github</a></li>
+<li><a href="https://github.com/xianyi/OpenBLAS">OpenBLAS</a></li>
+<li><a href="https://docs.nvidia.com/deploy/cuda-compatibility/index.html">CUDA Compatibility</a></li>
+<li><a href="https://docs.nvidia.com/cuda/cuda-runtime-api/index.html">CUDA Runtime API</a></li>
+<li><a href="https://github.com/NVIDIA/thrust.git">Thrust</a></li>
+<li><a href="https://docs.nvidia.com/cuda/cusolver">cuSolver</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="nccl"><a class="header" href="#nccl">nccl</a></h1>
@@ -8759,7 +8491,7 @@ ncclCommInitRank(&amp;comm, nRanks, id, myRank);
 </ul>
 </li>
 </ul>
-<h2 id="workflow-2"><a class="header" href="#workflow-2">Workflow</a></h2>
+<h2 id="workflow-1"><a class="header" href="#workflow-1">Workflow</a></h2>
 <h3 id="ncclgetuniqueid"><a class="header" href="#ncclgetuniqueid">ncclGetUniqueId</a></h3>
 <p>创建 <code>ncclGetUniqueId</code> 时会首先调用初始化函数 <code>ncclInit</code> 确认网络已经初始化, 然后调用 <code>bootstrapGetUniqueId</code> 创建 <code>ncclUniqueId</code>。</p>
 <pre><code class="language-cpp">// nccl/src/init.cc
@@ -9049,6 +8781,394 @@ for(int istep=0; istep&lt;NSTEP; istep++){
 <h2 id="references-1"><a class="header" href="#references-1">References</a></h2>
 <ul>
 <li><a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/examples.html">examples</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="tvm"><a class="header" href="#tvm">TVM</a></h1>
+<h2 id="expression-1"><a class="header" href="#expression-1">Expression</a></h2>
+<p><strong>TE</strong>
+Tensor Expression, DSL (domain-specific language)</p>
+<p><strong>Relay</strong> TVM’s high-level model language</p>
+<p><strong>IR</strong> intermediate representation</p>
+<p><strong>TIR</strong> Tensor Intermediate Representation, TVM’s low-level intermediate representation</p>
+<p><strong>Schedule</strong> how to execute the computation</p>
+<p><strong>Stage</strong> schedule for one operation</p>
+<p><strong>TOPI</strong> TVM Operator Inventory, numpy-style generic operations and schedules </p>
+<h2 id="demo-5"><a class="header" href="#demo-5">Demo</a></h2>
+<pre><code class="language-python">from tvm.driver import tvmc
+
+#Step 1: Load
+model = tvmc.load('resnet50-v2-7.onnx', shape_dict={'data':[1, 3, 224, 224]}) 
+
+#Step 1.5: Optional Tune
+tuning_records = tvmc.tune(model, target=&quot;llvm&quot;) 
+
+#Step 2: Compile
+package = tvmc.compile(model, target=&quot;llvm&quot;, tuning_records = tuning_records) 
+
+#Step 3: Run
+result = tvmc.run(package, device=&quot;cpu&quot;) 
+
+print(result)
+</code></pre>
+<ul>
+<li>IRModule: relay.Function + tir.PrimFunc</li>
+<li>tvmc.compile: relay::Function --&gt; tir::PrimFunc</li>
+</ul>
+<p><strong>Why TVM ?</strong></p>
+<p><code>tvmc.tune</code> make model run more fast.</p>
+<p><strong>How ?</strong></p>
+<p>ALL, especially,</p>
+<p>AutoTVM (template-based) or AutoScheduler (Ansor, template-free auto-tuning)</p>
+<h2 id="tvm-optimizaing-compiler-workflow"><a class="header" href="#tvm-optimizaing-compiler-workflow">TVM optimizaing compiler workflow</a></h2>
+<ol>
+<li>TF/PyTroch/ONNX</li>
+<li>Relay (High-level IR)</li>
+<li>TE (Computation definition)</li>
+<li>AutoTVM/AutoScheduler (Auto-tuining module)</li>
+<li>TE + Schedule (Optimization specification)</li>
+<li>TIR (Low-level IR)</li>
+<li>Machine Code</li>
+</ol>
+<p>流程解析</p>
+<ol>
+<li>TVM 数据输入格式，prefer ONNX</li>
+<li>TVM 高级 API 操作计算图</li>
+<li>Relay 通过 fuseops pass 生成子图，同时有 schedule primitives 对 low-level loop 进行优化，Tensor Operator Inventory (TOPI) 处理常规 op, 生成 TE</li>
+<li>通过 AutoTVM (template-based) 或 AutoScheduler (template-free auto-tuning) 寻找最佳 schedule</li>
+<li>生成 json 格式 tuning records, 包含最佳 schedule</li>
+<li>生成 TIR，支持主流 LLVM/NVCC</li>
+<li>生成机器码</li>
+</ol>
+<p>low-level loop optimizations: tiling, vectorization, parallelization, unrolling, and fusion</p>
+<h2 id="tvm-auto-scheduler-aka-ansor"><a class="header" href="#tvm-auto-scheduler-aka-ansor">TVM Auto-scheduler (a.k.a. Ansor)</a></h2>
+<p>package <code>tvm.auto_scheduler</code></p>
+<h2 id="schedule-primitives"><a class="header" href="#schedule-primitives">Schedule Primitives</a></h2>
+<p>How to get good performance kernel ?</p>
+<h2 id="te"><a class="header" href="#te">TE</a></h2>
+<pre><code class="language-python">import tvm
+from tvm import te
+
+m = te.var('m')
+n = te.var('n')
+
+a = te.placeholder((m, n), name='A')
+b = te.placeholder((m, n), name='B')
+
+c = te.compute((m, n), lambda i, j: a[i, j]*b[i, j], name='C')
+
+s = te.create_schedule([c.op])
+
+tgt = tvm.target.Target(target=&quot;llvm&quot;, host=&quot;llvm&quot;)
+mult = tvm.build(s, [a, b, c], target=tgt, name=&quot;mult&quot;)
+
+print(mult.get_source())
+
+print(tvm.lower(s, [a, b, c], simple_mode=True))
+</code></pre>
+<p><code>tvm.build</code> </p>
+<p>tvm.te.schedule.Schedule, tvm.tir.PrimFunc, IRModule, Mapping[str, IRModule] --&gt; <code>tvm.runtime.Module</code></p>
+<p>A module that combines both host and device code</p>
+<p><code>tvm.lower</code> </p>
+<p>tvm.te.schedule.Schedule, tvm.tir.PrimFunc, IRModule --&gt; <code>IRModule</code></p>
+<p>Demo for IRModule transform</p>
+<pre><code class="language-python">import tvm
+from tvm.ir.module import IRModule
+from tvm.script import tir as T
+import numpy as np
+
+from tvm import te
+
+A = te.placeholder((8,), dtype=&quot;float32&quot;, name=&quot;A&quot;)
+B = te.compute((8,), lambda *i: A(*i) + 1.0, name=&quot;B&quot;)
+func = te.create_prim_func([A, B])
+ir_module = IRModule({&quot;main&quot;: func})
+print(ir_module.script())
+&quot;&quot;&quot;
+# from tvm.script import tir as T
+@tvm.script.ir_module
+class Module:
+    @T.prim_func
+    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
+        # function attr dict
+        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
+        # body
+        # with T.block(&quot;root&quot;)
+        for i0 in T.serial(8):
+            with T.block(&quot;B&quot;):
+                i0_1 = T.axis.spatial(8, i0)
+                T.reads(A[i0_1])
+                T.writes(B[i0_1])
+                B[i0_1] = A[i0_1] + T.float32(1)
+&quot;&quot;&quot;
+</code></pre>
+<pre><code class="language-python"># &lt;class 'tvm.driver.build_module.OperatorModule'&gt;
+mod = tvm.build(ir_module, target=&quot;llvm&quot;)  # The module for CPU backends.
+
+# &lt;class 'tvm.tir.schedule.schedule.Schedule'&gt;
+sch = tvm.tir.Schedule(ir_module)
+block_b = sch.get_block(&quot;B&quot;)
+(i,) = sch.get_loops(block_b)
+</code></pre>
+<pre><code class="language-python">i_0, i_1, i_2 = sch.split(i, factors=[2, 2, 2])
+print(sch.mod.script())
+&quot;&quot;&quot;
+# from tvm.script import tir as T
+@tvm.script.ir_module
+class Module:
+    @T.prim_func
+    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
+        # function attr dict
+        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
+        # body
+        # with T.block(&quot;root&quot;)
+        for i0_0, i0_1, i0_2 in T.grid(2, 2, 2):
+            with T.block(&quot;B&quot;):
+                i0 = T.axis.spatial(8, i0_0 * 4 + i0_1 * 2 + i0_2)
+                T.reads(A[i0])
+                T.writes(B[i0])
+                B[i0] = A[i0] + T.float32(1)
+&quot;&quot;&quot;
+</code></pre>
+<pre><code class="language-python">sch.reorder(i_0, i_2, i_1)
+print(sch.mod.script())
+&quot;&quot;&quot;
+# from tvm.script import tir as T
+@tvm.script.ir_module
+class Module:
+    @T.prim_func
+    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
+        # function attr dict
+        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
+        # body
+        # with T.block(&quot;root&quot;)
+        for i0_0, i0_2, i0_1 in T.grid(2, 2, 2):
+            with T.block(&quot;B&quot;):
+                i0 = T.axis.spatial(8, i0_0 * 4 + i0_1 * 2 + i0_2)
+                T.reads(A[i0])
+                T.writes(B[i0])
+                B[i0] = A[i0] + T.float32(1)
+&quot;&quot;&quot;
+</code></pre>
+<pre><code class="language-python">sch.bind(i_0, &quot;blockIdx.x&quot;)
+sch.bind(i_2, &quot;threadIdx.x&quot;)
+print(sch.mod.script())
+&quot;&quot;&quot;
+# from tvm.script import tir as T
+@tvm.script.ir_module
+class Module:
+    @T.prim_func
+    def main(A: T.Buffer[8, &quot;float32&quot;], B: T.Buffer[8, &quot;float32&quot;]) -&gt; None:
+        # function attr dict
+        T.func_attr({&quot;global_symbol&quot;: &quot;main&quot;, &quot;tir.noalias&quot;: True})
+        # body
+        # with T.block(&quot;root&quot;)
+        for i0_0 in T.thread_binding(2, thread=&quot;blockIdx.x&quot;):
+            for i0_2 in T.thread_binding(2, thread=&quot;threadIdx.x&quot;):
+                for i0_1 in T.serial(2):
+                    with T.block(&quot;B&quot;):
+                        i0 = T.axis.spatial(8, i0_0 * 4 + i0_1 * 2 + i0_2)
+                        T.reads(A[i0])
+                        T.writes(B[i0])
+                        B[i0] = A[i0] + T.float32(1)
+&quot;&quot;&quot;
+</code></pre>
+<h2 id="relay"><a class="header" href="#relay">Relay</a></h2>
+<p><strong>relay.build()</strong></p>
+<p>return</p>
+<ul>
+<li>execution graph in json format</li>
+<li>TVM module library of compiled functions specifically for this graph on the target hardware</li>
+<li>parameter blobs of the model</li>
+</ul>
+<p>During the compilation, </p>
+<ul>
+<li>Relay does the graph-level optimization,</li>
+<li>TVM does the tensor-level optimization,</li>
+</ul>
+<p>resulting in an optimized runtime module for model serving.</p>
+<h3 id="relay-vs-te"><a class="header" href="#relay-vs-te">Relay v.s. TE</a></h3>
+<pre><code class="language-python">tvm.tir.sqrt(x: tvm.ir.PrimExpr) -&gt; tvm.ir.PrimExpr
+
+# Alias of tvm.tir.sqrt()
+tvm.te.sqrt(x: tvm.ir.PrimExpr) -&gt; tvm.ir.PrimExpr
+
+tvm.relay.sqrt(data: tvm.ir.RelayExpr) -&gt; tvm.ir.RelayExpr)
+</code></pre>
+<p>For tvm.ir.BaseExpr,</p>
+<ul>
+<li>PrimExpr is class of all primitive expressions, used in the low-level code optimizations and integer analysis.</li>
+<li>RelayExpr is class of all non-primitive expressions.</li>
+</ul>
+<h3 id="build-1"><a class="header" href="#build-1">Build</a></h3>
+<p><code>tvm.build</code> v.s. <code>tvm.relay.build</code></p>
+<pre><code class="language-python">tvm.relay.build(ir_mod: IRModule, target, target_host, executor=graph{}, runtime=cpp) 
+    -&gt; tvm.relay.backend.executor_factory.ExecutorFactoryModule
+
+tvm.build(inputs: Union[tvm.te.schedule.Schedule, tvm.tir.function.PrimFunc, tvm.ir.module.IRModule, Mapping[str, tvm.ir.module.IRModule]], args, target, target_host, runtime, binds) 
+    -&gt; tvm.driver.build_module.OperatorModule
+</code></pre>
+<h2 id="optimization"><a class="header" href="#optimization">Optimization</a></h2>
+<p><strong>Blocking</strong>, <strong>Cache</strong></p>
+<p>通过分 Block, 让留在 cache 中的中间计算结果能够发挥作用，从而提升性能。</p>
+<p><strong>Vectorization</strong>, <strong>Array Packing</strong></p>
+<p>连续的内存访问会比较高效，通过 <code>vectorize</code> 达到这样的目的。对矩阵的 Array Packing 也是在做这样的优化。</p>
+<p><strong>Parallelization</strong></p>
+<p>非依赖的情况下可以使用并行策略提高整体性能。</p>
+<h2 id="topi"><a class="header" href="#topi">TOPI</a></h2>
+<pre><code class="language-python">n = te.var(&quot;n&quot;)
+m = te.var(&quot;m&quot;)
+A = te.placeholder((n, m), name=&quot;A&quot;)
+</code></pre>
+<p>origin</p>
+<pre><code class="language-python">k = te.reduce_axis((0, m), &quot;k&quot;)
+B = te.compute((n,), lambda i: te.sum(A[i, k], axis=k), name=&quot;B&quot;)
+s = te.create_schedule(B.op)
+# print(tvm.lower(s, [A], simple_mode=True))
+</code></pre>
+<p>TOPI </p>
+<pre><code class="language-python">C = topi.sum(A, axis=1)
+ts = te.create_schedule(C.op)
+# print(tvm.lower(ts, [A], simple_mode=True))
+</code></pre>
+<h2 id="develop-2"><a class="header" href="#develop-2">Develop</a></h2>
+<ul>
+<li>write a pass with IR</li>
+<li>glue to lowering</li>
+</ul>
+<p>每一个 phase 做的 transformation 如下，</p>
+<ul>
+<li>Phase 0 generates the raw IR and loop levels.</li>
+<li>Phase 1 flattens the array storage.</li>
+<li>Phase 2 transforms loops, like unroll, vectorization and thread-binding.</li>
+<li>Phase 3 does some cleanup work.</li>
+</ul>
+<p>所以比如自定义的 vectorize 适合放在 phase 1 之后。</p>
+<pre><code class="language-python">with tvm.transform.PassContext(config={&quot;tir.add_lower_pass&quot;: [(1, vectorize)]}):
+    print(tvm.lower(sch, [a, b, c]))
+</code></pre>
+<h2 id="reference-10"><a class="header" href="#reference-10">Reference</a></h2>
+<ul>
+<li><a href="https://tvm.apache.org/docs/">https://tvm.apache.org/docs/</a></li>
+<li><a href="https://tvm.apache.org/docs/how_to/work_with_schedules/schedule_primitives.html">schedule_primitives</a></li>
+<li><a href="https://tvm.apache.org/docs/tutorial/tensor_expr_get_started.html">optimization TE</a></li>
+<li><a href="https://tvm.apache.org/docs/how_to/extend_tvm/low_level_custom_pass.html">custom pass</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="gloo"><a class="header" href="#gloo">Gloo</a></h1>
+<h2 id="tldr-1"><a class="header" href="#tldr-1">TL;DR;</a></h2>
+<p>Gloo 是集合通信和算法库。运行逻辑如下，</p>
+<ul>
+<li>定义网络设备信息创建通信媒介 Device;</li>
+<li>使用可以共同交换数据的 Store 实现 rendezvous;</li>
+<li>节点通过 (rank, size) 创建 Context, 使用 connectFullMesh 方法建立通信域：
+<ul>
+<li>向 Store 注册自身节点信息；</li>
+<li>从 Store 中获取全部节点信息；</li>
+<li>启动 n-1 个服务分别与其余节点建立连接;</li>
+</ul>
+</li>
+<li>通过 Context 使用集合通信功能。</li>
+</ul>
+<h2 id="concepts"><a class="header" href="#concepts">Concepts</a></h2>
+<p><strong>Device</strong></p>
+<p>Device 是通信设备的抽象。</p>
+<p><strong>Context</strong></p>
+<p>Context 负责建立管理通信域。</p>
+<p><strong>Store</strong> </p>
+<p>Store 是实现 rendezvous 的介质，是实现共识的媒介。</p>
+<p><strong>Address</strong> </p>
+<p><code>gloo::transport::tcp::Address</code> 是对网络地址的封装。</p>
+<p><strong>attr</strong></p>
+<p><code>gloo::transport::tcp::attr</code> 是对网络通信属性的结构体封装，ip、网卡等信息。</p>
+<h2 id="gloo-vs-mpi"><a class="header" href="#gloo-vs-mpi">Gloo v.s. MPI</a></h2>
+<h2 id="more"><a class="header" href="#more">More</a></h2>
+<p>ibverbs 是使用 IB(InfiniBand) 的 API.</p>
+<h2 id="workflow-2"><a class="header" href="#workflow-2">Workflow</a></h2>
+<pre><code class="language-cpp">int main(void) {
+
+  // Device
+  gloo::transport::tcp::attr attr;
+  auto dev = gloo::transport::tcp::CreateDevice(attr);
+  // Store
+  auto fileStore = gloo::rendezvous::FileStore(&quot;/tmp&quot;);
+  auto prefixStore = gloo::rendezvous::PrefixStore(prefix, fileStore);
+  // Context
+  auto context = std::make_shared&lt;gloo::rendezvous::Context&gt;(rank, size);
+
+  context-&gt;connectFullMesh(prefixStore, dev);
+}
+</code></pre>
+<pre><code class="language-cpp">// gloo/rendezvous/context.cc
+
+void Context::connectFullMesh(
+    rendezvous::Store&amp; store,
+    std::shared_ptr&lt;transport::Device&gt;&amp; dev) {
+
+  // localKey = 'rank_0'
+  // value = 'host-0'
+  store.set(localKey, value);
+  for (int i = 0; i &lt; size; i++) {
+    // i != rank
+    auto val = store.get(key);
+  }
+
+  auto transportContext = dev-&gt;createContext(rank, size);
+  for (int i = 0; i &lt; size; i++) {
+    // i != rank
+    auto&amp; pair = transportContext-&gt;createPair(i);
+  }
+
+  // '0'
+  // [host-0]:9000[host-1]:9001
+  store.set(storeKey.str(), allBytes);
+
+  for (int i = 0; i &lt; size; i++) {
+    // i != rank
+    store.wait({key.str()}, getTimeout());
+    auto allAddrs = store.get(key.str());
+    auto addr = extractAddress(allAddrs, i);
+    transportContext-&gt;getPair(i)-&gt;connect(addr);
+  }
+}
+
+</code></pre>
+<pre><code class="language-cpp">std::unique_ptr&lt;transport::Pair&gt;&amp; Context::createPair(int rank) {
+  pairs_[rank] = std::unique_ptr&lt;transport::Pair&gt;(
+      new tcp::Pair(this, device_.get(), rank, getTimeout()));
+  return pairs_[rank];
+}
+</code></pre>
+<p>创建 Pair 对象会在本地启动 tcp socket 服务。</p>
+<pre><code class="language-cpp">// gloo/transport/tcp/pair.cc
+
+Pair::Pair(
+    Context* context,
+    Device* device,
+    int rank,
+    std::chrono::milliseconds timeout) {
+  listen();
+}
+
+void Pair::listen() {
+  std::lock_guard&lt;std::mutex&gt; lock(m_);
+  int rv;
+
+  const auto&amp; attr = device_-&gt;attr_;
+  auto fd = socket(attr.ai_family, attr.ai_socktype, attr.ai_protocol);
+  rv = bind(fd, (const sockaddr*)&amp;attr.ai_addr, attr.ai_addrlen);
+  fd_ = fd;
+  rv = ::listen(fd_, 1);
+  self_ = Address::fromSockName(fd);
+
+  device_-&gt;registerDescriptor(fd_, EPOLLIN, this);
+
+  return;
+}
+</code></pre>
+<h2 id="reference-11"><a class="header" href="#reference-11">Reference</a></h2>
+<ul>
+<li><a href="https://github.com/facebookincubator/gloo">gloo</a></li>
+<li><a href="https://github.com/ray-project/pygloo">pygloo</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="mpi"><a class="header" href="#mpi">mpi</a></h1>
@@ -9632,9 +9752,14 @@ OpenAIGPTConfig {
   )
 )
 </code></pre>
+<h2 id="fastertransformer"><a class="header" href="#fastertransformer">FasterTransformer</a></h2>
+<p>NVIDIA Transformer 推理前向优化方案。</p>
 <h2 id="references-2"><a class="header" href="#references-2">References</a></h2>
 <ul>
 <li><a href="https://huggingface.co/docs/transformers/model_doc/bert">huggingface bert doc</a></li>
+<li><a href="https://github.com/NVIDIA/FasterTransformer">FasterTransformer</a></li>
+<li><a href="https://github.com/microsoft/Swin-Transformer">Swin Transformer github</a></li>
+<li><a href="https://arxiv.org/pdf/2103.14030.pdf">Swin Transformer arxiv</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="tips"><a class="header" href="#tips">tips</a></h1>
@@ -9749,10 +9874,17 @@ SYN-SENT  0        1               10.0.2.15:61001      123.125.114.144:80
 SYN-SENT  0        1               10.0.2.15:61000      123.125.114.144:80
 </code></pre>
 <p>Above test are available since linux kernel 3.2.</p>
-<h2 id="reference-11"><a class="header" href="#reference-11">Reference</a></h2>
+<h2 id="reference-12"><a class="header" href="#reference-12">Reference</a></h2>
 <ul>
 <li><a href="https://mozillazg.com/2019/05/linux-what-net.ipv4.ip_local_port_range-effect-or-mean.html">test blog</a></li>
 <li><a href="https://marc.info/?l=haproxy&amp;m=139315478227467&amp;w=2">info</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="github"><a class="header" href="#github">github</a></h1>
+<h2 id="tools"><a class="header" href="#tools">Tools</a></h2>
+<ul>
+<li><a href="https://github.com/honkit/honkit">honkit</a></li>
+<li><a href="https://github.com/chiphuyen/ml-interviews-book">ml-interviews-book</a></li>
 </ul>
 
                     </main>
@@ -9793,5 +9925,6 @@ SYN-SENT  0        1               10.0.2.15:61000      123.125.114.144:80
         });
         </script>
 
+    </div>
     </body>
 </html>
