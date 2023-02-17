@@ -14,6 +14,27 @@
     - [csc](survey/gradient_compression/csc.md)
   - [flash attention](survey/flash_attention.md)
 
+- [mathematics](mathematics/topics.md)
+  - [basic](mathematics/basic.md)
+  - [entropy](mathematics/entropy.md)
+  - [newton](mathematics/newton.md)
+  - [regression](mathematics/regression.md)
+  - [conjugate descent](mathematics/conjugate_descent.md)
+  - [gradient descent](mathematics/gradient_descent.md)
+  - [pca](mathematics/pca.md)
+  - [support vector](mathematics/support_vector.md)
+  - [differentiation](mathematics/differentiation.md)
+  - [fourier](mathematics/fourier.md)
+  - [kmeans](mathematics/kmeans_cos.md)
+
+- [wavelets](wavelets/plan.md)
+  - [plan](wavelets/plan.md)
+  - [preliminary](wavelets/preliminary.md)
+  - [haar wavelet](wavelets/haar.md)
+  - [fourier analysis](wavelets/fourier.md)
+  - [uncertainty principle](wavelets/uncertainty_principle.md)
+  - [multiresolution](wavelets/multiresolution.md)
+
 - [pytorch](pytorch/overview.md)
   - [tensor](pytorch/tensor.md)
   - [autograd](pytorch/autograd.md)
@@ -22,9 +43,10 @@
   - [hook](pytorch/hook.md)
   - [elastic](pytorch/elastic.md)
   - [patch](pytorch/patch.md)
+  - [misc](pytorch/misc.md)
 
 - [paddle](paddle/paddle.md)
-  - [ps](paddle/ps/ps-code-overview.md)
+  - [ps](paddle/ps-code-overview.md)
   - [framework](paddle/framework.md)
   - [cinn](paddle/cinn.md)
 
@@ -42,6 +64,7 @@
   - [gcs](ray/gcs.md)
   - [raylet](ray/raylet.md)
   - [api](ray/api.md)
+  - [survey](ray/survey.md)
 
 - [python](python/python.md)
   - [concurrent execution](python/concurrent.md)
@@ -53,14 +76,7 @@
   - [operator](kubernetes/operator.md)
   - [device plugin](kubernetes/device_plugin.md)
   - [docker](kubernetes/docker.md)
-
-- [nvidia](nvidia/nvidia.md)
-    - [nccl](nccl/nccl.md)
-
-- [tvm](tvm/tvm.md)
-
-- [gloo](gloo/gloo.md)
-- [mpi](mpi/mpi.md)
+  - [install](kubernetes/install.md)
 
 - [nlp](nlp/nlp.md)
   - [transformer](nlp/transformer.md)
@@ -68,5 +84,23 @@
 - [tips](tips/tips.md)
     - [enable_shared_from_this](tips/enable_shared_from_this.md)
     - [ip_local_port_range](tips/ip_local_port_range.md)
+    - [golang error](tips/golang_error.md)
 
 - [github](github/github.md)
+
+- [notes](notes/readme.md)
+  - [influence and persuasion](notes/influence_and_persuasion.md)
+  - [freynman technique](notes/feynman_technique.md)
+  - [wavelet signal processing](notes/wavelet_tour_signal_processing_sparse.md)
+
+- [somewhat](somewhat/tvm.md)
+    - [nvidia](somewhat/nvidia.md)
+    - [nccl](somewhat/nccl.md)
+    - [tvm](somewhat/tvm.md)
+    - [gloo](somewhat/gloo.md)
+    - [mpi](somewhat/mpi.md)
+    - [leveldb](somewhat/leveldb.md)
+    - [ray](somewhat/ray.md)
+
+
+
