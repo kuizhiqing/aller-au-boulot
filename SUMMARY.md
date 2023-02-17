@@ -12,7 +12,6 @@
   - [gradient_compression](survey/gradient_compression/gradient_compression.md)
     - [dgc](survey/gradient_compression/dgc.md)
     - [csc](survey/gradient_compression/csc.md)
-  - [adaptive training](survey/adaptive_training.md)
   - [flash attention](survey/flash_attention.md)
 
 - [pytorch](pytorch/overview.md)
@@ -55,10 +54,12 @@
   - [device plugin](kubernetes/device_plugin.md)
   - [docker](kubernetes/docker.md)
 
+- [nvidia](nvidia/nvidia.md)
+    - [nccl](nccl/nccl.md)
+
 - [tvm](tvm/tvm.md)
 
 - [gloo](gloo/gloo.md)
-- [nccl](nccl/nccl.md)
 - [mpi](mpi/mpi.md)
 
 - [nlp](nlp/nlp.md)
@@ -67,3 +68,5 @@
 - [tips](tips/tips.md)
     - [enable_shared_from_this](tips/enable_shared_from_this.md)
     - [ip_local_port_range](tips/ip_local_port_range.md)
+
+- [github](github/github.md)

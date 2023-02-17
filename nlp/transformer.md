@@ -605,6 +605,13 @@ OpenAIGPTModel(
 )
 ```
 
+## FasterTransformer
+
+NVIDIA Transformer 推理前向优化方案。
+
 ## References
 
 * [huggingface bert doc](https://huggingface.co/docs/transformers/model_doc/bert)
+* [FasterTransformer](https://github.com/NVIDIA/FasterTransformer)
+* [Swin Transformer github](https://github.com/microsoft/Swin-Transformer)
+* [Swin Transformer arxiv](https://arxiv.org/pdf/2103.14030.pdf)
