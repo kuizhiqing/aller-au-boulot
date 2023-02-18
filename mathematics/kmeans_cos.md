@@ -7,7 +7,7 @@ x_1, x_2, \dots x_n \in\mathbb{R}^m
 $$
 
 find 
-$ \hat x \in \mathbb{R}^m $
+$\hat x \in \mathbb{R}^m$
 
 such that 
 
@@ -31,8 +31,7 @@ Equivalent form
 
 $$
 \operatorname{min} -\sum_{k=1}^n \frac{x_k\cdot \hat x}{||x_k||\cdot||\hat x||} 
-=
-\operatorname{min} -\frac{1}{c}\sum_{k=1}^n \frac{1}{||x_k||} \left(\sum_{l=1}^m x_{kl}\cdot \hat x_l\right)
+= \operatorname{min} -\frac{1}{c}\sum_{k=1}^n \frac{1}{||x_k||} \left(\sum_{l=1}^m x_{kl}\cdot \hat x_l\right)
 $$
 
 under condition
@@ -55,7 +54,6 @@ For $1\le l \le n$, let
 
 $$
 \frac{\partial \mathcal{L}(\hat x_1,\hat x_2,\dots,\hat x_m,\lambda)}{\partial \hat x_l}
-=
 = -\frac{1}{c}\sum_{k=1}^n \frac{x_{kl}}{||x_k||} 
  +2\lambda \hat x_l = 0 
 $$
@@ -100,7 +98,7 @@ $$
 \right)^{-1/2}
 $$
 
-For $||x_k|| = 1 $ and $ c= 1$,
+For $||x_k|| = 1$ and $c= 1$,
 
 $$
 \hat x_l = 
@@ -112,8 +110,7 @@ $$
 \left(
 \sum_{k=1}^n {x_{kl}} 
 \right)^2 
-\right)^{-1/2}
-=
+\right)^{-1/2} =
 \bar x_l
 \left(
 \sum_{l=1}^{m} 

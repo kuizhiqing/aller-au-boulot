@@ -13,6 +13,7 @@
 离散向量
 $x,y\in \mathbb{C}^N$
 的内积定义为
+
 $$
 \langle x, y \rangle = \sum_{j=1}^N x_j \bar y_j.
 $$
@@ -30,6 +31,7 @@ $$
 #### 正交基
 
 如果 $B$ 是向量空间 $H$ 的一组正交基，那么对于所有向量 $\forall x \in H$, 
+
 $$
 x = \sum_{b\in B} \frac{\langle x,b\rangle}{\langle b, b\rangle} b
 = \sum_{b\in B} \frac{\langle x,b\rangle}{||b||^2} b.
@@ -66,6 +68,7 @@ $$
 
 任意二维平面上的向量 $(x,y) \in\mathbb{R}^2$ 都可以通过基 $u_1,u_2$ 的线性组合表示，
 向量在该坐标系中的坐标可以通过变换矩阵得到
+
 $$
 \frac{1}{2}
 \begin{bmatrix}
@@ -82,6 +85,7 @@ $$
 > $(0,1)$ 变换后的坐标为 $(1,1)$，因为 $(0,1) = \frac{1}{2}(1\cdot u_1 + 1\cdot u_2)$.
 
 从坐标系 $(u_1,u_2)$ 变换回 $(v_1,v_2)$ 的逆变换矩阵也即矩阵 $T$ 的逆矩阵为
+
 $$
 T^{-1}=
 \begin{bmatrix}
@@ -153,10 +157,9 @@ $$
 这样我们可以将 $x' = Vx$ 叫做 $x$ 的 *～变换*，而 $x = V^{-1}x'$ 叫做 $x$ 的 *～逆变换*。
 
 当采用如下的基向量时，我们得到了离散条件下的 *傅立叶变换* 和 *傅立叶逆变换*，
+
 $$
-
 v_k = (e^{-2\pi i k \cdot 0/n}, e^{-2\pi i k \cdot 1/n}, \dots, e^{-2\pi i k\cdot (n-1)/n})
-
 $$
 > 这里 $e$ 为欧拉 Euler 常数，$e^{i\theta} = \operatorname{cos}\theta + i\operatorname{sin}\theta$，所以
 $k$ 为整数时 $e^{2\pi i k} = 1$，当 $k=l/n$ 为时可以理解为 1 的 $n$ 次方根的第 $l$ 个根。 
@@ -164,7 +167,6 @@ $k$ 为整数时 $e^{2\pi i k} = 1$，当 $k=l/n$ 为时可以理解为 1 的 $n
 $k$ 的取值为从 $0$ 到 $n-1$ 共 $n$ 个向量，注意到
 
 $$
-
 \lang v_k, v_l\rang = n\cdot  \delta_{k,l}
 $$
 
@@ -176,9 +178,9 @@ $$
 记 $ \omega = e^{-2\pi i/n}$, 
 基向量 $ v_k = (\omega^0, \omega^k, \omega^{2k}\dots, \omega^{(n-1)k})$，
 傅立叶变换的矩阵为
+
 $$
-F_n
-=
+F_n =
 \begin{bmatrix}
 1 & 1 & 1 & \cdots & 1 \\
 1 & \omega & \omega^2 & \cdots & \omega^{(n-1)}  \\
@@ -188,9 +190,9 @@ F_n
 $$
 
 傅立叶逆变换的矩阵为
+
 $$
-\hat F_n
-=
+\hat F_n =
 \frac{1}{n}
 \begin{bmatrix}
 1 & 1 & 1 & \cdots & 1 \\
@@ -209,6 +211,7 @@ $$
 
 通过如下的计算可以看出在计算傅立叶变换时可通过分治的思想将
 计算复杂度从 $O(n^2)$ 降到 $O(\operatorname{log} n)$，这也快速傅立叶变换 (FFT) 在工程上如此成功的理论基础。
+
 $$
 \hat x_k = \sum_{j=0}^{n-1} \omega^{jk} x_j =  
 \sum_{j=0}^{n-1} \omega^{2jk} x_{2j} + \sum_{j=0}^{n-1} \omega^{2jk+k} x_{2j+1} 

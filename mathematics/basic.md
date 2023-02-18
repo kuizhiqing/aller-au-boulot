@@ -44,28 +44,24 @@ Conditional Probability
 
 $$
 P(y|x) = \frac{P(y,x)}{P(x)}
-
 $$
 
 If $x$ independent with $y$, then
 
 $$
 P(y|x) = P(y), \quad P(y|x) = P(y,x)
-
 $$
 
 Bayes's Rule
 
 $$
 P(x|y) = \frac{P(x)P(y|x)}{P(y)}
-
 $$
 
 Experience
 
 $$
 \operatorname{E}(x_i) = \sum_i P(x_i)x_i
-
 $$
 
 $$

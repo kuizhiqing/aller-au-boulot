@@ -1,6 +1,6 @@
 #### Newton's Method
 
-Given a twice differentiable function $ f:\mathbb {R} \to \mathbb {R} $, solve the optimization problem
+Given a twice differentiable function $f:\mathbb {R} \to \mathbb {R}$, solve the optimization problem
 
 $$
 \min _{x\in \mathbb {R} }f(x).
