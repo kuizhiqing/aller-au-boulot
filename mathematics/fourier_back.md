@@ -97,9 +97,8 @@ $$
 总结而言，矩阵 $T$ 可以进行坐标变换，同时其逆矩阵 $T^{-1}$ 可以实现坐标逆变换，
 
 $$
-I = T^{-1} T
-=
-\left(
+I= T^{-1} T
+=\left(
 \begin{bmatrix}
 1 & -1 \\
 1 & 1 \\
@@ -121,7 +120,7 @@ $$
 长度为 $n$ 的离散数据可以当作
  $n$ 维向量空间中的向量,
 假定它在经典基向量下的坐标为
-$ x = (x_0, x_1, x_2, \dots, x_{n-1}) \in\mathbb{C}^n$.
+$x = (x_0, x_1, x_2, \dots, x_{n-1}) \in\mathbb{C}^n$.
 
 这里我们考虑一组新的基向量
 $(v_0, v_1, \dots, v_{n-1})$，
@@ -139,7 +138,7 @@ v_{n-1} \\
 \in\mathbb{C}^{n\times n}
 $$
 
-则 $ V\cdot x $ 表示向量 $x$ 在变换后的向量。
+则 $V\cdot x$ 表示向量 $x$ 在变换后的向量。
 注意这里的 $V$ 是 $n\times n$ 的矩阵。 
 
 假设矩阵 $V$ 是可逆的，它的逆矩阵记做 $V^{-1}$，那么我们有
@@ -160,7 +159,6 @@ $$
 
 $$
 v_k = (e^{-2\pi i k \cdot 0/n}, e^{-2\pi i k \cdot 1/n}, \dots, e^{-2\pi i k\cdot (n-1)/n})
-
 $$
 
 > 这里 $e$ 为欧拉 Euler 常数，$e^{i\theta} = \operatorname{cos}\theta + i\operatorname{sin}\theta$，所以
@@ -177,14 +175,12 @@ $$
 > 基向量 $v_k$ 的选取非常巧妙，也是傅立叶变换的精髓，可以这样理解，
 > 对于 $n$ 维空间，选取 1 的 $n$ 个 $n$ 次方根作为一个基向量，然后通过分别取 $0$ 到 $n-1$ 次方构建出一组正交基。
 
-记 $ \omega = e^{-2\pi i/n}$, 
-基向量 $ v_k = (\omega^0, \omega^k, \omega^{2k}\dots, \omega^{(n-1)k})$，
+记 $\omega = e^{-2\pi i/n}$, 
+基向量 $v_k = (\omega^0, \omega^k, \omega^{2k}\dots, \omega^{(n-1)k})$，
 傅立叶变换的矩阵为
 
 $$
-F_n
-=
-\begin{bmatrix}
+F_n = \begin{bmatrix}
 1 & 1 & 1 & \cdots & 1 \\
 1 & \omega & \omega^2 & \cdots & \omega^{(n-1)}  \\
 \vdots & \vdots & \vdots & \ddots & \vdots \\
@@ -195,9 +191,7 @@ $$
 傅立叶逆变换的矩阵为
 
 $$
-\hat F_n
-=
-\frac{1}{n}
+\hat F_n = \frac{1}{n}
 \begin{bmatrix}
 1 & 1 & 1 & \cdots & 1 \\
 1 & \bar\omega & \bar\omega^2 & \cdots & \bar\omega^{(n-1)}  \\

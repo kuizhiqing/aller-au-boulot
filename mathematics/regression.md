@@ -4,7 +4,7 @@
 Objective function
 
 $$
-{ {\underset w{\operatorname {min} }}(\|y-x\cdot w \|^{2}_2})
+{{\underset w{\operatorname {min} }}(\|y-x\cdot w \|^{2}_{2}})
 $$
 
 Ordinary least square Lagrangian function
@@ -17,15 +17,15 @@ $$
 \frac{\partial L(w)}{\partial w} = 2 x^T x w - 2 x^T y 
 $$
 
-Let $ {\partial L(w)}/{\partial w} = 0 $ leads to 
+Let ${\partial L(w)}/{\partial w} = 0$ leads to 
 
 $$
 w = (x^T x)^{-1} x^T y 
 $$
 
 With respect to different constraints,
-* $||w||_1<t$ for lasso,
-* $||w||_2<t$ for ridge.
+* $||w||_1\lt t$ for lasso,
+* $||w||_2\lt t$ for ridge.
 
 #### Ridge Regression : L1 Regularization
 Least absolute shrinkage and selection operator

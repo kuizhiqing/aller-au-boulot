@@ -97,9 +97,8 @@ $$
 总结而言，矩阵 $T$ 可以进行坐标变换，同时其逆矩阵 $T^{-1}$ 可以实现坐标逆变换，
 
 $$
-I = T^{-1} T
-=
-\left(
+I= T^{-1} T
+=\left(
 \begin{bmatrix}
 1 & -1 \\
 1 & 1 \\
@@ -161,6 +160,7 @@ $$
 $$
 v_k = (e^{-2\pi i k \cdot 0/n}, e^{-2\pi i k \cdot 1/n}, \dots, e^{-2\pi i k\cdot (n-1)/n})
 $$
+
 > 这里 $e$ 为欧拉 Euler 常数，$e^{i\theta} = \operatorname{cos}\theta + i\operatorname{sin}\theta$，所以
 $k$ 为整数时 $e^{2\pi i k} = 1$，当 $k=l/n$ 为时可以理解为 1 的 $n$ 次方根的第 $l$ 个根。 
 
@@ -175,8 +175,8 @@ $$
 > 基向量 $v_k$ 的选取非常巧妙，也是傅立叶变换的精髓，可以这样理解，
 > 对于 $n$ 维空间，选取 1 的 $n$ 个 $n$ 次方根作为一个基向量，然后通过分别取 $0$ 到 $n-1$ 次方构建出一组正交基。
 
-记 $ \omega = e^{-2\pi i/n}$, 
-基向量 $ v_k = (\omega^0, \omega^k, \omega^{2k}\dots, \omega^{(n-1)k})$，
+记 $\omega = e^{-2\pi i/n}$, 
+基向量 $v_k = (\omega^0, \omega^k, \omega^{2k}\dots, \omega^{(n-1)k})$，
 傅立叶变换的矩阵为
 
 $$

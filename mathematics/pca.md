@@ -23,7 +23,7 @@ $$
 w^Tw = 1.
 $$
 
-Denote $\Sigma =\frac{1}{N} (X-\bar X)(X-\bar X)^T $ the variance of origin samples,
+Denote $\Sigma =\frac{1}{N} (X-\bar X)(X-\bar X)^T$ the variance of origin samples,
 variance of projected samples, 
 
 $$
