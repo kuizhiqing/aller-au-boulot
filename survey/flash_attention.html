@@ -70,10 +70,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -434,6 +436,7 @@ inline __device__ void device_1xN_(const Params &amp;params, const int bidb, con
 <li><a href="https://arxiv.org/abs/2205.14135">arxiv</a></li>
 <li><a href="https://github.com/facebookresearch/xformers">efficient</a></li>
 <li><a href="https://crfm.stanford.edu/2023/01/13/flashattention.html">long sequences</a></li>
+<li><a href="https://triton-lang.org/master/getting-started/tutorials/06-fused-attention.html">triton</a></li>
 </ul>
 
                     </main>

@@ -70,10 +70,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -138,6 +140,27 @@
 <ul>
 <li><a href="https://github.com/honkit/honkit">honkit</a></li>
 <li><a href="https://github.com/chiphuyen/ml-interviews-book">ml-interviews-book</a></li>
+</ul>
+<h2 id="triton"><a class="header" href="#triton">Triton</a></h2>
+<p>OpenAI <a href="https://github.com/openai/triton">triton</a></p>
+<p><a href="https://triton-lang.org/master/index.html">Document</a></p>
+<pre><code>      AST/Visitor     Triton/Compiler      libLLVM
+Python --------&gt; Triton-IR ------&gt; LLVM-IR ------&gt; PTX
+</code></pre>
+<h2 id="lightning"><a class="header" href="#lightning">Lightning</a></h2>
+<p><a href="https://github.com/Lightning-AI/lightning">lightning</a></p>
+<h2 id="fairscale"><a class="header" href="#fairscale">Fairscale</a></h2>
+<p><a href="https://github.com/facebookresearch/fairscale">fairscale</a></p>
+<h2 id="peft"><a class="header" href="#peft">PEFT</a></h2>
+<p><a href="https://github.com/huggingface/peft">huggingface peft</a></p>
+<p><a href="https://huggingface.co/blog/peft">Blog</a></p>
+<p>PEFT approaches enable you to get performance comparable to full fine-tuning while only having a small number of trainable parameters.</p>
+<p>Methods:</p>
+<ul>
+<li>LoRA: LORA: LOW-RANK ADAPTATION OF LARGE LANGUAGE MODELS</li>
+<li>Prefix Tuning: P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning Universally Across Scales and Tasks</li>
+<li>Prompt Tuning: The Power of Scale for Parameter-Efficient Prompt Tuning</li>
+<li>P-Tuning: GPT Understands, Too</li>
 </ul>
 
                     </main>
