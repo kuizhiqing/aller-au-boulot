@@ -351,3 +351,4 @@ csrc/flash_attn/src/fmha
 * [arxiv](https://arxiv.org/abs/2205.14135)
 * [efficient](https://github.com/facebookresearch/xformers)
 * [long sequences](https://crfm.stanford.edu/2023/01/13/flashattention.html)
+* [triton](https://triton-lang.org/master/getting-started/tutorials/06-fused-attention.html)

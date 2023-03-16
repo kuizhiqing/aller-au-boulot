@@ -1,7 +1,7 @@
 
 ## Entropy
 
-#### Definition
+### Definition
 For a discrete probability distribution $p$ on the finite set $\{x_1,x_2,\dots,x_N\}$  with $p_i=p(x_i)$,
 the entropy of $p$ is defined as 
 
@@ -16,7 +16,7 @@ $$
 h(p) = -\int_{a}^{b} p(x) \operatorname{log} p(x) \operatorname{d} x.
 $$
 
-#### Theorem
+### Theorem
 
 For a probability density function $p$ on a finite set $\{x_1,x_2,\dots,x_N\}$,
 then
@@ -27,7 +27,9 @@ $$
 
 with equality iff. $p$ is uniform, i.e. $\forall i \le N, p(x_i)=1/n$.
 
-#### Theorem
+> Uniform probability yields maximum uncertainty and therefore maximum entropy.
+
+### Theorem
 
 For a continuous probability density function $p$ on $\mathbb{R}$ with variance $\sigma^2$, then
 
@@ -41,7 +43,7 @@ $$
 p(x)= \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}.
 $$
 
-#### Theorem
+### Theorem
 
 For a continuous probability density function $p$ on $(0,\infty)$ with mean $\lambda$, then
 
@@ -57,15 +59,12 @@ $$
 
 ---
 
-#### Probability density function
-
-#### Entropy 
-
+<!--
 $$
     H(X) = -\sum_{x\in X} P(x)\operatorname{log} P(x)
 $$
+-->
 
-Uniform probability yields maximum uncertainty and therefore maximum entropy.
 
 #### Cross entropy
 The cross entropy of the distribution $q$ relative to a distribution $p$ over a given set is defined as follows:
@@ -95,5 +94,69 @@ $$
 
 where $M = \frac{1}{2} (P+Q)$
 
+
+---
+
+### Mutual Information
+
+Let $(X,Y)$ be a pair of random variables with values over the space 
+${\mathcal {X}}\times {\mathcal {Y}}$. If their joint distribution is 
+${\displaystyle P_{(X,Y)}}$ and the marginal distributions are 
+$P_X$ and 
+${\displaystyle P_{Y}}$, the **mutual information** is defined as
+
+$$
+{\displaystyle I(X;Y)=D_{\mathrm {KL} }(P_{(X,Y)}\|P_{X}\otimes P_{Y})}
+$$
+
+where $D_{{{\mathrm  {KL}}}}$ is the Kullback–Leibler divergence.
+
+#### PMFs for discrete distributions
+
+The mutual information of two jointly discrete random variables
+$X$ and
+$Y$ is calculated as a double sum:
+
+$$
+{\displaystyle \operatorname {I} (X;Y)=\sum _{y\in {\mathcal {Y}}}\sum _{x\in {\mathcal {X}}}{P_{(X,Y)}(x,y)\log \left({\frac {P_{(X,Y)}(x,y)}{P_{X}(x)\,P_{Y}(y)}}\right)},}
+$$
+
+where
+${\displaystyle P_{(X,Y)}}$ is the joint probability mass function of
+$X$ and
+$Y$, and
+$P_X$ and
+${\displaystyle P_{Y}}$ are the marginal probability mass functions of
+$X$ and
+$Y$ respectively.
+
+#### PDFs for continuous distributions
+
+In the case of jointly continuous random variables, the double sum is replaced by a double integral:
+
+$$
+{\displaystyle \operatorname {I} (X;Y)=\int _{\mathcal {Y}}\int _{\mathcal {X}}{P_{(X,Y)}(x,y)\log {\left({\frac {P_{(X,Y)}(x,y)}{P_{X}(x)\,P_{Y}(y)}}\right)}}\;dx\,dy,}
+$$
+
+where
+${\displaystyle P_{(X,Y)}}$ is now the joint probability density function of
+$X$ and
+$Y$, and
+$P_X$ and
+${\displaystyle P_{Y}}$ are the marginal probability density functions of
+$X$ and
+$Y$ respectively.
+
+#### Mutual information and Kullback–Leibler divergence
+
+Mutual information is the Kullback–Leibler divergence from the product of the marginal distributions
+
+$$
+{\displaystyle \operatorname {I} (X;Y)=D_{\text{KL}}\left(p_{(X,Y)}\parallel p_{X}p_{Y}\right)}
+$$
+
+$$
+{\displaystyle \operatorname {I} (X;Y)=\mathbb {E} _{Y}\left[D_{\text{KL}}\!\left(p_{X\mid Y}\parallel p_{X}\right)\right]}
+$$
 
 

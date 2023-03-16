@@ -82,9 +82,9 @@
   - [transformer](nlp/transformer.md)
 
 - [tips](tips/tips.md)
-    - [enable_shared_from_this](tips/enable_shared_from_this.md)
-    - [ip_local_port_range](tips/ip_local_port_range.md)
-    - [golang error](tips/golang_error.md)
+  - [enable_shared_from_this](tips/enable_shared_from_this.md)
+  - [ip_local_port_range](tips/ip_local_port_range.md)
+  - [golang error](tips/golang_error.md)
 
 - [github](github/github.md)
 
@@ -94,13 +94,13 @@
   - [wavelet signal processing](notes/wavelet_tour_signal_processing_sparse.md)
 
 - [somewhat](somewhat/tvm.md)
-    - [nvidia](somewhat/nvidia.md)
-    - [nccl](somewhat/nccl.md)
-    - [tvm](somewhat/tvm.md)
-    - [gloo](somewhat/gloo.md)
-    - [mpi](somewhat/mpi.md)
-    - [leveldb](somewhat/leveldb.md)
-    - [ray](somewhat/ray.md)
+  - [nvidia](somewhat/nvidia.md)
+  - [nccl](somewhat/nccl.md)
+  - [tvm](somewhat/tvm.md)
+  - [gloo](somewhat/gloo.md)
+  - [mpi](somewhat/mpi.md)
+  - [leveldb](somewhat/leveldb.md)
+  - [ray](somewhat/ray.md)
 
 
 
