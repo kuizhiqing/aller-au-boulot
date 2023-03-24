@@ -13,6 +13,8 @@
     - [dgc](survey/gradient_compression/dgc.md)
     - [csc](survey/gradient_compression/csc.md)
   - [flash attention](survey/flash_attention.md)
+  - [llm](survey/llm.md)
+  - [LoRA](survey/lora.md)
 
 - [mathematics](mathematics/topics.md)
   - [basic](mathematics/basic.md)
@@ -86,14 +88,12 @@
   - [ip_local_port_range](tips/ip_local_port_range.md)
   - [golang error](tips/golang_error.md)
 
-- [github](github/github.md)
-
 - [notes](notes/readme.md)
   - [influence and persuasion](notes/influence_and_persuasion.md)
   - [freynman technique](notes/feynman_technique.md)
   - [wavelet signal processing](notes/wavelet_tour_signal_processing_sparse.md)
 
-- [somewhat](somewhat/tvm.md)
+- [somewhat](somewhat/somewhat.md)
   - [nvidia](somewhat/nvidia.md)
   - [nccl](somewhat/nccl.md)
   - [tvm](somewhat/tvm.md)
@@ -101,6 +101,8 @@
   - [mpi](somewhat/mpi.md)
   - [leveldb](somewhat/leveldb.md)
   - [ray](somewhat/ray.md)
+  - [github](somewhat/github.md)
+
 
 
 
