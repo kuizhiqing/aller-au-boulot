@@ -44,6 +44,16 @@ int main() {
 
 [examples](https://github.com/NVIDIA/cutlass/blob/master/media/docs/quickstart.md)
 
+利用cutlass的warp和block层级的接口实现一个大的attention kernel为例，
+难点主要是需要熟练使用cutlass，并能进行调优，而采用cutlass的开发有以下4个难点：
+
+1. cutlass并不是一个如cublas那样使用简单的GEMM库。cutlass仅提供threads block, warp, instruction各个级别的原语，开发者需要熟悉cutlass源码，并根据需求组装原语实现kernel。
+2. cutlass使用了大量的模版，在debug过程中需要阅读很长的log，且基本无法使用代码跳转工具，会给开发带来一定困难。
+3. cutlass并不提供自动调优的功能，需要开发者手动选择最优的设置，或者接入框架的自动调优中。
+4. 由于可能的组合非常多，基于cutlass进行开发时通常需要编写自动生成kernel的脚本。
+
+从torch的实现上可以看出该工作需要的工作量还是比较大.
+
 ## CUB
 
 ```cpp

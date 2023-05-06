@@ -82,27 +82,28 @@
 
 - [nlp](nlp/nlp.md)
   - [transformer](nlp/transformer.md)
+  - [models](nlp/models.md)
 
 - [tips](tips/tips.md)
   - [enable_shared_from_this](tips/enable_shared_from_this.md)
   - [ip_local_port_range](tips/ip_local_port_range.md)
   - [golang error](tips/golang_error.md)
 
-- [notes](notes/readme.md)
-  - [influence and persuasion](notes/influence_and_persuasion.md)
-  - [freynman technique](notes/feynman_technique.md)
-  - [wavelet signal processing](notes/wavelet_tour_signal_processing_sparse.md)
+- [nvidia](nvidia/nvidia.md)
+  - [nccl](nvidia/nccl.md)
+  - [megatron](nvidia/megatron.md)
 
 - [somewhat](somewhat/somewhat.md)
-  - [nvidia](somewhat/nvidia.md)
-  - [nccl](somewhat/nccl.md)
   - [tvm](somewhat/tvm.md)
   - [gloo](somewhat/gloo.md)
   - [mpi](somewhat/mpi.md)
   - [leveldb](somewhat/leveldb.md)
-  - [ray](somewhat/ray.md)
+  - [jax](somewhat/jax.md)
   - [github](somewhat/github.md)
+  - [peft](somewhat/peft.md)
 
-
-
+- [notes](notes/readme.md)
+  - [influence and persuasion](notes/influence_and_persuasion.md)
+  - [freynman technique](notes/feynman_technique.md)
+  - [wavelet signal processing](notes/wavelet_tour_signal_processing_sparse.md)
 
