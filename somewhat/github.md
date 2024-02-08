@@ -1,5 +1,13 @@
 # github
 
+## AI
+
+[leptonai](https://github.com/leptonai/leptonai)
+A Pythonic framework to simplify AI service building
+
+[landscape2](https://github.com/cncf/landscape2)
+Landscape2 is a tool that generates interactive landscapes websites, [sncf](https://landscape.cncf.io/)
+
 ## Tools
 
 * [honkit](https://github.com/honkit/honkit)

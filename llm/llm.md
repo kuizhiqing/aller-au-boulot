@@ -29,6 +29,8 @@ Affiliation | Model | Size | Base
 * Bloom [arxiv](https://arxiv.org/abs/2211.05100)
 * Bloom [huggingface](https://huggingface.co/bigscience/bloom)
 
+* llama2.c[https://github.com/karpathy/llama2.c](https://github.com/karpathy/llama2.c)
+* llama.cpp[https://github.com/ggerganov/llama.cpp](https://github.com/ggerganov/llama.cpp)
 
 
 ## Tech
