@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Projects excelling">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
@@ -31,7 +31,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -61,42 +61,71 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="../index.html"><strong aria-hidden="true">1.</strong> welcome</a></li><li class="chapter-item "><a href="../survey/survey.html"><strong aria-hidden="true">2.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/pollux.html"><strong aria-hidden="true">2.1.</strong> pollux</a></li><li class="chapter-item "><a href="../survey/adasum.html"><strong aria-hidden="true">2.2.</strong> adasum</a></li><li class="chapter-item "><a href="../survey/adaptation_learning.html"><strong aria-hidden="true">2.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="../survey/gradient_descent.html"><strong aria-hidden="true">2.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="../survey/auto_parallel.html"><strong aria-hidden="true">2.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="../survey/scheduling.html"><strong aria-hidden="true">2.6.</strong> scheduling</a></li><li class="chapter-item "><a href="../survey/gradient_compression/gradient_compression.html"><strong aria-hidden="true">2.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/gradient_compression/dgc.html"><strong aria-hidden="true">2.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="../survey/gradient_compression/csc.html"><strong aria-hidden="true">2.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="../survey/flash_attention.html"><strong aria-hidden="true">2.8.</strong> flash attention</a></li><li class="chapter-item "><a href="../survey/lora.html"><strong aria-hidden="true">2.9.</strong> LoRA</a></li></ol></li><li class="chapter-item "><a href="../llm/llm.html"><strong aria-hidden="true">3.</strong> llm</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../llm/falcon.html"><strong aria-hidden="true">3.1.</strong> falcon</a></li><li class="chapter-item "><a href="../llm/llama.html"><strong aria-hidden="true">3.2.</strong> llama</a></li></ol></li><li class="chapter-item "><a href="../mathematics/topics.html"><strong aria-hidden="true">4.</strong> mathematics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../mathematics/basic.html"><strong aria-hidden="true">4.1.</strong> basic</a></li><li class="chapter-item "><a href="../mathematics/entropy.html"><strong aria-hidden="true">4.2.</strong> entropy</a></li><li class="chapter-item "><a href="../mathematics/newton.html"><strong aria-hidden="true">4.3.</strong> newton</a></li><li class="chapter-item "><a href="../mathematics/regression.html"><strong aria-hidden="true">4.4.</strong> regression</a></li><li class="chapter-item "><a href="../mathematics/conjugate_descent.html"><strong aria-hidden="true">4.5.</strong> conjugate descent</a></li><li class="chapter-item "><a href="../mathematics/gradient_descent.html"><strong aria-hidden="true">4.6.</strong> gradient descent</a></li><li class="chapter-item "><a href="../mathematics/pca.html"><strong aria-hidden="true">4.7.</strong> pca</a></li><li class="chapter-item "><a href="../mathematics/support_vector.html"><strong aria-hidden="true">4.8.</strong> support vector</a></li><li class="chapter-item "><a href="../mathematics/differentiation.html"><strong aria-hidden="true">4.9.</strong> differentiation</a></li><li class="chapter-item "><a href="../mathematics/fourier.html"><strong aria-hidden="true">4.10.</strong> fourier</a></li><li class="chapter-item "><a href="../mathematics/kmeans_cos.html"><strong aria-hidden="true">4.11.</strong> kmeans</a></li></ol></li><li class="chapter-item "><a href="../wavelets/plan.html"><strong aria-hidden="true">5.</strong> wavelets</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../wavelets/plan.html"><strong aria-hidden="true">5.1.</strong> plan</a></li><li class="chapter-item "><a href="../wavelets/preliminary.html"><strong aria-hidden="true">5.2.</strong> preliminary</a></li><li class="chapter-item "><a href="../wavelets/haar.html"><strong aria-hidden="true">5.3.</strong> haar wavelet</a></li><li class="chapter-item "><a href="../wavelets/fourier.html"><strong aria-hidden="true">5.4.</strong> fourier analysis</a></li><li class="chapter-item "><a href="../wavelets/uncertainty_principle.html"><strong aria-hidden="true">5.5.</strong> uncertainty principle</a></li><li class="chapter-item "><a href="../wavelets/multiresolution.html"><strong aria-hidden="true">5.6.</strong> multiresolution</a></li></ol></li><li class="chapter-item expanded "><a href="../pytorch/overview.html"><strong aria-hidden="true">6.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../pytorch/tensor.html" class="active"><strong aria-hidden="true">6.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/autograd.html"><strong aria-hidden="true">6.2.</strong> autograd</a></li><li class="chapter-item "><a href="../pytorch/operator.html"><strong aria-hidden="true">6.3.</strong> operator</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">6.4.</strong> profiler</a></li><li class="chapter-item "><a href="../pytorch/hook.html"><strong aria-hidden="true">6.5.</strong> hook</a></li><li class="chapter-item "><a href="../pytorch/elastic.html"><strong aria-hidden="true">6.6.</strong> elastic</a></li><li class="chapter-item "><a href="../pytorch/patch.html"><strong aria-hidden="true">6.7.</strong> patch</a></li><li class="chapter-item "><a href="../pytorch/misc.html"><strong aria-hidden="true">6.8.</strong> misc</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">7.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps-code-overview.html"><strong aria-hidden="true">7.1.</strong> ps</a></li><li class="chapter-item "><a href="../paddle/framework.html"><strong aria-hidden="true">7.2.</strong> framework</a></li><li class="chapter-item "><a href="../paddle/cinn.html"><strong aria-hidden="true">7.3.</strong> cinn</a></li><li class="chapter-item "><a href="../paddle/dataloader.html"><strong aria-hidden="true">7.4.</strong> dataloader</a></li></ol></li><li class="chapter-item "><a href="../horovod/horovod.html"><strong aria-hidden="true">8.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">8.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">8.2.</strong> workflow</a></li><li class="chapter-item "><a href="../horovod/object.html"><strong aria-hidden="true">8.3.</strong> object</a></li><li class="chapter-item "><a href="../horovod/develop.html"><strong aria-hidden="true">8.4.</strong> develop</a></li><li class="chapter-item "><a href="../horovod/pytorch.html"><strong aria-hidden="true">8.5.</strong> pytorch</a></li><li class="chapter-item "><a href="../horovod/tensorflow.html"><strong aria-hidden="true">8.6.</strong> tensorflow</a></li><li class="chapter-item "><a href="../horovod/elastic.html"><strong aria-hidden="true">8.7.</strong> elastic</a></li></ol></li><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">9.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">9.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">9.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">9.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">9.4.</strong> api</a></li><li class="chapter-item "><a href="../ray/survey.html"><strong aria-hidden="true">9.5.</strong> survey</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">10.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">10.1.</strong> concurrent execution</a></li><li class="chapter-item "><a href="../python/multiprocessing.html"><strong aria-hidden="true">10.2.</strong> multiprocessing</a></li><li class="chapter-item "><a href="../python/decorator.html"><strong aria-hidden="true">10.3.</strong> decorator</a></li></ol></li><li class="chapter-item "><a href="../kubernetes/kubernetes.html"><strong aria-hidden="true">11.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../kubernetes/scheduler.html"><strong aria-hidden="true">11.1.</strong> scheduler</a></li><li class="chapter-item "><a href="../kubernetes/operator.html"><strong aria-hidden="true">11.2.</strong> operator</a></li><li class="chapter-item "><a href="../kubernetes/device_plugin.html"><strong aria-hidden="true">11.3.</strong> device plugin</a></li><li class="chapter-item "><a href="../kubernetes/docker.html"><strong aria-hidden="true">11.4.</strong> docker</a></li><li class="chapter-item "><a href="../kubernetes/install.html"><strong aria-hidden="true">11.5.</strong> install</a></li></ol></li><li class="chapter-item "><a href="../nlp/nlp.html"><strong aria-hidden="true">12.</strong> nlp</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../nlp/transformer.html"><strong aria-hidden="true">12.1.</strong> transformer</a></li><li class="chapter-item "><a href="../nlp/models.html"><strong aria-hidden="true">12.2.</strong> models</a></li></ol></li><li class="chapter-item "><a href="../tips/tips.html"><strong aria-hidden="true">13.</strong> tips</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../tips/enable_shared_from_this.html"><strong aria-hidden="true">13.1.</strong> enable_shared_from_this</a></li><li class="chapter-item "><a href="../tips/ip_local_port_range.html"><strong aria-hidden="true">13.2.</strong> ip_local_port_range</a></li><li class="chapter-item "><a href="../tips/golang_error.html"><strong aria-hidden="true">13.3.</strong> golang error</a></li></ol></li><li class="chapter-item "><a href="../nvidia/nvidia.html"><strong aria-hidden="true">14.</strong> nvidia</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../nvidia/nccl.html"><strong aria-hidden="true">14.1.</strong> nccl</a></li><li class="chapter-item "><a href="../nvidia/megatron.html"><strong aria-hidden="true">14.2.</strong> megatron</a></li></ol></li><li class="chapter-item "><a href="../somewhat/somewhat.html"><strong aria-hidden="true">15.</strong> somewhat</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../somewhat/tvm.html"><strong aria-hidden="true">15.1.</strong> tvm</a></li><li class="chapter-item "><a href="../somewhat/gloo.html"><strong aria-hidden="true">15.2.</strong> gloo</a></li><li class="chapter-item "><a href="../somewhat/mpi.html"><strong aria-hidden="true">15.3.</strong> mpi</a></li><li class="chapter-item "><a href="../somewhat/leveldb.html"><strong aria-hidden="true">15.4.</strong> leveldb</a></li><li class="chapter-item "><a href="../somewhat/jax.html"><strong aria-hidden="true">15.5.</strong> jax</a></li><li class="chapter-item "><a href="../somewhat/github.html"><strong aria-hidden="true">15.6.</strong> github</a></li><li class="chapter-item "><a href="../somewhat/peft.html"><strong aria-hidden="true">15.7.</strong> peft</a></li></ol></li><li class="chapter-item "><a href="../notes/index.html"><strong aria-hidden="true">16.</strong> notes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../notes/influence_and_persuasion.html"><strong aria-hidden="true">16.1.</strong> influence and persuasion</a></li><li class="chapter-item "><a href="../notes/feynman_technique.html"><strong aria-hidden="true">16.2.</strong> freynman technique</a></li><li class="chapter-item "><a href="../notes/wavelet_tour_signal_processing_sparse.html"><strong aria-hidden="true">16.3.</strong> wavelet signal processing</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="../index.html"><strong aria-hidden="true">1.</strong> welcome</a></li><li class="chapter-item "><a href="../chronicles/chronicles.html"><strong aria-hidden="true">2.</strong> chronicles</a></li><li class="chapter-item "><a href="../survey/papers.html"><strong aria-hidden="true">3.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/pollux.html"><strong aria-hidden="true">3.1.</strong> pollux</a></li><li class="chapter-item "><a href="../survey/adasum.html"><strong aria-hidden="true">3.2.</strong> adasum</a></li><li class="chapter-item "><a href="../survey/adaptation_learning.html"><strong aria-hidden="true">3.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="../survey/gradient_descent.html"><strong aria-hidden="true">3.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="../survey/auto_parallel.html"><strong aria-hidden="true">3.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="../survey/scheduling.html"><strong aria-hidden="true">3.6.</strong> scheduling</a></li><li class="chapter-item "><a href="../survey/gradient_compression/gradient_compression.html"><strong aria-hidden="true">3.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/gradient_compression/dgc.html"><strong aria-hidden="true">3.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="../survey/gradient_compression/csc.html"><strong aria-hidden="true">3.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="../survey/flash_attention.html"><strong aria-hidden="true">3.8.</strong> flash attention</a></li><li class="chapter-item "><a href="../survey/lora.html"><strong aria-hidden="true">3.9.</strong> LoRA</a></li></ol></li><li class="chapter-item "><a href="../mathematics/overview.html"><strong aria-hidden="true">4.</strong> mathematics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../mathematics/topics.html"><strong aria-hidden="true">4.1.</strong> mathematics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../mathematics/basic.html"><strong aria-hidden="true">4.1.1.</strong> basic</a></li><li class="chapter-item "><a href="../mathematics/entropy.html"><strong aria-hidden="true">4.1.2.</strong> entropy</a></li><li class="chapter-item "><a href="../mathematics/newton.html"><strong aria-hidden="true">4.1.3.</strong> newton</a></li><li class="chapter-item "><a href="../mathematics/regression.html"><strong aria-hidden="true">4.1.4.</strong> regression</a></li><li class="chapter-item "><a href="../mathematics/conjugate_descent.html"><strong aria-hidden="true">4.1.5.</strong> conjugate descent</a></li><li class="chapter-item "><a href="../mathematics/gradient_descent.html"><strong aria-hidden="true">4.1.6.</strong> gradient descent</a></li><li class="chapter-item "><a href="../mathematics/pca.html"><strong aria-hidden="true">4.1.7.</strong> pca</a></li><li class="chapter-item "><a href="../mathematics/support_vector.html"><strong aria-hidden="true">4.1.8.</strong> support vector</a></li><li class="chapter-item "><a href="../mathematics/differentiation.html"><strong aria-hidden="true">4.1.9.</strong> differentiation</a></li><li class="chapter-item "><a href="../mathematics/fourier.html"><strong aria-hidden="true">4.1.10.</strong> fourier</a></li><li class="chapter-item "><a href="../mathematics/kmeans_cos.html"><strong aria-hidden="true">4.1.11.</strong> kmeans</a></li></ol></li><li class="chapter-item "><a href="../wavelets/plan.html"><strong aria-hidden="true">4.2.</strong> wavelets</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../wavelets/plan.html"><strong aria-hidden="true">4.2.1.</strong> plan</a></li><li class="chapter-item "><a href="../wavelets/preliminary.html"><strong aria-hidden="true">4.2.2.</strong> preliminary</a></li><li class="chapter-item "><a href="../wavelets/haar.html"><strong aria-hidden="true">4.2.3.</strong> haar wavelet</a></li><li class="chapter-item "><a href="../wavelets/fourier.html"><strong aria-hidden="true">4.2.4.</strong> fourier analysis</a></li><li class="chapter-item "><a href="../wavelets/uncertainty_principle.html"><strong aria-hidden="true">4.2.5.</strong> uncertainty principle</a></li><li class="chapter-item "><a href="../wavelets/multiresolution.html"><strong aria-hidden="true">4.2.6.</strong> multiresolution</a></li></ol></li></ol></li><li class="chapter-item "><a href="../llm/models.html"><strong aria-hidden="true">5.</strong> models</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../llm/llm.html"><strong aria-hidden="true">5.1.</strong> llm</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../llm/falcon.html"><strong aria-hidden="true">5.1.1.</strong> falcon</a></li><li class="chapter-item "><a href="../llm/llama.html"><strong aria-hidden="true">5.1.2.</strong> llama</a></li></ol></li><li class="chapter-item "><a href="../nlp/nlp.html"><strong aria-hidden="true">5.2.</strong> nlp</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../nlp/transformer.html"><strong aria-hidden="true">5.2.1.</strong> transformer</a></li><li class="chapter-item "><a href="../nlp/models.html"><strong aria-hidden="true">5.2.2.</strong> models</a></li></ol></li><li class="chapter-item "><a href="../llm/peft.html"><strong aria-hidden="true">5.3.</strong> peft</a></li><li class="chapter-item "><a href="../somewhat/github.html"><strong aria-hidden="true">5.4.</strong> trends</a></li></ol></li><li class="chapter-item expanded "><a href="../frameworks/overview.html"><strong aria-hidden="true">6.</strong> frameworks</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../megatron/megatron.html"><strong aria-hidden="true">6.1.</strong> megatron</a></li><li class="chapter-item "><a href="../deepspeed/deepspeed.html"><strong aria-hidden="true">6.2.</strong> deepspeed</a></li><li class="chapter-item expanded "><a href="../pytorch/overview.html"><strong aria-hidden="true">6.3.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../pytorch/tensor.html" class="active"><strong aria-hidden="true">6.3.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/autograd.html"><strong aria-hidden="true">6.3.2.</strong> autograd</a></li><li class="chapter-item "><a href="../pytorch/operator.html"><strong aria-hidden="true">6.3.3.</strong> operator</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">6.3.4.</strong> profiler</a></li><li class="chapter-item "><a href="../pytorch/hook.html"><strong aria-hidden="true">6.3.5.</strong> hook</a></li><li class="chapter-item "><a href="../pytorch/elastic.html"><strong aria-hidden="true">6.3.6.</strong> elastic</a></li><li class="chapter-item "><a href="../pytorch/patch.html"><strong aria-hidden="true">6.3.7.</strong> patch</a></li><li class="chapter-item "><a href="../pytorch/misc.html"><strong aria-hidden="true">6.3.8.</strong> misc</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">6.4.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps-code-overview.html"><strong aria-hidden="true">6.4.1.</strong> ps</a></li><li class="chapter-item "><a href="../paddle/framework.html"><strong aria-hidden="true">6.4.2.</strong> framework</a></li><li class="chapter-item "><a href="../paddle/cinn.html"><strong aria-hidden="true">6.4.3.</strong> cinn</a></li><li class="chapter-item "><a href="../paddle/dataloader.html"><strong aria-hidden="true">6.4.4.</strong> dataloader</a></li></ol></li><li class="chapter-item "><a href="../horovod/horovod.html"><strong aria-hidden="true">6.5.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">6.5.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">6.5.2.</strong> workflow</a></li><li class="chapter-item "><a href="../horovod/object.html"><strong aria-hidden="true">6.5.3.</strong> object</a></li><li class="chapter-item "><a href="../horovod/develop.html"><strong aria-hidden="true">6.5.4.</strong> develop</a></li><li class="chapter-item "><a href="../horovod/pytorch.html"><strong aria-hidden="true">6.5.5.</strong> pytorch</a></li><li class="chapter-item "><a href="../horovod/tensorflow.html"><strong aria-hidden="true">6.5.6.</strong> tensorflow</a></li><li class="chapter-item "><a href="../horovod/elastic.html"><strong aria-hidden="true">6.5.7.</strong> elastic</a></li></ol></li><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">6.6.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">6.6.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">6.6.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">6.6.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">6.6.4.</strong> api</a></li><li class="chapter-item "><a href="../ray/survey.html"><strong aria-hidden="true">6.6.5.</strong> survey</a></li></ol></li><li class="chapter-item "><a href="../somewhat/jax.html"><strong aria-hidden="true">6.7.</strong> jax</a></li><li class="chapter-item "><a href="../somewhat/tvm.html"><strong aria-hidden="true">6.8.</strong> tvm</a></li></ol></li><li class="chapter-item "><a href="../programming/overview.html"><strong aria-hidden="true">7.</strong> programming</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">7.1.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">7.1.1.</strong> concurrent execution</a></li><li class="chapter-item "><a href="../python/multiprocessing.html"><strong aria-hidden="true">7.1.2.</strong> multiprocessing</a></li><li class="chapter-item "><a href="../python/decorator.html"><strong aria-hidden="true">7.1.3.</strong> decorator</a></li></ol></li><li class="chapter-item "><a href="../tips/tips.html"><strong aria-hidden="true">7.2.</strong> tips</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../tips/enable_shared_from_this.html"><strong aria-hidden="true">7.2.1.</strong> enable_shared_from_this</a></li><li class="chapter-item "><a href="../tips/ip_local_port_range.html"><strong aria-hidden="true">7.2.2.</strong> ip_local_port_range</a></li><li class="chapter-item "><a href="../tips/golang_error.html"><strong aria-hidden="true">7.2.3.</strong> golang error</a></li></ol></li></ol></li><li class="chapter-item "><a href="../infra/overview.html"><strong aria-hidden="true">8.</strong> infrastructure</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../kubernetes/kubernetes.html"><strong aria-hidden="true">8.1.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../kubernetes/scheduler.html"><strong aria-hidden="true">8.1.1.</strong> scheduler</a></li><li class="chapter-item "><a href="../kubernetes/operator.html"><strong aria-hidden="true">8.1.2.</strong> operator</a></li><li class="chapter-item "><a href="../kubernetes/device_plugin.html"><strong aria-hidden="true">8.1.3.</strong> device plugin</a></li><li class="chapter-item "><a href="../kubernetes/docker.html"><strong aria-hidden="true">8.1.4.</strong> docker</a></li><li class="chapter-item "><a href="../kubernetes/install.html"><strong aria-hidden="true">8.1.5.</strong> install</a></li></ol></li><li class="chapter-item "><a href="../nvidia/nvidia.html"><strong aria-hidden="true">8.2.</strong> cuda</a></li><li class="chapter-item "><a href="../infra/ccl.html"><strong aria-hidden="true">8.3.</strong> communication library</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../nvidia/nccl.html"><strong aria-hidden="true">8.3.1.</strong> nccl</a></li><li class="chapter-item "><a href="../somewhat/gloo.html"><strong aria-hidden="true">8.3.2.</strong> gloo</a></li><li class="chapter-item "><a href="../somewhat/mpi.html"><strong aria-hidden="true">8.3.3.</strong> mpi</a></li></ol></li></ol></li><li class="chapter-item "><a href="../notes/index.html"><strong aria-hidden="true">9.</strong> notes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../notes/influence_and_persuasion.html"><strong aria-hidden="true">9.1.</strong> influence and persuasion</a></li><li class="chapter-item "><a href="../notes/feynman_technique.html"><strong aria-hidden="true">9.2.</strong> freynman technique</a></li><li class="chapter-item "><a href="../notes/wavelet_tour_signal_processing_sparse.html"><strong aria-hidden="true">9.3.</strong> wavelet signal processing</a></li></ol></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -153,13 +182,13 @@ PyMODINIT_FUNC PyInit__C(void)
 </code></pre>
 <pre><code class="language-cpp">// torch/csrc/Module.cpp
 
-extern &quot;C&quot;
+extern "C"
 TORCH_API PyObject* initModule();
 PyObject* initModule() {
   THPUtils_addPyMethodDefs(methods, TorchMethods);
   THPUtils_addPyMethodDefs(methods, torch::autograd::python_functions());
 
-  static struct PyModuleDef torchmodule = {PyModuleDef_HEAD_INIT, &quot;torch._C&quot;, nullptr, -1, methods.data()};
+  static struct PyModuleDef torchmodule = {PyModuleDef_HEAD_INIT, "torch._C", nullptr, -1, methods.data()};
   ASSERT_TRUE(module = PyModule_Create(&amp;torchmodule));
   ASSERT_TRUE(THPGenerator_init(module));
   ASSERT_TRUE(THPException_init(module));
@@ -188,7 +217,7 @@ PyObject* initModule() {
 <pre><code class="language-cpp">// torch/csrc/autograd/python_torch_functions_manual.cpp
 
 static PyMethodDef torch_functions_manual[] = {
-    {&quot;tensor&quot;,
+    {"tensor",
      castPyCFunctionWithKeywords(THPVariable_tensor),
      METH_VARARGS | METH_KEYWORDS | METH_STATIC,
      nullptr},
@@ -197,7 +226,7 @@ static PyMethodDef torch_functions_manual[] = {
 // implemented on python object to allow torch.tensor to be constructed with
 // arbitrarily nested python objects - list, tuple, np array, scalar, etc.
 static PyObject* THPVariable_tensor( PyObject* self, PyObject* args, PyObject* kwargs) {
-  jit::tracer::warn(&quot;torch.tensor&quot;, jit::tracer::WARN_CONSTRUCTOR);
+  jit::tracer::warn("torch.tensor", jit::tracer::WARN_CONSTRUCTOR);
   return THPVariable_Wrap(torch::utils::tensor_ctor(
       torch::tensors::get_default_dispatch_key(),
       torch::tensors::get_default_scalar_type(),
@@ -265,7 +294,7 @@ Tensor internal_new_from_data(
     return var.to(...);
   }
 
-  if (PyObject_HasAttrString(data, &quot;__cuda_array_interface__&quot;)) {
+  if (PyObject_HasAttrString(data, "__cuda_array_interface__")) {
     auto tensor = tensor_from_cuda_array_interface(data);
     return tensor.to(...);
   }
@@ -349,13 +378,13 @@ static PyObject* THPVariable_NewWithVar(PyTypeObject* type, Variable _var, c10::
 <pre><code class="language-cpp">// torch/csrc/autograd/python_variable.cpp
 
 bool THPVariable_initModule(PyObject* module) {
-  PyModule_AddObject(module, &quot;_TensorMeta&quot;, (PyObject*)&amp;THPVariableMetaType);
+  PyModule_AddObject(module, "_TensorMeta", (PyObject*)&amp;THPVariableMetaType);
 
   static std::vector&lt;PyMethodDef&gt; methods;
   THPUtils_addPyMethodDefs(methods, torch::autograd::variable_methods);
   THPUtils_addPyMethodDefs(methods, extra_methods);
   THPVariableType.tp_methods = methods.data();
-  PyModule_AddObject(module, &quot;_TensorBase&quot;, (PyObject*)&amp;THPVariableType);
+  PyModule_AddObject(module, "_TensorBase", (PyObject*)&amp;THPVariableType);
   torch::autograd::initTorchFunctions(module);
   torch::autograd::initTensorImplConversion(module);
   return true;
@@ -370,7 +399,7 @@ namespace autograd {
 static PyTypeObject THPVariableFunctions = {
     PyVarObject_HEAD_INIT(
         nullptr,
-        0) &quot;torch._C._VariableFunctionsClass&quot;, /* tp_name */
+        0) "torch._C._VariableFunctionsClass", /* tp_name */
     0, /* tp_basicsize */
     ...
 }
@@ -382,12 +411,12 @@ void initTorchFunctions(PyObject* module) {
 
   if (PyModule_AddObject(
           module,
-          &quot;_VariableFunctionsClass&quot;,
+          "_VariableFunctionsClass",
           reinterpret_cast&lt;PyObject*&gt;(&amp;THPVariableFunctions)) &lt; 0) { }
   THPVariableFunctionsModule =
       PyType_GenericNew(&amp;THPVariableFunctions, Py_None, Py_None);
   if (PyModule_AddObject(
-          module, &quot;_VariableFunctions&quot;, THPVariableFunctionsModule) &lt; 0) { }
+          module, "_VariableFunctions", THPVariableFunctionsModule) &lt; 0) { }
 }
 } // namespace autograd
 } // namespace torch
@@ -408,7 +437,7 @@ for name in dir(_C._VariableFunctions):
     obj = getattr(_C._VariableFunctions, name)
     obj.__module__ = 'torch'
     globals()[name] = obj
-    if not name.startswith(&quot;_&quot;):
+    if not name.startswith("_"):
         __all__.append(name)
 
 </code></pre>
@@ -426,10 +455,10 @@ void gatherTorchFunctions(std::vector&lt;PyMethodDef&gt;&amp; torch_functions) {
 
   static std::array&lt;std::pair&lt;const char*, const char*&gt;, 4&gt; aliases{
       {// Canonical function, alias name
-       {&quot;sspaddmm&quot;, &quot;saddmm&quot;},
-       {&quot;mm&quot;, &quot;spmm&quot;},
-       {&quot;mm&quot;, &quot;dsmm&quot;},
-       {&quot;hspmm&quot;, &quot;hsmm&quot;}}};
+       {"sspaddmm", "saddmm"},
+       {"mm", "spmm"},
+       {"mm", "dsmm"},
+       {"hspmm", "hsmm"}}};
 
   for (const auto&amp; alias : aliases) {
     auto it = std::find_if(
@@ -440,9 +469,9 @@ void gatherTorchFunctions(std::vector&lt;PyMethodDef&gt;&amp; torch_functions) {
         });
     TORCH_INTERNAL_ASSERT(
         it != torch_functions.end(),
-        &quot;Failed to create function alias from &quot;,
+        "Failed to create function alias from ",
         alias.first,
-        &quot; to &quot;,
+        " to ",
         alias.second);
     PyMethodDef alias_def = *it;
     alias_def.ml_name = alias.second;
@@ -466,19 +495,19 @@ void gatherTorchFunctions(std::vector&lt;PyMethodDef&gt;&amp; torch_functions) {
 
 # These functions require manual Python bindings or are not exposed to Python
 _SKIP_PYTHON_BINDINGS = [
-    &quot;tensor&quot;,
+    "tensor",
 ]
 
 def gen( out: str, native_yaml_path: str, tags_yaml_path: str, deprecated_yaml_path: str, template_path: str, *, symint: bool = True,):
-    create_python_bindings( None, &quot;python_variable_methods.cpp&quot;,)
-    create_python_bindings_sharded( &quot;torch&quot;, &quot;python_torch_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.nn&quot;, &quot;python_nn_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.fft&quot;, &quot;python_fft_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.linalg&quot;, &quot;python_linalg_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.nested&quot;, &quot;python_nested_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.sparse&quot;, &quot;python_sparse_functions.cpp&quot;,)
-    create_python_bindings( &quot;torch.special&quot;, &quot;python_special_functions.cpp&quot;,)
-    create_python_return_type_bindings( fm, functions, lambda fn: True, &quot;python_return_types.cpp&quot;)
+    create_python_bindings( None, "python_variable_methods.cpp",)
+    create_python_bindings_sharded( "torch", "python_torch_functions.cpp",)
+    create_python_bindings( "torch.nn", "python_nn_functions.cpp",)
+    create_python_bindings( "torch.fft", "python_fft_functions.cpp",)
+    create_python_bindings( "torch.linalg", "python_linalg_functions.cpp",)
+    create_python_bindings( "torch.nested", "python_nested_functions.cpp",)
+    create_python_bindings( "torch.sparse", "python_sparse_functions.cpp",)
+    create_python_bindings( "torch.special", "python_special_functions.cpp",)
+    create_python_return_type_bindings( fm, functions, lambda fn: True, "python_return_types.cpp")
 </code></pre>
 <h2 id="class-torchtensor"><a class="header" href="#class-torchtensor">class torch.Tensor</a></h2>
 <p>What's behind <code>torch.Tensor</code> ?</p>
@@ -512,7 +541,7 @@ bool THPVariable_initModule(PyObject *module)
   if (PyType_Ready(&amp;THPVariableMetaType) &lt; 0)
     return false;
   Py_INCREF(&amp;THPVariableMetaType);
-  PyModule_AddObject(module, &quot;_TensorMeta&quot;,   (PyObject *)&amp;THPVariableMetaType);
+  PyModule_AddObject(module, "_TensorMeta",   (PyObject *)&amp;THPVariableMetaType);
 
   static std::vector&lt;PyMethodDef&gt; methods;
   THPUtils_addPyMethodDefs(methods, torch::autograd::variable_methods);
@@ -521,7 +550,7 @@ bool THPVariable_initModule(PyObject *module)
   if (PyType_Ready(&amp;THPVariableType) &lt; 0)
     return false;
   Py_INCREF(&amp;THPVariableType);
-  PyModule_AddObject(module, &quot;_TensorBase&quot;,   (PyObject *)&amp;THPVariableType);
+  PyModule_AddObject(module, "_TensorBase",   (PyObject *)&amp;THPVariableType);
   torch::autograd::initTorchFunctions(module);
   torch::autograd::initTensorImplConversion(module);
   return true;
@@ -530,7 +559,7 @@ bool THPVariable_initModule(PyObject *module)
 PyTypeObject THPVariableType = {
     PyVarObject_HEAD_INIT(
         &amp;THPVariableMetaType,
-        0) &quot;torch._C._TensorBase&quot;, /* tp_name */
+        0) "torch._C._TensorBase", /* tp_name */
     sizeof(THPVariable), /* tp_basicsize */
     0, /* tp_itemsize */
     ...
@@ -539,7 +568,7 @@ PyTypeObject THPVariableType = {
 
 PyTypeObject THPVariableMetaType = {
   PyVarObject_HEAD_INIT(DEFERRED_ADDRESS(&amp;PyType_Type), 0)
-  &quot;torch._C._TensorMeta&quot;,                      /* tp_name */
+  "torch._C._TensorMeta",                      /* tp_name */
   sizeof(THPVariableMeta),
   ...
   THPVariableMetaType_init,                    /* tp_init */
@@ -665,7 +694,7 @@ protected:
 <pre><code class="language-cpp">// torch/include/ATen/core/TensorBody.h
 // aten/src/ATen/templates/TensorBody.h
 
-// Tensor is a &quot;generic&quot; object holding a pointer to the underlying TensorImpl object, which has an embedded reference count. 
+// Tensor is a "generic" object holding a pointer to the underlying TensorImpl object, which has an embedded reference count. 
 // similar to boost::intrusive_ptr.
 class TORCH_API Tensor: public TensorBase {
  protected:
@@ -822,7 +851,7 @@ class C10_API DataPtr {
   Device device_;
 }
 </code></pre>
-<p>UniqueVoidPtr </p>
+<p>UniqueVoidPtr</p>
 <pre><code class="language-cpp">// c10/util/UniqueVoidPtr.h
 
 namespace c10 {
@@ -841,7 +870,7 @@ class UniqueVoidPtr {
 </code></pre>
 <p><code>detail::UniqueVoidPtr</code> is an owning smart pointer like <code>unique_ptr</code></p>
 <ul>
-<li>specialized to void </li>
+<li>specialized to void</li>
 <li>specialized for a function pointer deleter <code>void(void* ctx)</code></li>
 <li>deleter is guaranteed to be called when the unique pointer is destructed and the context is non-null</li>
 </ul>
@@ -850,7 +879,7 @@ class UniqueVoidPtr {
 tensor([6.7871e-27])
 &gt;&gt;&gt; torch.Tensor(1.0)
 Traceback (most recent call last):
-  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
 TypeError: new(): data must be a sequence (got float)
 </code></pre>
 <pre><code class="language-cpp">// torch/csrc/autograd/python_variable.cpp
@@ -861,7 +890,7 @@ PyObject* THPVariable_pynew(
     PyObject* kwargs) {
   TORCH_CHECK(
       type != &amp;THPVariableType,
-      &quot;Cannot directly construct _TensorBase; subclass it and then construct that&quot;);
+      "Cannot directly construct _TensorBase; subclass it and then construct that");
   auto tensor = torch::utils::base_tensor_ctor(args, kwargs);
   return THPVariable_NewWithVar(
       type,
@@ -888,18 +917,18 @@ Tensor legacy_tensor_generic_ctor_new(
     CtorOrNew ctor_or_new) {
   auto options = dispatchKeyToTensorOptions(dispatch_key);
   static PythonArgParser parser({
-      &quot;new(*, Device? device=None)&quot;,
-      &quot;new(Storage storage)&quot;,
-      &quot;new(*, int64_t cdata)|hidden&quot;,
+      "new(*, Device? device=None)",
+      "new(Storage storage)",
+      "new(*, int64_t cdata)|hidden",
       // This constructor is no longer legacy, it will also be usable for
       // subclass initialization
-      &quot;new(Tensor other)&quot;,
-      &quot;new(Tensor other, *, Device? device=None)|hidden&quot;, // prevent Tensor
+      "new(Tensor other)",
+      "new(Tensor other, *, Device? device=None)|hidden", // prevent Tensor
                                                           // matching with
                                                           // IntArrayRef,
                                                           // PyObject*
-      &quot;new(IntArrayRef size, *, Device? device=None)&quot;,
-      &quot;new(PyObject* data, *, Device? device=None)&quot;,
+      "new(IntArrayRef size, *, Device? device=None)",
+      "new(PyObject* data, *, Device? device=None)",
   });
 
   if (isSparse(dispatchKeyToBackend(dispatch_key))) {
@@ -924,11 +953,11 @@ Tensor legacy_tensor_generic_ctor_new(
     if (storage_scalar_type != at::ScalarType::Undefined &amp;&amp; is_typed_storage) {
       TORCH_CHECK(
           storage_scalar_type == scalar_type,
-          &quot;Expected a Storage of type &quot;,
+          "Expected a Storage of type ",
           scalar_type,
-          &quot; or an UntypedStorage, but got type &quot;,
+          " or an UntypedStorage, but got type ",
           storage_scalar_type,
-          &quot; for argument 1 'storage'&quot;);
+          " for argument 1 'storage'");
     }
     return new_with_storage(options, scalar_type, storage);
   } else if (r.idx == 2) {
@@ -937,29 +966,29 @@ Tensor legacy_tensor_generic_ctor_new(
   } else if (r.idx == 3) {
     const auto&amp; other = r.tensor(0);
     // BASE_CTOR (aka torch.Tensor) is now relaxed to accept any
-    // dtype; previously it was &quot;float&quot; biased
+    // dtype; previously it was "float" biased
     if (ctor_or_new != CtorOrNew::BASE_CTOR) {
       options = options.dtype(scalar_type);
       TORCH_CHECK_TYPE(
           other.options().type_equal(options),
-          &quot;expected &quot;,
+          "expected ",
           options,
-          &quot; (got &quot;,
+          " (got ",
           other.options(),
-          &quot;)&quot;);
+          ")");
     }
     return other.alias();
   } else if (r.idx == 4) {
     if (ctor_or_new == CtorOrNew::CTOR || ctor_or_new == CtorOrNew::BASE_CTOR) {
       TORCH_CHECK(
           false,
-          &quot;Legacy tensor constructor of the form torch.Tensor(tensor, device=device) &quot;
-          &quot;is not supported.  Use torch.tensor(...) or torch.as_tensor(...) instead.&quot;);
+          "Legacy tensor constructor of the form torch.Tensor(tensor, device=device) "
+          "is not supported.  Use torch.tensor(...) or torch.as_tensor(...) instead.");
     } else {
       TORCH_CHECK(
           false,
-          &quot;Legacy tensor new of the form tensor.new(tensor, device=device) &quot;
-          &quot;is not supported.  Use torch.as_tensor(...) instead.&quot;);
+          "Legacy tensor new of the form tensor.new(tensor, device=device) "
+          "is not supported.  Use torch.as_tensor(...) instead.");
     }
   } else if (r.idx == 5) {
     PyObject* arg = r.pyobject(0);
@@ -980,7 +1009,7 @@ Tensor legacy_tensor_generic_ctor_new(
     return legacy_new_from_sequence(
         options, scalar_type, deviceOptional, r.pyobject(0));
   }
-  throw std::runtime_error(&quot;new(): invalid arguments&quot;);
+  throw std::runtime_error("new(): invalid arguments");
 }
 </code></pre>
 <p>PyTorch Tensor 相关主要数据结构和关系</p>
@@ -1000,7 +1029,7 @@ Tensor legacy_tensor_generic_ctor_new(
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../pytorch/autograd.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../pytorch/autograd.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -1014,7 +1043,7 @@ Tensor legacy_tensor_generic_ctor_new(
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../pytorch/autograd.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../pytorch/autograd.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

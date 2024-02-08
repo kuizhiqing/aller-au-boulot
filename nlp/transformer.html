@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Projects excelling">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
@@ -31,7 +31,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -61,42 +61,71 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="../index.html"><strong aria-hidden="true">1.</strong> welcome</a></li><li class="chapter-item "><a href="../survey/survey.html"><strong aria-hidden="true">2.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/pollux.html"><strong aria-hidden="true">2.1.</strong> pollux</a></li><li class="chapter-item "><a href="../survey/adasum.html"><strong aria-hidden="true">2.2.</strong> adasum</a></li><li class="chapter-item "><a href="../survey/adaptation_learning.html"><strong aria-hidden="true">2.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="../survey/gradient_descent.html"><strong aria-hidden="true">2.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="../survey/auto_parallel.html"><strong aria-hidden="true">2.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="../survey/scheduling.html"><strong aria-hidden="true">2.6.</strong> scheduling</a></li><li class="chapter-item "><a href="../survey/gradient_compression/gradient_compression.html"><strong aria-hidden="true">2.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/gradient_compression/dgc.html"><strong aria-hidden="true">2.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="../survey/gradient_compression/csc.html"><strong aria-hidden="true">2.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="../survey/flash_attention.html"><strong aria-hidden="true">2.8.</strong> flash attention</a></li><li class="chapter-item "><a href="../survey/lora.html"><strong aria-hidden="true">2.9.</strong> LoRA</a></li></ol></li><li class="chapter-item "><a href="../llm/llm.html"><strong aria-hidden="true">3.</strong> llm</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../llm/falcon.html"><strong aria-hidden="true">3.1.</strong> falcon</a></li><li class="chapter-item "><a href="../llm/llama.html"><strong aria-hidden="true">3.2.</strong> llama</a></li></ol></li><li class="chapter-item "><a href="../mathematics/topics.html"><strong aria-hidden="true">4.</strong> mathematics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../mathematics/basic.html"><strong aria-hidden="true">4.1.</strong> basic</a></li><li class="chapter-item "><a href="../mathematics/entropy.html"><strong aria-hidden="true">4.2.</strong> entropy</a></li><li class="chapter-item "><a href="../mathematics/newton.html"><strong aria-hidden="true">4.3.</strong> newton</a></li><li class="chapter-item "><a href="../mathematics/regression.html"><strong aria-hidden="true">4.4.</strong> regression</a></li><li class="chapter-item "><a href="../mathematics/conjugate_descent.html"><strong aria-hidden="true">4.5.</strong> conjugate descent</a></li><li class="chapter-item "><a href="../mathematics/gradient_descent.html"><strong aria-hidden="true">4.6.</strong> gradient descent</a></li><li class="chapter-item "><a href="../mathematics/pca.html"><strong aria-hidden="true">4.7.</strong> pca</a></li><li class="chapter-item "><a href="../mathematics/support_vector.html"><strong aria-hidden="true">4.8.</strong> support vector</a></li><li class="chapter-item "><a href="../mathematics/differentiation.html"><strong aria-hidden="true">4.9.</strong> differentiation</a></li><li class="chapter-item "><a href="../mathematics/fourier.html"><strong aria-hidden="true">4.10.</strong> fourier</a></li><li class="chapter-item "><a href="../mathematics/kmeans_cos.html"><strong aria-hidden="true">4.11.</strong> kmeans</a></li></ol></li><li class="chapter-item "><a href="../wavelets/plan.html"><strong aria-hidden="true">5.</strong> wavelets</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../wavelets/plan.html"><strong aria-hidden="true">5.1.</strong> plan</a></li><li class="chapter-item "><a href="../wavelets/preliminary.html"><strong aria-hidden="true">5.2.</strong> preliminary</a></li><li class="chapter-item "><a href="../wavelets/haar.html"><strong aria-hidden="true">5.3.</strong> haar wavelet</a></li><li class="chapter-item "><a href="../wavelets/fourier.html"><strong aria-hidden="true">5.4.</strong> fourier analysis</a></li><li class="chapter-item "><a href="../wavelets/uncertainty_principle.html"><strong aria-hidden="true">5.5.</strong> uncertainty principle</a></li><li class="chapter-item "><a href="../wavelets/multiresolution.html"><strong aria-hidden="true">5.6.</strong> multiresolution</a></li></ol></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">6.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">6.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/autograd.html"><strong aria-hidden="true">6.2.</strong> autograd</a></li><li class="chapter-item "><a href="../pytorch/operator.html"><strong aria-hidden="true">6.3.</strong> operator</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">6.4.</strong> profiler</a></li><li class="chapter-item "><a href="../pytorch/hook.html"><strong aria-hidden="true">6.5.</strong> hook</a></li><li class="chapter-item "><a href="../pytorch/elastic.html"><strong aria-hidden="true">6.6.</strong> elastic</a></li><li class="chapter-item "><a href="../pytorch/patch.html"><strong aria-hidden="true">6.7.</strong> patch</a></li><li class="chapter-item "><a href="../pytorch/misc.html"><strong aria-hidden="true">6.8.</strong> misc</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">7.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps-code-overview.html"><strong aria-hidden="true">7.1.</strong> ps</a></li><li class="chapter-item "><a href="../paddle/framework.html"><strong aria-hidden="true">7.2.</strong> framework</a></li><li class="chapter-item "><a href="../paddle/cinn.html"><strong aria-hidden="true">7.3.</strong> cinn</a></li><li class="chapter-item "><a href="../paddle/dataloader.html"><strong aria-hidden="true">7.4.</strong> dataloader</a></li></ol></li><li class="chapter-item "><a href="../horovod/horovod.html"><strong aria-hidden="true">8.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">8.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">8.2.</strong> workflow</a></li><li class="chapter-item "><a href="../horovod/object.html"><strong aria-hidden="true">8.3.</strong> object</a></li><li class="chapter-item "><a href="../horovod/develop.html"><strong aria-hidden="true">8.4.</strong> develop</a></li><li class="chapter-item "><a href="../horovod/pytorch.html"><strong aria-hidden="true">8.5.</strong> pytorch</a></li><li class="chapter-item "><a href="../horovod/tensorflow.html"><strong aria-hidden="true">8.6.</strong> tensorflow</a></li><li class="chapter-item "><a href="../horovod/elastic.html"><strong aria-hidden="true">8.7.</strong> elastic</a></li></ol></li><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">9.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">9.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">9.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">9.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">9.4.</strong> api</a></li><li class="chapter-item "><a href="../ray/survey.html"><strong aria-hidden="true">9.5.</strong> survey</a></li></ol></li><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">10.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">10.1.</strong> concurrent execution</a></li><li class="chapter-item "><a href="../python/multiprocessing.html"><strong aria-hidden="true">10.2.</strong> multiprocessing</a></li><li class="chapter-item "><a href="../python/decorator.html"><strong aria-hidden="true">10.3.</strong> decorator</a></li></ol></li><li class="chapter-item "><a href="../kubernetes/kubernetes.html"><strong aria-hidden="true">11.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../kubernetes/scheduler.html"><strong aria-hidden="true">11.1.</strong> scheduler</a></li><li class="chapter-item "><a href="../kubernetes/operator.html"><strong aria-hidden="true">11.2.</strong> operator</a></li><li class="chapter-item "><a href="../kubernetes/device_plugin.html"><strong aria-hidden="true">11.3.</strong> device plugin</a></li><li class="chapter-item "><a href="../kubernetes/docker.html"><strong aria-hidden="true">11.4.</strong> docker</a></li><li class="chapter-item "><a href="../kubernetes/install.html"><strong aria-hidden="true">11.5.</strong> install</a></li></ol></li><li class="chapter-item expanded "><a href="../nlp/nlp.html"><strong aria-hidden="true">12.</strong> nlp</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../nlp/transformer.html" class="active"><strong aria-hidden="true">12.1.</strong> transformer</a></li><li class="chapter-item "><a href="../nlp/models.html"><strong aria-hidden="true">12.2.</strong> models</a></li></ol></li><li class="chapter-item "><a href="../tips/tips.html"><strong aria-hidden="true">13.</strong> tips</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../tips/enable_shared_from_this.html"><strong aria-hidden="true">13.1.</strong> enable_shared_from_this</a></li><li class="chapter-item "><a href="../tips/ip_local_port_range.html"><strong aria-hidden="true">13.2.</strong> ip_local_port_range</a></li><li class="chapter-item "><a href="../tips/golang_error.html"><strong aria-hidden="true">13.3.</strong> golang error</a></li></ol></li><li class="chapter-item "><a href="../nvidia/nvidia.html"><strong aria-hidden="true">14.</strong> nvidia</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../nvidia/nccl.html"><strong aria-hidden="true">14.1.</strong> nccl</a></li><li class="chapter-item "><a href="../nvidia/megatron.html"><strong aria-hidden="true">14.2.</strong> megatron</a></li></ol></li><li class="chapter-item "><a href="../somewhat/somewhat.html"><strong aria-hidden="true">15.</strong> somewhat</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../somewhat/tvm.html"><strong aria-hidden="true">15.1.</strong> tvm</a></li><li class="chapter-item "><a href="../somewhat/gloo.html"><strong aria-hidden="true">15.2.</strong> gloo</a></li><li class="chapter-item "><a href="../somewhat/mpi.html"><strong aria-hidden="true">15.3.</strong> mpi</a></li><li class="chapter-item "><a href="../somewhat/leveldb.html"><strong aria-hidden="true">15.4.</strong> leveldb</a></li><li class="chapter-item "><a href="../somewhat/jax.html"><strong aria-hidden="true">15.5.</strong> jax</a></li><li class="chapter-item "><a href="../somewhat/github.html"><strong aria-hidden="true">15.6.</strong> github</a></li><li class="chapter-item "><a href="../somewhat/peft.html"><strong aria-hidden="true">15.7.</strong> peft</a></li></ol></li><li class="chapter-item "><a href="../notes/index.html"><strong aria-hidden="true">16.</strong> notes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../notes/influence_and_persuasion.html"><strong aria-hidden="true">16.1.</strong> influence and persuasion</a></li><li class="chapter-item "><a href="../notes/feynman_technique.html"><strong aria-hidden="true">16.2.</strong> freynman technique</a></li><li class="chapter-item "><a href="../notes/wavelet_tour_signal_processing_sparse.html"><strong aria-hidden="true">16.3.</strong> wavelet signal processing</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="../index.html"><strong aria-hidden="true">1.</strong> welcome</a></li><li class="chapter-item "><a href="../chronicles/chronicles.html"><strong aria-hidden="true">2.</strong> chronicles</a></li><li class="chapter-item "><a href="../survey/papers.html"><strong aria-hidden="true">3.</strong> survey</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/pollux.html"><strong aria-hidden="true">3.1.</strong> pollux</a></li><li class="chapter-item "><a href="../survey/adasum.html"><strong aria-hidden="true">3.2.</strong> adasum</a></li><li class="chapter-item "><a href="../survey/adaptation_learning.html"><strong aria-hidden="true">3.3.</strong> adaptation_learning</a></li><li class="chapter-item "><a href="../survey/gradient_descent.html"><strong aria-hidden="true">3.4.</strong> gradient_descent</a></li><li class="chapter-item "><a href="../survey/auto_parallel.html"><strong aria-hidden="true">3.5.</strong> auto_parallel</a></li><li class="chapter-item "><a href="../survey/scheduling.html"><strong aria-hidden="true">3.6.</strong> scheduling</a></li><li class="chapter-item "><a href="../survey/gradient_compression/gradient_compression.html"><strong aria-hidden="true">3.7.</strong> gradient_compression</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../survey/gradient_compression/dgc.html"><strong aria-hidden="true">3.7.1.</strong> dgc</a></li><li class="chapter-item "><a href="../survey/gradient_compression/csc.html"><strong aria-hidden="true">3.7.2.</strong> csc</a></li></ol></li><li class="chapter-item "><a href="../survey/flash_attention.html"><strong aria-hidden="true">3.8.</strong> flash attention</a></li><li class="chapter-item "><a href="../survey/lora.html"><strong aria-hidden="true">3.9.</strong> LoRA</a></li></ol></li><li class="chapter-item "><a href="../mathematics/overview.html"><strong aria-hidden="true">4.</strong> mathematics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../mathematics/topics.html"><strong aria-hidden="true">4.1.</strong> mathematics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../mathematics/basic.html"><strong aria-hidden="true">4.1.1.</strong> basic</a></li><li class="chapter-item "><a href="../mathematics/entropy.html"><strong aria-hidden="true">4.1.2.</strong> entropy</a></li><li class="chapter-item "><a href="../mathematics/newton.html"><strong aria-hidden="true">4.1.3.</strong> newton</a></li><li class="chapter-item "><a href="../mathematics/regression.html"><strong aria-hidden="true">4.1.4.</strong> regression</a></li><li class="chapter-item "><a href="../mathematics/conjugate_descent.html"><strong aria-hidden="true">4.1.5.</strong> conjugate descent</a></li><li class="chapter-item "><a href="../mathematics/gradient_descent.html"><strong aria-hidden="true">4.1.6.</strong> gradient descent</a></li><li class="chapter-item "><a href="../mathematics/pca.html"><strong aria-hidden="true">4.1.7.</strong> pca</a></li><li class="chapter-item "><a href="../mathematics/support_vector.html"><strong aria-hidden="true">4.1.8.</strong> support vector</a></li><li class="chapter-item "><a href="../mathematics/differentiation.html"><strong aria-hidden="true">4.1.9.</strong> differentiation</a></li><li class="chapter-item "><a href="../mathematics/fourier.html"><strong aria-hidden="true">4.1.10.</strong> fourier</a></li><li class="chapter-item "><a href="../mathematics/kmeans_cos.html"><strong aria-hidden="true">4.1.11.</strong> kmeans</a></li></ol></li><li class="chapter-item "><a href="../wavelets/plan.html"><strong aria-hidden="true">4.2.</strong> wavelets</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../wavelets/plan.html"><strong aria-hidden="true">4.2.1.</strong> plan</a></li><li class="chapter-item "><a href="../wavelets/preliminary.html"><strong aria-hidden="true">4.2.2.</strong> preliminary</a></li><li class="chapter-item "><a href="../wavelets/haar.html"><strong aria-hidden="true">4.2.3.</strong> haar wavelet</a></li><li class="chapter-item "><a href="../wavelets/fourier.html"><strong aria-hidden="true">4.2.4.</strong> fourier analysis</a></li><li class="chapter-item "><a href="../wavelets/uncertainty_principle.html"><strong aria-hidden="true">4.2.5.</strong> uncertainty principle</a></li><li class="chapter-item "><a href="../wavelets/multiresolution.html"><strong aria-hidden="true">4.2.6.</strong> multiresolution</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../llm/models.html"><strong aria-hidden="true">5.</strong> models</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../llm/llm.html"><strong aria-hidden="true">5.1.</strong> llm</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../llm/falcon.html"><strong aria-hidden="true">5.1.1.</strong> falcon</a></li><li class="chapter-item "><a href="../llm/llama.html"><strong aria-hidden="true">5.1.2.</strong> llama</a></li></ol></li><li class="chapter-item expanded "><a href="../nlp/nlp.html"><strong aria-hidden="true">5.2.</strong> nlp</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../nlp/transformer.html" class="active"><strong aria-hidden="true">5.2.1.</strong> transformer</a></li><li class="chapter-item "><a href="../nlp/models.html"><strong aria-hidden="true">5.2.2.</strong> models</a></li></ol></li><li class="chapter-item "><a href="../llm/peft.html"><strong aria-hidden="true">5.3.</strong> peft</a></li><li class="chapter-item "><a href="../somewhat/github.html"><strong aria-hidden="true">5.4.</strong> trends</a></li></ol></li><li class="chapter-item "><a href="../frameworks/overview.html"><strong aria-hidden="true">6.</strong> frameworks</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../megatron/megatron.html"><strong aria-hidden="true">6.1.</strong> megatron</a></li><li class="chapter-item "><a href="../deepspeed/deepspeed.html"><strong aria-hidden="true">6.2.</strong> deepspeed</a></li><li class="chapter-item "><a href="../pytorch/overview.html"><strong aria-hidden="true">6.3.</strong> pytorch</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../pytorch/tensor.html"><strong aria-hidden="true">6.3.1.</strong> tensor</a></li><li class="chapter-item "><a href="../pytorch/autograd.html"><strong aria-hidden="true">6.3.2.</strong> autograd</a></li><li class="chapter-item "><a href="../pytorch/operator.html"><strong aria-hidden="true">6.3.3.</strong> operator</a></li><li class="chapter-item "><a href="../pytorch/profiler.html"><strong aria-hidden="true">6.3.4.</strong> profiler</a></li><li class="chapter-item "><a href="../pytorch/hook.html"><strong aria-hidden="true">6.3.5.</strong> hook</a></li><li class="chapter-item "><a href="../pytorch/elastic.html"><strong aria-hidden="true">6.3.6.</strong> elastic</a></li><li class="chapter-item "><a href="../pytorch/patch.html"><strong aria-hidden="true">6.3.7.</strong> patch</a></li><li class="chapter-item "><a href="../pytorch/misc.html"><strong aria-hidden="true">6.3.8.</strong> misc</a></li></ol></li><li class="chapter-item "><a href="../paddle/paddle.html"><strong aria-hidden="true">6.4.</strong> paddle</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../paddle/ps-code-overview.html"><strong aria-hidden="true">6.4.1.</strong> ps</a></li><li class="chapter-item "><a href="../paddle/framework.html"><strong aria-hidden="true">6.4.2.</strong> framework</a></li><li class="chapter-item "><a href="../paddle/cinn.html"><strong aria-hidden="true">6.4.3.</strong> cinn</a></li><li class="chapter-item "><a href="../paddle/dataloader.html"><strong aria-hidden="true">6.4.4.</strong> dataloader</a></li></ol></li><li class="chapter-item "><a href="../horovod/horovod.html"><strong aria-hidden="true">6.5.</strong> horovod</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../horovod/run.html"><strong aria-hidden="true">6.5.1.</strong> run</a></li><li class="chapter-item "><a href="../horovod/workflow.html"><strong aria-hidden="true">6.5.2.</strong> workflow</a></li><li class="chapter-item "><a href="../horovod/object.html"><strong aria-hidden="true">6.5.3.</strong> object</a></li><li class="chapter-item "><a href="../horovod/develop.html"><strong aria-hidden="true">6.5.4.</strong> develop</a></li><li class="chapter-item "><a href="../horovod/pytorch.html"><strong aria-hidden="true">6.5.5.</strong> pytorch</a></li><li class="chapter-item "><a href="../horovod/tensorflow.html"><strong aria-hidden="true">6.5.6.</strong> tensorflow</a></li><li class="chapter-item "><a href="../horovod/elastic.html"><strong aria-hidden="true">6.5.7.</strong> elastic</a></li></ol></li><li class="chapter-item "><a href="../ray/ray.html"><strong aria-hidden="true">6.6.</strong> ray</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../ray/overview.html"><strong aria-hidden="true">6.6.1.</strong> overview</a></li><li class="chapter-item "><a href="../ray/gcs.html"><strong aria-hidden="true">6.6.2.</strong> gcs</a></li><li class="chapter-item "><a href="../ray/raylet.html"><strong aria-hidden="true">6.6.3.</strong> raylet</a></li><li class="chapter-item "><a href="../ray/api.html"><strong aria-hidden="true">6.6.4.</strong> api</a></li><li class="chapter-item "><a href="../ray/survey.html"><strong aria-hidden="true">6.6.5.</strong> survey</a></li></ol></li><li class="chapter-item "><a href="../somewhat/jax.html"><strong aria-hidden="true">6.7.</strong> jax</a></li><li class="chapter-item "><a href="../somewhat/tvm.html"><strong aria-hidden="true">6.8.</strong> tvm</a></li></ol></li><li class="chapter-item "><a href="../programming/overview.html"><strong aria-hidden="true">7.</strong> programming</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/python.html"><strong aria-hidden="true">7.1.</strong> python</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../python/concurrent.html"><strong aria-hidden="true">7.1.1.</strong> concurrent execution</a></li><li class="chapter-item "><a href="../python/multiprocessing.html"><strong aria-hidden="true">7.1.2.</strong> multiprocessing</a></li><li class="chapter-item "><a href="../python/decorator.html"><strong aria-hidden="true">7.1.3.</strong> decorator</a></li></ol></li><li class="chapter-item "><a href="../tips/tips.html"><strong aria-hidden="true">7.2.</strong> tips</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../tips/enable_shared_from_this.html"><strong aria-hidden="true">7.2.1.</strong> enable_shared_from_this</a></li><li class="chapter-item "><a href="../tips/ip_local_port_range.html"><strong aria-hidden="true">7.2.2.</strong> ip_local_port_range</a></li><li class="chapter-item "><a href="../tips/golang_error.html"><strong aria-hidden="true">7.2.3.</strong> golang error</a></li></ol></li></ol></li><li class="chapter-item "><a href="../infra/overview.html"><strong aria-hidden="true">8.</strong> infrastructure</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../kubernetes/kubernetes.html"><strong aria-hidden="true">8.1.</strong> kubernetes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../kubernetes/scheduler.html"><strong aria-hidden="true">8.1.1.</strong> scheduler</a></li><li class="chapter-item "><a href="../kubernetes/operator.html"><strong aria-hidden="true">8.1.2.</strong> operator</a></li><li class="chapter-item "><a href="../kubernetes/device_plugin.html"><strong aria-hidden="true">8.1.3.</strong> device plugin</a></li><li class="chapter-item "><a href="../kubernetes/docker.html"><strong aria-hidden="true">8.1.4.</strong> docker</a></li><li class="chapter-item "><a href="../kubernetes/install.html"><strong aria-hidden="true">8.1.5.</strong> install</a></li></ol></li><li class="chapter-item "><a href="../nvidia/nvidia.html"><strong aria-hidden="true">8.2.</strong> cuda</a></li><li class="chapter-item "><a href="../infra/ccl.html"><strong aria-hidden="true">8.3.</strong> communication library</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../nvidia/nccl.html"><strong aria-hidden="true">8.3.1.</strong> nccl</a></li><li class="chapter-item "><a href="../somewhat/gloo.html"><strong aria-hidden="true">8.3.2.</strong> gloo</a></li><li class="chapter-item "><a href="../somewhat/mpi.html"><strong aria-hidden="true">8.3.3.</strong> mpi</a></li></ol></li></ol></li><li class="chapter-item "><a href="../notes/index.html"><strong aria-hidden="true">9.</strong> notes</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../notes/influence_and_persuasion.html"><strong aria-hidden="true">9.1.</strong> influence and persuasion</a></li><li class="chapter-item "><a href="../notes/feynman_technique.html"><strong aria-hidden="true">9.2.</strong> freynman technique</a></li><li class="chapter-item "><a href="../notes/wavelet_tour_signal_processing_sparse.html"><strong aria-hidden="true">9.3.</strong> wavelet signal processing</a></li></ol></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -219,7 +248,7 @@ class BertEncoder(nn.Module):
 
                 if use_cache:
                     logger.warning(
-                        &quot;`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...&quot;
+                        "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
                     )
                     use_cache = False
 
@@ -287,7 +316,7 @@ class BertPooler(nn.Module):
         self.activation = nn.Tanh()
 
     def forward(self, hidden_states: torch.Tensor) -&gt; torch.Tensor:
-        # We &quot;pool&quot; the model by simply taking the hidden state corresponding
+        # We "pool" the model by simply taking the hidden state corresponding
         # to the first token.
         first_token_tensor = hidden_states[:, 0]
         pooled_output = self.dense(first_token_tensor)
@@ -298,34 +327,34 @@ class BertPooler(nn.Module):
 
 ```python
 from transformers import BertTokenizer, BertModel
-tokenizer = BertTokenizer.from_pretrained(&quot;bert-base-uncased&quot;)
-model = BertModel.from_pretrained(&quot;bert-base-uncased&quot;)
+tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+model = BertModel.from_pretrained("bert-base-uncased")
 </code></pre>
 <pre><code class="language-python">&gt;&gt;&gt; model.config
 BertConfig {
-  &quot;_name_or_path&quot;: &quot;bert-base-uncased&quot;,
-  &quot;architectures&quot;: [
-    &quot;BertForMaskedLM&quot;
+  "_name_or_path": "bert-base-uncased",
+  "architectures": [
+    "BertForMaskedLM"
   ],
-  &quot;attention_probs_dropout_prob&quot;: 0.1,
-  &quot;classifier_dropout&quot;: null,
-  &quot;gradient_checkpointing&quot;: false,
-  &quot;hidden_act&quot;: &quot;gelu&quot;,
-  &quot;hidden_dropout_prob&quot;: 0.1,
-  &quot;hidden_size&quot;: 768,
-  &quot;initializer_range&quot;: 0.02,
-  &quot;intermediate_size&quot;: 3072,
-  &quot;layer_norm_eps&quot;: 1e-12,
-  &quot;max_position_embeddings&quot;: 512,
-  &quot;model_type&quot;: &quot;bert&quot;,
-  &quot;num_attention_heads&quot;: 12,
-  &quot;num_hidden_layers&quot;: 12,
-  &quot;pad_token_id&quot;: 0,
-  &quot;position_embedding_type&quot;: &quot;absolute&quot;,
-  &quot;transformers_version&quot;: &quot;4.22.2&quot;,
-  &quot;type_vocab_size&quot;: 2,
-  &quot;use_cache&quot;: true,
-  &quot;vocab_size&quot;: 30522
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "gradient_checkpointing": false,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "bert",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "transformers_version": "4.22.2",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 30522
 }
 
 </code></pre>
@@ -423,67 +452,67 @@ BertModel(
 </code></pre>
 <h2 id="t5"><a class="header" href="#t5">T5</a></h2>
 <pre><code class="language-python">from transformers import T5Tokenizer, T5Model
-model = T5Model.from_pretrained(&quot;t5-small&quot;)
+model = T5Model.from_pretrained("t5-small")
 </code></pre>
 <pre><code class="language-python">&gt;&gt;&gt; model.config
 T5Config {
-  &quot;_name_or_path&quot;: &quot;t5-small&quot;,
-  &quot;architectures&quot;: [
-    &quot;T5WithLMHeadModel&quot;
+  "_name_or_path": "t5-small",
+  "architectures": [
+    "T5WithLMHeadModel"
   ],
-  &quot;d_ff&quot;: 2048,
-  &quot;d_kv&quot;: 64,
-  &quot;d_model&quot;: 512,
-  &quot;decoder_start_token_id&quot;: 0,
-  &quot;dense_act_fn&quot;: &quot;relu&quot;,
-  &quot;dropout_rate&quot;: 0.1,
-  &quot;eos_token_id&quot;: 1,
-  &quot;feed_forward_proj&quot;: &quot;relu&quot;,
-  &quot;initializer_factor&quot;: 1.0,
-  &quot;is_encoder_decoder&quot;: true,
-  &quot;is_gated_act&quot;: false,
-  &quot;layer_norm_epsilon&quot;: 1e-06,
-  &quot;model_type&quot;: &quot;t5&quot;,
-  &quot;n_positions&quot;: 512,
-  &quot;num_decoder_layers&quot;: 6,
-  &quot;num_heads&quot;: 8,
-  &quot;num_layers&quot;: 6,
-  &quot;output_past&quot;: true,
-  &quot;pad_token_id&quot;: 0,
-  &quot;relative_attention_max_distance&quot;: 128,
-  &quot;relative_attention_num_buckets&quot;: 32,
-  &quot;task_specific_params&quot;: {
-    &quot;summarization&quot;: {
-      &quot;early_stopping&quot;: true,
-      &quot;length_penalty&quot;: 2.0,
-      &quot;max_length&quot;: 200,
-      &quot;min_length&quot;: 30,
-      &quot;no_repeat_ngram_size&quot;: 3,
-      &quot;num_beams&quot;: 4,
-      &quot;prefix&quot;: &quot;summarize: &quot;
+  "d_ff": 2048,
+  "d_kv": 64,
+  "d_model": 512,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 6,
+  "num_heads": 8,
+  "num_layers": 6,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
     },
-    &quot;translation_en_to_de&quot;: {
-      &quot;early_stopping&quot;: true,
-      &quot;max_length&quot;: 300,
-      &quot;num_beams&quot;: 4,
-      &quot;prefix&quot;: &quot;translate English to German: &quot;
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
     },
-    &quot;translation_en_to_fr&quot;: {
-      &quot;early_stopping&quot;: true,
-      &quot;max_length&quot;: 300,
-      &quot;num_beams&quot;: 4,
-      &quot;prefix&quot;: &quot;translate English to French: &quot;
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
     },
-    &quot;translation_en_to_ro&quot;: {
-      &quot;early_stopping&quot;: true,
-      &quot;max_length&quot;: 300,
-      &quot;num_beams&quot;: 4,
-      &quot;prefix&quot;: &quot;translate English to Romanian: &quot;
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
     }
   },
-  &quot;transformers_version&quot;: &quot;4.22.2&quot;,
-  &quot;use_cache&quot;: true,
-  &quot;vocab_size&quot;: 32128
+  "transformers_version": "4.22.2",
+  "use_cache": true,
+  "vocab_size": 32128
 }
 </code></pre>
 <pre><code class="language-python">&gt;&gt;&gt; model.eval()
@@ -625,7 +654,7 @@ T5Model(
   )
 )
 </code></pre>
-<pre><code class="language-python">model = T5ForConditionalGeneration.from_pretrained(&quot;t5-small&quot;)
+<pre><code class="language-python">model = T5ForConditionalGeneration.from_pretrained("t5-small")
 &gt;&gt;&gt; model.config
 # same as T5Model
 &gt;&gt;&gt; model.eval()
@@ -635,40 +664,40 @@ T5ForConditionalGeneration(
 )
 </code></pre>
 <h2 id="gpt"><a class="header" href="#gpt">GPT</a></h2>
-<pre><code class="language-python">model = OpenAIGPTModel.from_pretrained(&quot;openai-gpt&quot;)
+<pre><code class="language-python">model = OpenAIGPTModel.from_pretrained("openai-gpt")
 &gt;&gt;&gt; model.config
 OpenAIGPTConfig {
-  &quot;_name_or_path&quot;: &quot;openai-gpt&quot;,
-  &quot;afn&quot;: &quot;gelu&quot;,
-  &quot;architectures&quot;: [
-    &quot;OpenAIGPTLMHeadModel&quot;
+  "_name_or_path": "openai-gpt",
+  "afn": "gelu",
+  "architectures": [
+    "OpenAIGPTLMHeadModel"
   ],
-  &quot;attn_pdrop&quot;: 0.1,
-  &quot;embd_pdrop&quot;: 0.1,
-  &quot;initializer_range&quot;: 0.02,
-  &quot;layer_norm_epsilon&quot;: 1e-05,
-  &quot;model_type&quot;: &quot;openai-gpt&quot;,
-  &quot;n_ctx&quot;: 512,
-  &quot;n_embd&quot;: 768,
-  &quot;n_head&quot;: 12,
-  &quot;n_layer&quot;: 12,
-  &quot;n_positions&quot;: 512,
-  &quot;n_special&quot;: 0,
-  &quot;predict_special_tokens&quot;: true,
-  &quot;resid_pdrop&quot;: 0.1,
-  &quot;summary_activation&quot;: null,
-  &quot;summary_first_dropout&quot;: 0.1,
-  &quot;summary_proj_to_labels&quot;: true,
-  &quot;summary_type&quot;: &quot;cls_index&quot;,
-  &quot;summary_use_proj&quot;: true,
-  &quot;task_specific_params&quot;: {
-    &quot;text-generation&quot;: {
-      &quot;do_sample&quot;: true,
-      &quot;max_length&quot;: 50
+  "attn_pdrop": 0.1,
+  "embd_pdrop": 0.1,
+  "initializer_range": 0.02,
+  "layer_norm_epsilon": 1e-05,
+  "model_type": "openai-gpt",
+  "n_ctx": 512,
+  "n_embd": 768,
+  "n_head": 12,
+  "n_layer": 12,
+  "n_positions": 512,
+  "n_special": 0,
+  "predict_special_tokens": true,
+  "resid_pdrop": 0.1,
+  "summary_activation": null,
+  "summary_first_dropout": 0.1,
+  "summary_proj_to_labels": true,
+  "summary_type": "cls_index",
+  "summary_use_proj": true,
+  "task_specific_params": {
+    "text-generation": {
+      "do_sample": true,
+      "max_length": 50
     }
   },
-  &quot;transformers_version&quot;: &quot;4.22.2&quot;,
-  &quot;vocab_size&quot;: 40478
+  "transformers_version": "4.22.2",
+  "vocab_size": 40478
 }
 </code></pre>
 <pre><code>OpenAIGPTModel(
@@ -730,7 +759,7 @@ OpenAIGPTConfig {
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../nlp/models.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../nlp/models.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -744,7 +773,7 @@ OpenAIGPTConfig {
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../nlp/models.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../nlp/models.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
