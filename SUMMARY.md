@@ -2,7 +2,8 @@
 
 - [welcome](README.md)
 
-- [chronicles](chronicles/chronicles.md)
+- [chronicles](chronicles/2024mar.md)
+  - [feb 2024](chronicles/2024feb.md)
 
 - [survey](survey/papers.md)
   - [pollux](survey/pollux.md)

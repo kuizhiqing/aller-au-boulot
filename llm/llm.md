@@ -31,7 +31,11 @@ Affiliation | Model | Size | Base
 
 * llama2.c[https://github.com/karpathy/llama2.c](https://github.com/karpathy/llama2.c)
 * llama.cpp[https://github.com/ggerganov/llama.cpp](https://github.com/ggerganov/llama.cpp)
+* [ggml](https://github.com/ggerganov/ggml)
+* [llama-cpp-python](https://github.com/abetlen/llama-cpp-python)
 
+* [whisper](https://github.com/openai/whisper)
+* [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
 
 ## Tech
 
