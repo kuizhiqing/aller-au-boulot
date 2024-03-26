@@ -1,5 +1,9 @@
 # github
 
+## LocalAI
+
+[LocalAI](https://github.com/mudler/LocalAI)
+
 ## AI
 
 [leptonai](https://github.com/leptonai/leptonai)
@@ -47,5 +51,4 @@ Methods:
 * Prefix Tuning: P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning Universally Across Scales and Tasks
 * Prompt Tuning: The Power of Scale for Parameter-Efficient Prompt Tuning
 * P-Tuning: GPT Understands, Too
-
 

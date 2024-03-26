@@ -47,7 +47,7 @@
     - [transformer](nlp/transformer.md)
     - [models](nlp/models.md)
   - [peft](llm/peft.md)
-  - [trends](somewhat/github.md)
+  - [github](llm/github.md)
 
 - [frameworks](frameworks/overview.md)
   - [megatron](megatron/megatron.md)
