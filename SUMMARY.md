@@ -5,6 +5,10 @@
 - [chronicles](chronicles/2024mar.md)
   - [feb 2024](chronicles/2024feb.md)
 
+- [projects](projects/projects.md)
+  - [copilot](projects/copilot.md)
+  - [library](projects/library.md)
+
 - [survey](survey/papers.md)
   - [pollux](survey/pollux.md)
   - [adasum](survey/adasum.md)
@@ -95,12 +99,17 @@
 
 
 - [infrastructure](infra/overview.md)
+  - [pki](pki/pki.md)
+  - [linux](infra/linux.md)
+    - [cache](infra/cache.md)
   - [kubernetes](kubernetes/kubernetes.md)
+    - [concepts](kubernetes/concepts.md)
     - [scheduler](kubernetes/scheduler.md)
     - [operator](kubernetes/operator.md)
     - [device plugin](kubernetes/device_plugin.md)
     - [docker](kubernetes/docker.md)
     - [install](kubernetes/install.md)
+    - [api-service](kubernetes/api_service.md)
   - [cuda](nvidia/nvidia.md)
   - [communication library](infra/ccl.md)
     - [nccl](nvidia/nccl.md)
