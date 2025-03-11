@@ -7,12 +7,15 @@ title = "Aller au boulot"
 description = "Projects excelling"
 
 [preprocessor.katex]
+[preprocessor.index]
 
 [output.html]
 no-section-label = false
 git-repository-url = "https://github.com/kuizhiqing/aller-au-boulot"
 site-url = "/"
 cname = "excel.kuizhiqing.cn"
+additional-css = ["./theme/catppuccin.css"]
+default-theme = "latte"
 
 [output.html.playground]
 editable = false
@@ -28,3 +31,4 @@ level = 0
 
 [output.html.redirect]
 
+[preprocessor.theme]

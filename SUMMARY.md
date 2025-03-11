@@ -2,12 +2,16 @@
 
 - [welcome](README.md)
 
+- [vllm](vllm/overview.md)
+  - [architecture](vllm/architecture.md)
+
 - [chronicles](chronicles/2024mar.md)
   - [feb 2024](chronicles/2024feb.md)
 
 - [projects](projects/projects.md)
   - [copilot](projects/copilot.md)
   - [library](projects/library.md)
+  - [RAG](projects/rag.md)
 
 - [survey](survey/papers.md)
   - [pollux](survey/pollux.md)
@@ -109,6 +113,7 @@
   - [docker](kubernetes/docker.md)
   - [install](kubernetes/install.md)
   - [api-service](kubernetes/api_service.md)
+  - [controller](kubernetes/controller.md)
 
 - [nccl](nccl/nccl.md)
 
