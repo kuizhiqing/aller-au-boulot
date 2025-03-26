@@ -5,6 +5,8 @@
 - [vllm](vllm/overview.md)
   - [architecture](vllm/architecture.md)
 
+- [llama](somewhat/llama.md)
+
 - [chronicles](chronicles/2024mar.md)
   - [feb 2024](chronicles/2024feb.md)
 
