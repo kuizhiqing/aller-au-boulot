@@ -1,15 +1,72 @@
 # architecture
 
-
 ## online serving
 
-服务启动命令
+**TL;DR;**
+
+* 使用 vllm serve 命令启动 FastAPI/HTTP 模型服务，支持 OpenAI 协议访问；
+* 本质上创建了 AsyncLLMEngine，当访问 `/v1/chat/completions` 接口时，会调用 `engine.generate` 方法；
+
+使用命令
 
 ```bash
 vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
 ```
 
-命令在 `pyproject.toml` 中定义
+可以在本地启动一个基于 `DeepSeek-R1-Distill-Qwen-7B` 的模型服务。
+
+服务的默认端口是 8000，采用 [OpenAI 的协议](https://platform.openai.com/docs/api-reference/chat/create)
+格式，可以使用 http 或 [openai sdk]() 等方式访问。
+
+**curl 访问**
+
+```python
+curl https://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer EMPTY" \
+  -d '{
+    "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant."
+      },
+      {
+        "role": "user",
+        "content": "Hello!"
+      }
+    ]
+  }'
+```
+
+**openai sdk 访问**
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="EMPTY",
+    base_url="http://localhost:8000/v1",
+)
+
+chat_completion = client.chat.completions.create(
+    messages=[{
+        "role": "system",
+        "content": "You are a helpful assistant."
+    }, {
+        "role": "user",
+        "content": "Hello!"
+    }],
+    model="deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+)
+
+print("Chat completion results:")
+print(chat_completion)
+```
+
+**entrypoint**
+
+`vllm` 命令在安装 vllm 时被安装，在 `pyproject.toml` 中定义
 
 ```toml
 [project.scripts]
@@ -96,6 +153,7 @@ async def serve_http(app: FastAPI, sock: Optional[socket.socket], **uvicorn_kwar
 python3 -m vllm.entrypoints.openai.api_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
 ```
 
+**请求链路**
 
 ```python
 # vllm/entrypoints/openai/api_server.py
@@ -144,12 +202,7 @@ class OpenAIServingChat(OpenAIServing):
 
         result_generator, = generators
 
-        if request.stream:
-            return self.chat_completion_stream_generator(
-                request, result_generator, request_id, model_name,
-                conversation, tokenizer, request_metadata)
-
-        return await self.chat_completion_full_generator(
+        return await self.chat_completion_full_generator( # chat_completion_stream_generator
             request, result_generator, request_id, model_name,
             conversation, tokenizer, request_metadata)
 
@@ -176,25 +229,10 @@ class OpenAIServingChat(OpenAIServing):
         )
 
         return response
-
-    def _create_chat_logprobs(self, token_ids,) -> ChatCompletionLogProbs:
-        for i, token_id in enumerate(token_ids):
-            step_top_logprobs = top_logprobs[i]
-            token = tokenizer.decode(token_id)
-            logprobs_content.append(ChatCompletionLogProbsContent(token=token,))
-
-        return ChatCompletionLogProbs(content=logprobs_content)
-
 ```
 
-> generate 返回的 generator 中的 `output.text` 是已经经过 tokenizer decode 的。
-
-`create_chat_completion` 的主要逻辑是调用 engine 的 `generate` 方法，生成结果，
-其中 prompt 由 `OpenAIServing._preprocess_chat` 进行预处理，包括 template 化和 tokenization. 
-
-注意 `request_prompt -> prompt_inputs -> engine_prompt` 的过程，engine_prompt 中包含了完整 prompt 信息。
-
-最后根据是否 stream 请求，chat_completion_stream_generator 和 chat_completion_full_generator 返回不同的结果。
+可以看到 `create_chat_completion` 的主要逻辑是调用 engine 的 `generate` 方法，生成结果，
+`prompt` 由 `OpenAIServing._preprocess_chat` 进行预处理，包括 template 化和 tokenization。
 
 ```python
 # vllm/entrypoints/openai/serving_engine.py
@@ -213,10 +251,31 @@ class OpenAIServing:
         return conversation, [request_prompt], [engine_prompt]
 ```
 
-https://platform.openai.com/docs/api-reference/chat/create
+注意 `request_prompt -> prompt_inputs -> engine_prompt` 的过程，engine_prompt 中包含了完整 prompt 信息。
+
+
+函数 `generate` 调用的 3 个参数
+
+* prompt : 未 tokenized 的格式化输入；
+* sampling_params : 采样参数，包括 temperature, top_p, top_k 等；
+* request_id : 请求 id，用于区分不同请求。
+
+注意到
+
+* 生成的文本位于 `response.choices.message.content` 中。
+* generate 返回的 generator 中的 `output.text` 是已经经过 tokenizer decode 的。
+
+根据是否 stream 请求，调用 chat_completion_stream_generator 和 chat_completion_full_generator 返回不同的结果。
+
+
+推理实现的核心逻辑 `engine.generate` 将在 Engine 部分分析。
 
 
 ## offline inference
+
+与 serving 模式不同，离线推理模式直接在程序内加载模型通过函数调用的方式得到推理结果。
+
+**demo**
 
 ```python
 from vllm import LLM
@@ -226,7 +285,12 @@ prompts = "Hello, my name is"
 llm = LLM(model="facebook/opt-125m")
 
 outputs = llm.generate(prompts)
+
+for output in outputs:
+    generated_text = output.outputs[0].text
 ```
+
+从 demo 中可以看出流程为使用 `LLM` 类，调用 `generate` 方法，得到结果。
 
 ```python
 # vllm/__init__.py
@@ -234,7 +298,8 @@ outputs = llm.generate(prompts)
 from vllm.entrypoints.llm import LLM
 ```  
 
-LLM
+与在线不同，离线使用的 `LLM` 类是对应的是同步 `LLMEngine`, 也即在线 serving 通常使用异步模式，离线 inference 模式通常使用同步模式。
+
 
 ```python
 # vllm/entrypoints/llm.py
@@ -254,22 +319,36 @@ class LLM:
             return V1LLMEngine
         return LLMEngine
 
-    def get_tokenizer(self) -> AnyTokenizer:
-        return self.llm_engine.get_tokenizer_group(TokenizerGroup).tokenizer
-
     @overload
     def generate(self, prompts, sampling_params):
+        self._validate_and_add_requests(prompts=parsed_prompts, params=sampling_params,...)
         outputs = self._run_engine(use_tqdm=use_tqdm)
         return self.engine_class.validate_outputs(outputs, RequestOutput)
 
-    def collective_rpc(self, ...):
-        executor = self.llm_engine.model_executor
-        return executor.collective_rpc(method, timeout, args, kwargs)
+    def _validate_and_add_requests(self, prompts, ...):
+        for i, prompt in enumerate(prompts):
+            self._add_request(prompt, ...)
 
-    def apply_model(self, func: Callable[[nn.Module], _R]) -> list[_R]:
-        executor = self.llm_engine.model_executor
-        return executor.apply_model(func)
+    def _add_request(self, prompt, ...):
+        self.llm_engine.add_request( request_id, prompt, params, ...)
+
+    def _run_engine(self, *, use_tqdm: bool) -> List[Union[RequestOutput, PoolingRequestOutput]]:
+        while self.llm_engine.has_unfinished_requests():
+            step_outputs = self.llm_engine.step()
+            for output in step_outputs:
+                if output.finished:
+                    outputs.append(output)
+
+        return sorted(outputs, key=lambda x: int(x.request_id))
 ```
+
+总结 LLM 的流程为，
+
+1. 初始化时创建 `LLMEngine` 实例;
+2. 调用 `generate` 时首先调用 `engine.add_request` 方法添加请求;
+3. 再调用 `engine.step` 方法执行请求，获取推理结果；
+
+具体如何获取推理结果，需要看 `LLMEngine` 的实现。
 
 ## Engine
 
@@ -356,7 +435,7 @@ class AsyncLLM(EngineClient):
         return queue
 ```
 
-generate() 调用
+分析 `generate()` 调用流程
 
 ```
 engine_core.get_output_async()
@@ -368,9 +447,9 @@ output_processor.add_request()
 engine_core.add_request_async()
 ```
 
-AsyncLLM 是一个异步的 LLM，系统的核心组件，它的初始化过程启动了主要组件：
+AsyncLLM (V1 版本的 AsyncLLMEngine) 是一个异步的 LLM，系统的核心组件，它的初始化过程启动了主要组件：
 
-* EngineCoreClient + Executor [ref](#executor)
+* EngineCoreClient + Executor
 * Processor + Tokenizer
 * OutputProcessor + Tokenizer
 
@@ -1074,3 +1153,7 @@ class WorkerWrapperBase:
 
     def execute_method(self, method: Union[str, bytes], *args, **kwargs):
         return run_method(target, method, args, kwargs)
+
+## Reference
+
+* https://platform.openai.com/docs/api-reference/chat/create
