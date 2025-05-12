@@ -536,6 +536,12 @@ class AsyncLLM(EngineClient):
 
         return queue
 </code></pre>
+<p>AsyncLLM (V1 版本的 AsyncLLMEngine) 是一个异步的 LLM，系统的核心组件，它的初始化过程启动了主要组件：</p>
+<ul>
+<li>EngineCoreClient + Executor</li>
+<li>Processor + Tokenizer</li>
+<li>OutputProcessor + Tokenizer</li>
+</ul>
 <p>分析 <code>generate()</code> 调用流程</p>
 <pre><code>engine_core.get_output_async()
 output_processor.process_outputs()
@@ -545,12 +551,6 @@ processor.process_inputs()
 output_processor.add_request()
 engine_core.add_request_async()
 </code></pre>
-<p>AsyncLLM (V1 版本的 AsyncLLMEngine) 是一个异步的 LLM，系统的核心组件，它的初始化过程启动了主要组件：</p>
-<ul>
-<li>EngineCoreClient + Executor</li>
-<li>Processor + Tokenizer</li>
-<li>OutputProcessor + Tokenizer</li>
-</ul>
 <pre><code>"""
 Main function called by the API server to kick off a request
     * 1) Making an AsyncStream corresponding to the Request.
@@ -1201,6 +1201,7 @@ class WorkerWrapperBase:
 ## Reference
 
 * https://platform.openai.com/docs/api-reference/chat/create
+* https://blog.vllm.ai/2025/01/27/v1-alpha-release.html
 </code></pre>
 
                     </main>

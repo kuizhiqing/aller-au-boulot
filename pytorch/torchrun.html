@@ -166,6 +166,747 @@
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="torchrun"><a class="header" href="#torchrun">torchrun</a></h1>
+<blockquote>
+<p>本文使用代码版本 commit: 0da8127f77f9bf05ba204ea7659cb15ec85e88a7</p>
+</blockquote>
+<p>PyTorch 提供了原生的分布式启动命令 <code>torchrun</code>，可以用于启动分布式训练任务。
+例如通过以下命令可以启动一个 2 节点的分布式训练任务，该命令需要在所有 2 个节点上执行。</p>
+<pre><code class="language-bash">torchrun 
+    --nnodes=2 
+    --nproc-per-node=8 
+    --rdzv-endpoint=123.45.67.89:36123 
+    --rdzv-backend=c10d
+    demo.py
+</code></pre>
+<p>根据环境变量转换规则，<a href="https://github.com/pytorch/pytorch/blob/main/torch/distributed/argparse_util.py#L13-L58">env action</a>， 上述启动命令等价于以下命令：</p>
+<pre><code class="language-bash">export PET_NPROC_PER_NODE=8
+export PET_NNODES=2
+export PET_RDZV_ENDPOINT=123.45.67.89:36123
+export PET_RDZV_BACKEND=c10d
+
+torchrun demo.py
+</code></pre>
+<p>其中 demo.py 可以是如下的可以用于测试完整流程的 allreduce 例子.</p>
+<pre><code class="language-python"># demo.py
+
+import torch
+torch.distributed.init_process_group(backend="nccl", init_method="env://")
+rank = torch.distributed.get_rank()
+torch.cuda.set_device(rank % torch.cuda.device_count())
+world_size = torch.distributed.get_world_size()
+print(f"rank {rank} world_size {world_size}")
+a = torch.tensor([1]).cuda()
+torch.distributed.all_reduce(a)
+print(f"rank {rank} world_size {world_size} {a}")
+torch.distributed.barrier()
+print(f"rank {rank} world_size {world_size}")
+</code></pre>
+<p>在无 GPU 的环境下可以使用以下 demo 进行测试</p>
+<pre><code class="language-python">import torch
+torch.distributed.init_process_group(backend="gloo", init_method="env://")
+rank = torch.distributed.get_rank()
+world_size = torch.distributed.get_world_size()
+print(f"rank {rank} world_size {world_size}")
+a = torch.tensor([1])
+torch.distributed.all_reduce(a)
+print(f"rank {rank} world_size {world_size} {a}")
+torch.distributed.barrier()
+print(f"rank {rank} world_size {world_size}")
+</code></pre>
+<p>下面分析启动的细节流程。</p>
+<h2 id="run"><a class="header" href="#run">run</a></h2>
+<p>根据 <code>setup.py</code> 可以看出 <code>torchrun</code> 对应的启动函数</p>
+<pre><code class="language-python"># setup.py
+
+def configure_extension_build():
+    entry_points = {
+        "console_scripts": [
+            "torchrun = torch.distributed.run:main",
+        ],
+    }
+</code></pre>
+<p>在 pytorch 1.9.0 版本后引入 <code>torch.distributed.run</code> 模块取代 <code>torch.distributed.launch</code> 启动分布式任务并支持弹性容错能力。</p>
+<pre><code class="language-python"># torch/distributed/run.py
+
+from torch.distributed.launcher.api import elastic_launch
+
+def run(args):
+    config, cmd, cmd_args = config_from_args(args)
+    elastic_launch(config=config, entrypoint=cmd,)(*cmd_args)
+
+@record
+def main(args=None):
+    args = parse_args(args)
+    run(args)
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+<p>可以看到实际执行的是伪装成函数的 <code>elastic_launch</code> 类</p>
+<pre><code class="language-python"># torch/distributed/launcher/api.py
+
+class elastic_launch:
+    def __init__(self, config: LaunchConfig, entrypoint: Union[Callable, str, None],):
+        self._config = config
+        self._entrypoint = entrypoint
+
+    def __call__(self, *args):
+        return launch_agent(self._config, self._entrypoint, list(args))
+
+def launch_agent(config: LaunchConfig, entrypoint: Union[Callable, str, None], args: list[Any],):
+    rdzv_parameters = RendezvousParameters(
+        backend=config.rdzv_backend,
+        endpoint=config.rdzv_endpoint,
+        run_id=config.run_id,
+        min_nodes=config.min_nodes,
+        max_nodes=config.max_nodes,
+        local_addr=config.local_addr,
+        **config.rdzv_configs,
+    )
+
+    master_addr, master_port = _get_addr_and_port(rdzv_parameters)
+
+    spec = WorkerSpec(
+        role=config.role,
+        local_world_size=config.nproc_per_node,
+        entrypoint=entrypoint,
+        args=tuple(args),
+        rdzv_handler=rdzv_registry.get_rendezvous_handler(rdzv_parameters),
+        master_addr=master_addr,
+        master_port=master_port,
+    )
+
+    agent = LocalElasticAgent(spec=spec, ...)
+
+    try:
+        result = agent.run()
+        return result.return_values
+
+def _get_addr_and_port(rdzv_parameters: RendezvousParameters,) -&gt; tuple[Optional[str], Optional[int]]:
+    if rdzv_parameters.backend != "static":
+        return (None, None)
+
+    endpoint = rdzv_parameters.endpoint
+    endpoint = endpoint.strip()
+    master_addr, master_port = parse_rendezvous_endpoint(endpoint, default_port=-1)
+    return (master_addr, master_port)
+</code></pre>
+<p><code>elastic_launch</code> 通过 <code>launch_agent</code> 实现了主要的启动流程。</p>
+<ul>
+<li>通过启动参数定义 <strong>rendezvous</strong>, 用于节点间的协同模块</li>
+<li>定义进程 <strong>worker</strong> 的描述信息 WorkerSpec，一个 worker 对应一个进程，一般对应一个 GPU</li>
+<li>定义并启动 <strong>agent</strong>, LocalElasticAgent 在每个分布式节点上启动，管理节点上的多个 worker 进程</li>
+</ul>
+<p>注意到：</p>
+<ul>
+<li>当 rendezvous backend 为 <code>static</code> 时，worker 中的 <code>master_addr</code> 和 <code>master_port</code> 为 <code>None</code>， 否则比如为 c10d 时，<code>master_addr</code> 和 <code>master_port</code> 为 endpoint 中的 ip 和 port.</li>
+<li>根据 <code>rendezvous backend</code> 参数会从 <code>rdzv_registry</code> 中选择对应的 <code>rendezvous handler</code>，比如 <code>etcd</code>，<code>c10d</code> 等，不同的 handler 采用不同的方式实现 rendezvous 即分布式节点间如何协同.</li>
+</ul>
+<h2 id="worker"><a class="header" href="#worker">worker</a></h2>
+<p>这里的 worker 并没有被封装成 process 的抽象， 所以 worker 部分相对比较简单。
+WorkerSpec/Worker 都只是包含了 worker 的描述信息，WorkerGroup 包含 worker 的集合信息。</p>
+<pre><code class="language-python"># torch/distributed/elastic/agent/server/api.py
+
+@dataclass
+class WorkerSpec:
+    role: str
+    local_world_size: int
+    rdzv_handler: rdzv.RendezvousHandler
+    fn: Optional[Callable] = None
+    entrypoint: Union[Callable, str, None] = None
+    args: tuple = ()
+    max_restarts: int = 3
+    monitor_interval: float = 0.1
+    master_port: Optional[int] = None
+    master_addr: Optional[str] = None
+    local_addr: Optional[str] = None
+
+class Worker:
+    def __init__(
+        self,
+        local_rank: int,
+        global_rank: int = -1,
+        role_rank: int = -1,
+        world_size: int = -1,
+        role_world_size: int = -1,
+    ):
+        self.id: Any = None
+        self.local_rank: int = local_rank
+        self.global_rank: int = global_rank
+        self.role_rank: int = role_rank
+        self.world_size: int = world_size
+        self.role_world_size: int = role_world_size
+
+class WorkerGroup:
+    def __init__(self, spec: WorkerSpec):
+        self.spec = spec
+        self.workers = [Worker(local_rank=i) for i in range(self.spec.local_world_size)]
+
+        self.master_addr = None
+        self.master_port = None
+        self.state = WorkerState.INIT
+</code></pre>
+<h2 id="rendezvous"><a class="header" href="#rendezvous">rendezvous</a></h2>
+<p><code>rendezvous</code>, 法语词，字面意思的约会，读音“夯dēi勿”， 用于分布式节点间协同，简单说就是节点间如何找到彼此，协商各自的 rank 等信息。</p>
+<pre><code class="language-python"># torch/distributed/elastic/rendezvous/__init__.py
+
+from .registry import _register_default_handlers
+
+_register_default_handlers()
+</code></pre>
+<p>可用的 rendezvous backend 是静态定义的，当前版本支持：<code>etcd</code>, <code>etcd-v2</code>, <code>c10d</code>, <code>static</code>，初始化化时注册到 <code>handler_registry</code> 中，通过 <code>rdzv_registry.get_rendezvous_handler</code> 获取对应的 handler.</p>
+<pre><code class="language-python"># torch/distributed/elastic/rendezvous/registry.py
+
+def _register_default_handlers() -&gt; None:
+    handler_registry.register("etcd", _create_etcd_handler)
+    handler_registry.register("etcd-v2", _create_etcd_v2_handler)
+    handler_registry.register("c10d", _create_c10d_handler)
+    handler_registry.register("static", _create_static_handler)
+
+def _create_static_handler(params: RendezvousParameters) -&gt; RendezvousHandler:
+    from . import static_tcp_rendezvous
+
+    return static_tcp_rendezvous.create_rdzv_handler(params)
+
+def _create_c10d_handler(params: RendezvousParameters) -&gt; RendezvousHandler:
+    from .c10d_rendezvous_backend import create_backend
+
+    backend, store = create_backend(params)
+
+    return create_handler(store, backend, params)
+</code></pre>
+<p>这里主要看 <code>c10d</code> 的实现，<code>c10d</code> 的 tcp 版本通过 <code>TCPStore</code> 实现了 rendezvous，<code>TCPStore</code> 就是 pytorch 中重要的 kv 存储实现，在 <code>init_process_group</code> 等多个场景中都有使用。</p>
+<pre><code class="language-python"># torch/distributed/elastic/rendezvous/c10d_rendezvous_backend.py
+
+def create_backend(params: RendezvousParameters) -&gt; tuple[C10dRendezvousBackend, Store]:
+    if store_type == "file":
+        store = _create_file_store(params)
+    elif store_type == "tcp":
+        store = _create_tcp_store(params)
+    backend = C10dRendezvousBackend(store, params.run_id)
+
+    return backend, store
+
+def _create_tcp_store(params: RendezvousParameters) -&gt; TCPStore:
+    host, port = parse_rendezvous_endpoint(params.endpoint, default_port=DEFAULT_PORT)
+
+    store = TCPStore(
+        host,
+        port,
+        is_master=is_server,
+        multi_tenant=True,
+        timeout=timedelta(seconds=read_timeout),
+    )
+
+    return store
+</code></pre>
+<p>划重点：用户参数中传递的 endpoint 对应的 host 和 port 会启动 <code>TCPStore</code> 服务端。</p>
+<p>区别于 <code>static</code> backend, 使用 <code>c10d</code> 创建的 <code>rendezvous</code> 是动态 <code>DynamicRendezvousHandler</code>, 可以想见，它支持动态地进行节点协同，即在完成首次 rendezvous 后，可以动态的添加节点，删除节点，重新同步节点间的信息。</p>
+<pre><code class="language-python"># torch/distributed/elastic/rendezvous/dynamic_rendezvous.py
+
+def create_handler(store: Store, backend: RendezvousBackend, params: RendezvousParameters) -&gt; DynamicRendezvousHandler:
+    return DynamicRendezvousHandler.from_backend(...)
+
+class DynamicRendezvousHandler(RendezvousHandler):
+    _node_desc_generator = _NodeDescGenerator()
+
+    @classmethod
+    def from_backend(...):
+        node = cls._node_desc_generator.generate(local_addr)
+
+        return cls(node, settings, backend.name, store, state_holder)
+
+    def __init__(...):
+        self._this_node = node
+        self._bootstrap_store_info: Optional[RendezvousStoreInfo] = None
+
+    def next_rendezvous(self) -&gt; RendezvousInfo:
+        try:
+            rank, world_size = self._get_world()
+            store = self._get_store()
+
+        if os.getenv("TORCH_DISABLE_SHARE_RDZV_TCP_STORE", "0") == "1":
+            bootstrap_store_info = RendezvousStoreInfo.build(
+                rank, store, local_addr=self._this_node.addr
+            )
+            return RendezvousInfo(
+                store,
+                rank,
+                world_size,
+                bootstrap_store_info,
+            )
+
+        # This will only be hit when TCPStore sharing is enabled.
+        if self._bootstrap_store_info is None:
+            server_port = 0
+            if rank == 0:
+                self._shared_tcp_store_server = self._create_tcp_store_server(
+                    self._this_node.addr, server_port
+                )
+                server_port = self._shared_tcp_store_server.port
+            self._bootstrap_store_info = RendezvousStoreInfo.build(
+                rank,
+                store,
+                local_addr=self._this_node.addr,
+                server_port=server_port,  # For non-0 rank, this is a no-op
+            )
+
+        return RendezvousInfo(
+            store,
+            rank,
+            world_size,
+            self._bootstrap_store_info,  # type: ignore[assignment]
+        )
+
+class _NodeDescGenerator:
+    def generate(self, local_addr: Optional[str] = None) -&gt; _NodeDesc:
+        return _NodeDesc(local_addr or socket.getfqdn(), os.getpid(), local_id)
+
+</code></pre>
+<p>可以看到 <code>rendezvous</code> 的结果通过 <code>RendezvousInfo</code> 进行了封装，其中包含了 <code>rank</code> 和 <code>world_size</code> 信息。</p>
+<p>其中 RendezvousInfo 包含两个 TCPStore：</p>
+<ul>
+<li><code>store</code> 是使用参数 rdzv endpoint 创建的 TCPStore;</li>
+<li><code>_bootstrap_store_info</code> 中 master 存储了通过 store 交换回来的 addr 为 rank-0 地址，port 为 _create_tcp_store_server 创建的新的 TCPStore 的端口；</li>
+</ul>
+<pre><code class="language-python"># torch/distributed/elastic/rendezvous/api.py
+
+@dataclass
+class RendezvousStoreInfo:
+
+    @staticmethod
+    def build(
+        rank: int,
+        store: Store,
+        local_addr: Optional[str],
+        server_port: Optional[int] = None,
+    ) -&gt; "RendezvousStoreInfo":
+        if rank == 0:
+            addr = local_addr or socket.getfqdn()
+            port = server_port or get_free_port()
+            store.set(
+                RendezvousStoreInfo.MASTER_ADDR_KEY,
+                addr.encode(encoding="UTF-8"),  # type: ignore[arg-type]
+            )
+            store.set(
+                RendezvousStoreInfo.MASTER_PORT_KEY,
+                str(port).encode(encoding="UTF-8"),  # type: ignore[arg-type]
+            )
+
+        addr = store.get(RendezvousStoreInfo.MASTER_ADDR_KEY).decode(encoding="UTF-8")
+        port = int(
+            store.get(RendezvousStoreInfo.MASTER_PORT_KEY).decode(encoding="UTF-8")
+        )
+        return RendezvousStoreInfo(master_addr=addr, master_port=port)
+</code></pre>
+<ul>
+<li>rank 为 0 的 “主节点” 会将自己的地址和端口信息存储到 <code>store</code> 中，所有节点会从 <code>store</code> 中获取新的 master 地址和端口信息即 rank 0 的信息存储在 RendezvousStoreInfo 中并返回；</li>
+<li>每次执行都可能更新信息，每次调用 <code>next_rendezvous</code> 都会返回新的 <code>RendezvousInfo</code>，返回新的 <code>master</code> 地址和端口;</li>
+<li>在弹性容错逻辑中，<code>_restart_workers</code> 会通过 <code>_initialize_workers</code> 调用 <code>_rendezvous</code> 来重新刷新 rank 等信息，RendezvousInfo 中的 master_addr/master_port 信息将会被使用；</li>
+</ul>
+<h2 id="agent"><a class="header" href="#agent">agent</a></h2>
+<p>从上述启动流程可以看到，agent 是启动的核心，<code>rendezvous</code> 和 <code>worker</code> 的定义都是传递给 agent，然后调用 agent 的 <code>run</code> 方法启动，这是一个阻塞函数，它代表了节点的生命周期，也即 torchrun 进程可以等同于 agent 进程。</p>
+<p><code>LocalElasticAgent</code> 中的 <code>run</code> 函数在父类 <code>SimpleElasticAgent</code> 中实现,</p>
+<pre><code class="language-python"># torch/distributed/elastic/agent/server/api.py 
+
+class SimpleElasticAgent(ElasticAgent):
+    def __init__(self, spec: WorkerSpec, exit_barrier_timeout: float = 300):
+        self._worker_group = WorkerGroup(spec)
+
+    def _rendezvous(self, worker_group: WorkerGroup) -&gt; None:
+        spec = worker_group.spec
+
+        rdzv_info = spec.rdzv_handler.next_rendezvous()
+        store = rdzv_info.store
+        group_rank = rdzv_info.rank
+        group_world_size = rdzv_info.world_size
+
+        master_addr = spec.master_addr or rdzv_info.bootstrap_store_info.master_addr
+        master_port = spec.master_port or rdzv_info.bootstrap_store_info.master_port
+
+        self._store = store
+
+        workers = self._assign_worker_ranks(
+            store, group_rank, group_world_size, spec
+        )
+        worker_group.workers = workers
+        worker_group.store = store
+        worker_group.group_rank = group_rank
+        worker_group.group_world_size = group_world_size
+        worker_group.master_addr = master_addr
+        worker_group.master_port = master_port
+
+
+    def _assign_worker_ranks(
+        self, store, group_rank: int, group_world_size: int, spec: WorkerSpec
+    ) -&gt; list[Worker]:
+        base_role_rank = ...
+        role_world_size = ...
+
+        workers = []
+        for local_rank in range(spec.local_world_size):
+            worker = Worker(
+                local_rank=local_rank,
+                global_rank=base_global_rank + local_rank,
+                role_rank=base_role_rank + local_rank,
+                world_size=global_world_size,
+                role_world_size=role_world_size,
+            )
+            workers.append(worker)
+        return workers
+
+    def _initialize_workers(self, worker_group: WorkerGroup) -&gt; None:
+        role = worker_group.spec.role
+
+        self._rendezvous(worker_group)
+        worker_ids = self._start_workers(worker_group)
+        for local_rank, w_id in worker_ids.items():
+            worker = worker_group.workers[local_rank]
+            worker.id = w_id
+
+        worker_group.state = WorkerState.HEALTHY
+
+    def _restart_workers(self, worker_group: WorkerGroup) -&gt; None:
+        self._stop_workers(worker_group, is_restart=True)
+        self._initialize_workers(worker_group)
+
+    def run(self, role: str = DEFAULT_ROLE) -&gt; RunResult:
+        result = self._invoke_run(role)
+        return result
+
+    def _invoke_run(self, role: str = DEFAULT_ROLE) -&gt; RunResult:
+        spec = self._worker_group.spec
+        role = spec.role
+
+        self._initialize_workers(self._worker_group)
+        rdzv_handler = spec.rdzv_handler
+
+        while True:
+            time.sleep(monitor_interval)
+            run_result = self._monitor_workers(self._worker_group)
+            state = run_result.state
+            self._worker_group.state = state
+
+            if state == WorkerState.SUCCEEDED:
+                self._exit_barrier()
+                return run_result
+            elif state in {WorkerState.UNHEALTHY, WorkerState.FAILED}:
+                self._remaining_restarts -= 1
+                self._restart_workers(self._worker_group)
+            elif state == WorkerState.HEALTHY:
+                num_nodes_waiting = rdzv_handler.num_nodes_waiting()
+                if num_nodes_waiting &gt; 0:
+                    self._restart_workers(self._worker_group)
+</code></pre>
+<p><code>LocalElasticAgent</code> 中主要实现了 <code>_start_workers</code> 和 <code>_monitor_workers</code>, 这里和进程的封装 PContext 进行交互。</p>
+<pre><code class="language-python"># torch/distributed/elastic/agent/server/local_elastic_agent.py
+
+class LocalElasticAgent(SimpleElasticAgent):
+    def __init__(
+        self,
+        spec: WorkerSpec,
+        start_method="spawn",
+    ):
+        super().__init__(spec, exit_barrier_timeout)
+        self._start_method = start_method
+        self._pcontext: Optional[PContext] = None
+        self._rdzv_handler = spec.rdzv_handler
+
+    def _start_workers(self, worker_group: WorkerGroup) -&gt; dict[int, Any]:
+        spec = worker_group.spec
+        store = worker_group.store
+
+        use_agent_store: bool = spec.rdzv_handler.use_agent_store
+
+        args: dict[int, tuple] = {}
+        envs: dict[int, dict[str, str]] = {}
+        for worker in worker_group.workers:
+            local_rank = worker.local_rank
+            worker_env = {
+                "LOCAL_RANK": str(local_rank),
+                "RANK": str(worker.global_rank),
+                "GROUP_RANK": str(worker_group.group_rank),
+                "ROLE_RANK": str(worker.role_rank),
+                "ROLE_NAME": spec.role,
+                "LOCAL_WORLD_SIZE": str(spec.local_world_size),
+                "WORLD_SIZE": str(worker.world_size),
+                "GROUP_WORLD_SIZE": str(worker_group.group_world_size),
+                "ROLE_WORLD_SIZE": str(worker.role_world_size),
+                "MASTER_ADDR": worker_group.master_addr,
+                "MASTER_PORT": str(worker_group.master_port),
+                "TORCHELASTIC_RESTART_COUNT": str(restart_count),
+                "TORCHELASTIC_MAX_RESTARTS": str(spec.max_restarts),
+                "TORCHELASTIC_RUN_ID": spec.rdzv_handler.get_run_id(),
+                "TORCHELASTIC_USE_AGENT_STORE": str(use_agent_store),
+                "TORCH_NCCL_ASYNC_ERROR_HANDLING": os.getenv(
+                    "TORCH_NCCL_ASYNC_ERROR_HANDLING", str(1)
+                ),
+            }
+            if "OMP_NUM_THREADS" in os.environ:
+                worker_env["OMP_NUM_THREADS"] = os.environ["OMP_NUM_THREADS"]
+
+            envs[local_rank] = worker_env
+            worker_args = list(spec.args)
+            worker_args = macros.substitute(worker_args, str(local_rank))
+            args[local_rank] = tuple(worker_args)
+
+        self._pcontext = start_processes(
+            name=spec.role,
+            entrypoint=spec.entrypoint,
+            args=args,
+            envs=envs,
+            logs_specs=self._logs_specs,
+            log_line_prefixes=log_line_prefixes,
+            start_method=self._start_method,
+        )
+        return self._pcontext.pids()
+
+    def _monitor_workers(self, worker_group: WorkerGroup) -&gt; RunResult:
+        result = self._pcontext.wait(0)
+        if result:
+            if result.is_failed():
+                return RunResult(state=WorkerState.FAILED, failures=worker_failures)
+            else:
+                return RunResult(state=WorkerState.SUCCEEDED, return_values=workers_ret_vals)
+        else:
+            return RunResult(state=WorkerState.HEALTHY)
+</code></pre>
+<p><strong>进程环境变量</strong></p>
+<p>注意到 <code>worker_env</code> 是配置给进程的环境变量，其中 <code>MASTER_ADDR/MASTER_PORT</code> 来自于 <code>worker_group</code>，
+它在 <code>SimpleElasticAgent._rendezvous</code> 中被赋值</p>
+<pre><code class="language-python">master_addr = spec.master_addr or rdzv_info.bootstrap_store_info.master_addr
+master_port = spec.master_port or rdzv_info.bootstrap_store_info.master_port
+worker_group.master_addr = master_addr
+worker_group.master_port = master_port
+</code></pre>
+<p>当 <code>rdvz-backend != static</code> 时，
+由 <code>WorkerSpec</code> 定义的 <code>worker_group.master_addr/master_port</code> 赋值为 None，
+使得上述 worker_group.master_addr/master_port 由 <code>rdzv_info.bootstrap_store_info</code> 赋值。
+而 <code>rdzv_info</code> 在 <code>DynamicRendezvousHandler.next_rendezvous</code> 中生成。
+在 <code>next_rendezvous</code> 中 <code>RendezvousStoreInfo</code> 里的 master 信息取决于 <code>self._this_node</code>， 它来自于 <code>_NodeDescGenerator.generate</code> 的返回</p>
+<pre><code class="language-python">_NodeDesc(local_addr or socket.getfqdn(), os.getpid(), local_id)
+</code></pre>
+<p>这里的 <code>local_addr</code> 来自于启动命令的 <code>--local-addr</code> 参数，所以如果未使用该参数时，<code>MASTER_ADDR</code> 由 <code>socket.getfqdn()</code> 得到，即本机域名。<code>MASTER_PORT</code> 为在 <code>next_rendezvous</code> 启动 store server 分配到的端口.</p>
+<p>注意，这里的新 store 信息会通过已有的 store 在 <code>RendezvousStoreInfo.build</code> 进行同步，所有 group 内的节点都会获得该信息。</p>
+<p><strong>启动流程</strong>:</p>
+<p>简化后的启动流程如下：</p>
+<pre><code class="language-bash"># launch_agent 中定义 进程的基础信息: 例如机器有 8 个 gpu，对应 8 个进程
+spec = WorkerSpec(...) # launch_agent
+    local_world_size=config.nproc_per_node,
+
+# 根据 WorkerSpec 构建 WorkerGroup: 本机的 8 个进程抽象为 8 个 Worker，并组成 WorkerGroup
+self._worker_group = WorkerGroup(spec) # agent init
+    self.workers = [Worker(local_rank=i) for i in range(self.spec.local_world_size)]
+
+
+# 根据 WorkerGroup 初始化 worker
+self._initialize_workers(self._worker_group)
+    # rendezvous 过程
+    self._rendezvous(worker_group)
+        # 通过对应的 rendezvous 模式获取共建信息: 协同分配 rank 的媒介
+        rdzv_info = spec.rdzv_handler.next_rendezvous()
+        # 根据全局信息为每个 worker 计算分配 rank
+        workers = self._assign_worker_ranks(...)
+
+    # 启动 workers
+    worker_ids = self._start_workers(worker_group)
+        # 为每个 worker 配置环境变量并启动进程
+        for worker in worker_group.workers:
+            local_rank = worker.local_rank
+            worker_env = {
+                "LOCAL_RANK": str(local_rank),
+                "RANK": str(worker.global_rank),
+                "GROUP_RANK": str(worker_group.group_rank),
+            }
+            envs[local_rank] = worker_env
+            args[local_rank] = tuple(worker_args)
+
+        self._pcontext = start_processes(...)
+</code></pre>
+<p><strong>rank 计算</strong>:</p>
+<ul>
+<li>local_rank: 本节点内进程粒度的 rank</li>
+<li>global_rank: 全局进程粒度的 rank</li>
+<li>group_rank: 全局节点粒度的 rank</li>
+</ul>
+<p>group_rank 计算方式:</p>
+<pre><code>global_rank = group_rank * group_world_size + local_rank
+</code></pre>
+<p>rank 计算的逻辑处理好累计问题其实比较简单，此处不详细展开。</p>
+<p><strong>elastic</strong>:</p>
+<p>agent 的弹性能力体现在 <code>_invoke_run</code> 中，<code>_invoke_run</code> 会循环检测 worker 进程的状态:</p>
+<ul>
+<li>如果 worker 进程正常退出则正常退出；</li>
+<li>如果 worker 进程异常退出则重启 worker 进程；</li>
+<li>如果 worker 进程正常但是有节点处于等待状态，即其他节点故障时会触发当前节点重启 worker 进程；</li>
+</ul>
+<p>可以看出，agent 对当前节点上的 worker 进程负责，监控他们的健康状态，按需重启。</p>
+<p>注意这里的查看状态函数 <code>_monitor_workers</code> 底层使用 timeout=0 的 poll 操作，所以是非阻塞的，而当前循环的等待是靠显示 sleep 实现的。</p>
+<p><strong>为什么其他节点故障时会触发当前节点重启 worker 进程？</strong></p>
+<p>当前架构中 agent-workers agent 是负责管理的进程，worker 是真正执行任务的进程，worker 之间还会通过 NCCL/gloo 等方式创建通信域进行通信从而可以交换数据。 当有节点故障时，当前逻辑是每个节点上的 agent 进程不退出，但是所有节点包括健康节点上的 worker 进程都会退出，再节点替换等逻辑恢复后，agent 重新拉起 worker 进程进而实现弹性。</p>
+<p>这一实现的主要原因如下：</p>
+<ul>
+<li>假设发生故障后，只有故障节点退出，健康节点的 worker 进程不退出，那么新 worker 启动后需要重新和已有进程建立新的通信域，这个过程的实现会极为复杂，远没有所有进程重启简单且稳定;</li>
+<li>在 NCCL 信息域的角度看，peer 节点的异常是几乎无法感知的，无法感知就无法采取其他动作，并且不是处在所有状态的 OP  都是可撤销的（其实大多数是不可撤销的），即使利用超时等不可以的逻辑之上依然难以实现稳定的重建逻辑；</li>
+<li>从 workflow 的角度看，worker 进程中的工作进程大概可以看作是计算、通信 OP 的串行序列，并没有一个 supervisor 的角色负责确认是否异常等上层逻辑，实现难度大且不够优雅。</li>
+</ul>
+<p>以上原因导致主流的实现都使用 GPU 进程重启方式应对故障，实现容错和弹性。当然如果从探索角度看的话这已经不是一个新的话题，早几年就已经有相关的论文。</p>
+<h2 id="rendezvous-version"><a class="header" href="#rendezvous-version">rendezvous version</a></h2>
+<p>在最近的几个版本中，<code>rendevous</code> 模块有一些比较大的变化，所以导致启动行为有写不一样，这里做一个简单对比。</p>
+<h3 id="v260--v270"><a class="header" href="#v260--v270">v2.6.0 &amp; v2.7.0</a></h3>
+<pre><code class="language-python"># torch/distributed/elastic/rendezvous/dynamic_rendezvous.py
+
+class DynamicRendezvousHandler(RendezvousHandler):
+    def next_rendezvous(self) -&gt; RendezvousInfo:
+        try:
+            rank, world_size = self._get_world()
+            store = self._get_store()
+
+        if self._bootstrap_store_info is None:
+            # To avoid race in get_free_port because we release the port after the call,
+            # we want to create a TCPStore server soon afterwards.
+            server_port = 0
+            if rank == 0:
+                self._shared_tcp_store_server = self._create_tcp_store_server(
+                    self._this_node.addr, server_port
+                )
+                server_port = self._shared_tcp_store_server.port
+            self._bootstrap_store_info = RendezvousStoreInfo.build(
+                rank,
+                store,
+                local_addr=self._this_node.addr,
+                server_port=server_port,  # For non-0 rank, this is a no-op
+            )
+
+        return RendezvousInfo(
+            store,
+            rank,
+            world_size,
+            self._bootstrap_store_info,  # type: ignore[assignment]
+        )
+</code></pre>
+<pre><code class="language-python"># torch/distributed/elastic/rendezvous/api.py
+
+@dataclass
+class RendezvousStoreInfo:
+    @staticmethod
+    def build(
+        rank: int,
+        store: Store,
+        local_addr: Optional[str],
+        server_port: Optional[int] = None,
+    ) -&gt; "RendezvousStoreInfo":
+        if rank == 0:
+            addr = local_addr or socket.getfqdn()
+            # When TCPStore is not shared, we fallback to get_free_port.
+            port = server_port or get_free_port()
+            store.set(RendezvousStoreInfo.MASTER_ADDR_KEY, addr.encode(encoding="UTF-8"))
+            store.set(RendezvousStoreInfo.MASTER_PORT_KEY, str(port).encode(encoding="UTF-8"))
+
+        addr = store.get(RendezvousStoreInfo.MASTER_ADDR_KEY).decode(encoding="UTF-8")
+        port = int(
+            store.get(RendezvousStoreInfo.MASTER_PORT_KEY).decode(encoding="UTF-8")
+        )
+        return RendezvousStoreInfo(master_addr=addr, master_port=port)
+</code></pre>
+<p>在最新的两个版本中，接收通过 <code>local_addr</code> 指定本机地址，都通过 <code>RendezvousStoreInfo.build</code> 同步到 <code>master_addr</code> 和 <code>master_port</code> 信息。</p>
+<h3 id="v251"><a class="header" href="#v251">v2.5.1</a></h3>
+<pre><code class="language-python"># torch/distributed/elastic/rendezvous/dynamic_rendezvous.py
+
+class DynamicRendezvousHandler(RendezvousHandler):
+    def next_rendezvous(self) -&gt; RendezvousInfo:
+        try:
+            rank, world_size = self._get_world()
+            store = self._get_store()
+
+        if self._bootstrap_store_info is None:
+            if isinstance(self._store, dist.TCPStore):
+                addr = self._store.host
+                port = self._store.port
+                self._bootstrap_store_info = RendezvousStoreInfo(
+                    master_addr=addr, master_port=port
+                )
+                if rank == 0:
+                    self._shared_tcp_store_server = self._store
+            else:
+                # If the store is not type of TCPStore start TCPStore server, which requries
+                # bootstrapping info across ranks
+                self._bootstrap_store_info = RendezvousStoreInfo.build(
+                    rank, store, local_addr=self._this_node.addr
+                )
+                if rank == 0:
+                    self._shared_tcp_store_server = self._create_tcp_store_server(
+                        self._bootstrap_store_info
+                    )
+
+        return RendezvousInfo(
+            store,
+            rank,
+            world_size,
+            self._bootstrap_store_info,  # type: ignore[assignment]
+        )
+</code></pre>
+<pre><code class="language-python"># torch/distributed/elastic/rendezvous/api.py
+
+@dataclass
+class RendezvousStoreInfo:
+    @staticmethod
+    def build(
+        rank: int, store: Store, local_addr: Optional[str]
+    ) -&gt; "RendezvousStoreInfo":
+        if rank == 0:
+            addr = local_addr or socket.getfqdn()
+            port = _get_free_port()
+            store.set(RendezvousStoreInfo.MASTER_ADDR_KEY, addr.encode(encoding="UTF-8"))
+            store.set(RendezvousStoreInfo.MASTER_PORT_KEY, str(port).encode(encoding="UTF-8"))
+
+        addr = store.get(RendezvousStoreInfo.MASTER_ADDR_KEY).decode(encoding="UTF-8")
+        port = int(
+            store.get(RendezvousStoreInfo.MASTER_PORT_KEY).decode(encoding="UTF-8")
+        )
+        return RendezvousStoreInfo(master_addr=addr, master_port=port)
+</code></pre>
+<p>在 v2.5.1 版本中，当原 store 为 TCPStore 时，会直接构造并返回 RendezvousStoreInfo，不再创建新的 store.</p>
+<h3 id="v241"><a class="header" href="#v241">v2.4.1</a></h3>
+<pre><code class="language-python"># torch/distributed/elastic/rendezvous/dynamic_rendezvous.py
+
+class DynamicRendezvousHandler(RendezvousHandler):
+    def next_rendezvous(self) -&gt; RendezvousInfo:
+        try:
+            rank, world_size = self._get_world()
+            store = self._get_store()
+
+        bootstrap_store_info = RendezvousStoreInfo.build(rank, store)
+        return RendezvousInfo(
+            store,
+            rank,
+            world_size,
+            bootstrap_store_info,
+        )
+</code></pre>
+<pre><code class="language-python"># torch/distributed/elastic/rendezvous/api.py
+
+@dataclass
+class RendezvousStoreInfo:
+    @staticmethod
+    def build(rank: int, store: Store) -&gt; "RendezvousStoreInfo":
+        if rank == 0:
+            addr = socket.getfqdn()
+            port = _get_free_port()
+            store.set(RendezvousStoreInfo.MASTER_ADDR_KEY, addr.encode(encoding="UTF-8"))
+            store.set(RendezvousStoreInfo.MASTER_PORT_KEY, str(port).encode(encoding="UTF-8"))
+
+        addr = store.get(RendezvousStoreInfo.MASTER_ADDR_KEY).decode(encoding="UTF-8")
+        port = int(store.get(RendezvousStoreInfo.MASTER_PORT_KEY).decode(encoding="UTF-8"))
+        return RendezvousStoreInfo(master_addr=addr, master_port=port)
+</code></pre>
+<p>在 v2.4.1 版本中，统一通过
+<code>RendezvousStoreInfo.build</code> 同步 master 信息，master 的 addr 通过 socket.getfqdn() 获取，无法指定。</p>
+<h1 id="reference"><a class="header" href="#reference">Reference</a></h1>
+<ul>
+<li><a href="https://pytorch.org/docs/stable/elastic/run.html">torchrun (Elastic Launch)</a></li>
+<li><a href="https://github.com/pytorch/pytorch">pytorch github</a></li>
+</ul>
 
                     </main>
 
