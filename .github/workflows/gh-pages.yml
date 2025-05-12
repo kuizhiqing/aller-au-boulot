@@ -12,7 +12,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
@@ -24,13 +24,13 @@ jobs:
       - name: Setup mdBook
         uses: peaceiris/actions-mdbook@v1
         with:
-          mdbook-version: '0.4.43'
+          mdbook-version: '0.4.36'
           # mdbook-version: 'latest'
 
       - name: Setup mdbook-katex
         uses: magicgh/mdbook-katex-action@v1
         with:
-          version: '0.2.10'
+          version: '0.5.9'
           #version: 'latest'
 
       - run: mdbook build
