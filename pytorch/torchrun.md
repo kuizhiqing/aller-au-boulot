@@ -1,6 +1,9 @@
 # torchrun
 
-可以通过以下命令启动一个 2 机 8 卡的分布式训练任务，该命令需要在所有 2 个节点上执行。
+> 本文使用代码版本 commit: 0da8127f77f9bf05ba204ea7659cb15ec85e88a7
+
+PyTorch 提供了原生的分布式启动命令 `torchrun`，可以用于启动分布式训练任务。
+例如通过以下命令可以启动一个 2 节点的分布式训练任务，该命令需要在所有 2 个节点上执行。
 
 ```bash
 torchrun 
@@ -22,7 +25,7 @@ export PET_RDZV_BACKEND=c10d
 torchrun demo.py
 ```
 
-以下 allreduce 的例子可以用于测试完整流程。
+其中 demo.py 可以是如下的可以用于测试完整流程的 allreduce 例子.
 
 ```python
 # demo.py
@@ -34,6 +37,21 @@ torch.cuda.set_device(rank % torch.cuda.device_count())
 world_size = torch.distributed.get_world_size()
 print(f"rank {rank} world_size {world_size}")
 a = torch.tensor([1]).cuda()
+torch.distributed.all_reduce(a)
+print(f"rank {rank} world_size {world_size} {a}")
+torch.distributed.barrier()
+print(f"rank {rank} world_size {world_size}")
+```
+
+在无 GPU 的环境下可以使用以下 demo 进行测试
+
+```python
+import torch
+torch.distributed.init_process_group(backend="gloo", init_method="env://")
+rank = torch.distributed.get_rank()
+world_size = torch.distributed.get_world_size()
+print(f"rank {rank} world_size {world_size}")
+a = torch.tensor([1])
 torch.distributed.all_reduce(a)
 print(f"rank {rank} world_size {world_size} {a}")
 torch.distributed.barrier()
@@ -142,9 +160,8 @@ def _get_addr_and_port(rdzv_parameters: RendezvousParameters,) -> tuple[Optional
 
 ## worker
 
-worker 并没有被封装成 process 的抽象，窃以为这里是有讨论空间的。
-
-所以 WorkerSpec/Worker 包含了 worker 的描述信息，而 WorkerGroup 包含 worker 的集合信息。
+这里的 worker 并没有被封装成 process 的抽象， 所以 worker 部分相对比较简单。
+WorkerSpec/Worker 都只是包含了 worker 的描述信息，WorkerGroup 包含 worker 的集合信息。
 
 ```python
 # torch/distributed/elastic/agent/server/api.py
@@ -188,6 +205,181 @@ class WorkerGroup:
         self.master_port = None
         self.state = WorkerState.INIT
 ```
+
+
+## rendezvous
+
+`rendezvous`, 法语词，字面意思的约会，读音“夯dēi勿”， 用于分布式节点间协同，简单说就是节点间如何找到彼此，协商各自的 rank 等信息。
+
+```python
+# torch/distributed/elastic/rendezvous/__init__.py
+
+from .registry import _register_default_handlers
+
+_register_default_handlers()
+```
+
+可用的 rendezvous backend 是静态定义的，当前版本支持：`etcd`, `etcd-v2`, `c10d`, `static`，初始化化时注册到 `handler_registry` 中，通过 `rdzv_registry.get_rendezvous_handler` 获取对应的 handler.
+
+```python
+# torch/distributed/elastic/rendezvous/registry.py
+
+def _register_default_handlers() -> None:
+    handler_registry.register("etcd", _create_etcd_handler)
+    handler_registry.register("etcd-v2", _create_etcd_v2_handler)
+    handler_registry.register("c10d", _create_c10d_handler)
+    handler_registry.register("static", _create_static_handler)
+
+def _create_static_handler(params: RendezvousParameters) -> RendezvousHandler:
+    from . import static_tcp_rendezvous
+
+    return static_tcp_rendezvous.create_rdzv_handler(params)
+
+def _create_c10d_handler(params: RendezvousParameters) -> RendezvousHandler:
+    from .c10d_rendezvous_backend import create_backend
+
+    backend, store = create_backend(params)
+
+    return create_handler(store, backend, params)
+```
+
+这里主要看 `c10d` 的实现，`c10d` 的 tcp 版本通过 `TCPStore` 实现了 rendezvous，`TCPStore` 就是 pytorch 中重要的 kv 存储实现，在 `init_process_group` 等多个场景中都有使用。
+
+```python
+# torch/distributed/elastic/rendezvous/c10d_rendezvous_backend.py
+
+def create_backend(params: RendezvousParameters) -> tuple[C10dRendezvousBackend, Store]:
+    if store_type == "file":
+        store = _create_file_store(params)
+    elif store_type == "tcp":
+        store = _create_tcp_store(params)
+    backend = C10dRendezvousBackend(store, params.run_id)
+
+    return backend, store
+
+def _create_tcp_store(params: RendezvousParameters) -> TCPStore:
+    host, port = parse_rendezvous_endpoint(params.endpoint, default_port=DEFAULT_PORT)
+
+    store = TCPStore(
+        host,
+        port,
+        is_master=is_server,
+        multi_tenant=True,
+        timeout=timedelta(seconds=read_timeout),
+    )
+
+    return store
+```
+
+划重点：用户参数中传递的 endpoint 对应的 host 和 port 会启动 `TCPStore` 服务端。
+
+区别于 `static` backend, 使用 `c10d` 创建的 `rendezvous` 是动态 `DynamicRendezvousHandler`, 可以想见，它支持动态地进行节点协同，即在完成首次 rendezvous 后，可以动态的添加节点，删除节点，重新同步节点间的信息。
+
+```python
+# torch/distributed/elastic/rendezvous/dynamic_rendezvous.py
+
+def create_handler(store: Store, backend: RendezvousBackend, params: RendezvousParameters) -> DynamicRendezvousHandler:
+    return DynamicRendezvousHandler.from_backend(...)
+
+class DynamicRendezvousHandler(RendezvousHandler):
+    _node_desc_generator = _NodeDescGenerator()
+
+    @classmethod
+    def from_backend(...):
+        node = cls._node_desc_generator.generate(local_addr)
+
+        return cls(node, settings, backend.name, store, state_holder)
+
+    def __init__(...):
+        self._this_node = node
+        self._bootstrap_store_info: Optional[RendezvousStoreInfo] = None
+
+    def next_rendezvous(self) -> RendezvousInfo:
+        try:
+            rank, world_size = self._get_world()
+            store = self._get_store()
+
+        if os.getenv("TORCH_DISABLE_SHARE_RDZV_TCP_STORE", "0") == "1":
+            bootstrap_store_info = RendezvousStoreInfo.build(
+                rank, store, local_addr=self._this_node.addr
+            )
+            return RendezvousInfo(
+                store,
+                rank,
+                world_size,
+                bootstrap_store_info,
+            )
+
+        # This will only be hit when TCPStore sharing is enabled.
+        if self._bootstrap_store_info is None:
+            server_port = 0
+            if rank == 0:
+                self._shared_tcp_store_server = self._create_tcp_store_server(
+                    self._this_node.addr, server_port
+                )
+                server_port = self._shared_tcp_store_server.port
+            self._bootstrap_store_info = RendezvousStoreInfo.build(
+                rank,
+                store,
+                local_addr=self._this_node.addr,
+                server_port=server_port,  # For non-0 rank, this is a no-op
+            )
+
+        return RendezvousInfo(
+            store,
+            rank,
+            world_size,
+            self._bootstrap_store_info,  # type: ignore[assignment]
+        )
+
+class _NodeDescGenerator:
+    def generate(self, local_addr: Optional[str] = None) -> _NodeDesc:
+        return _NodeDesc(local_addr or socket.getfqdn(), os.getpid(), local_id)
+
+```
+
+可以看到 `rendezvous` 的结果通过 `RendezvousInfo` 进行了封装，其中包含了 `rank` 和 `world_size` 信息。
+
+其中 RendezvousInfo 包含两个 TCPStore：
+
+* `store` 是使用参数 rdzv endpoint 创建的 TCPStore;
+* `_bootstrap_store_info` 中 master 存储了通过 store 交换回来的 addr 为 rank-0 地址，port 为 _create_tcp_store_server 创建的新的 TCPStore 的端口；
+
+```python
+# torch/distributed/elastic/rendezvous/api.py
+
+@dataclass
+class RendezvousStoreInfo:
+
+    @staticmethod
+    def build(
+        rank: int,
+        store: Store,
+        local_addr: Optional[str],
+        server_port: Optional[int] = None,
+    ) -> "RendezvousStoreInfo":
+        if rank == 0:
+            addr = local_addr or socket.getfqdn()
+            port = server_port or get_free_port()
+            store.set(
+                RendezvousStoreInfo.MASTER_ADDR_KEY,
+                addr.encode(encoding="UTF-8"),  # type: ignore[arg-type]
+            )
+            store.set(
+                RendezvousStoreInfo.MASTER_PORT_KEY,
+                str(port).encode(encoding="UTF-8"),  # type: ignore[arg-type]
+            )
+
+        addr = store.get(RendezvousStoreInfo.MASTER_ADDR_KEY).decode(encoding="UTF-8")
+        port = int(
+            store.get(RendezvousStoreInfo.MASTER_PORT_KEY).decode(encoding="UTF-8")
+        )
+        return RendezvousStoreInfo(master_addr=addr, master_port=port)
+```
+
+* rank 为 0 的 “主节点” 会将自己的地址和端口信息存储到 `store` 中，所有节点会从 `store` 中获取新的 master 地址和端口信息即 rank 0 的信息存储在 RendezvousStoreInfo 中并返回；
+* 每次执行都可能更新信息，每次调用 `next_rendezvous` 都会返回新的 `RendezvousInfo`，返回新的 `master` 地址和端口;
+* 在弹性容错逻辑中，`_restart_workers` 会通过 `_initialize_workers` 调用 `_rendezvous` 来重新刷新 rank 等信息，RendezvousInfo 中的 master_addr/master_port 信息将会被使用；
 
 
 ## agent
@@ -365,6 +557,29 @@ class LocalElasticAgent(SimpleElasticAgent):
             return RunResult(state=WorkerState.HEALTHY)
 ```
 
+**进程环境变量**
+
+注意到 `worker_env` 是配置给进程的环境变量，其中 `MASTER_ADDR/MASTER_PORT` 来自于 `worker_group`，
+它在 `SimpleElasticAgent._rendezvous` 中被赋值
+
+```python
+master_addr = spec.master_addr or rdzv_info.bootstrap_store_info.master_addr
+master_port = spec.master_port or rdzv_info.bootstrap_store_info.master_port
+worker_group.master_addr = master_addr
+worker_group.master_port = master_port
+```
+
+当 `rdvz-backend != static` 时，
+由 `WorkerSpec` 定义的 `worker_group.master_addr/master_port` 赋值为 None，
+使得上述 worker_group.master_addr/master_port 由 `rdzv_info.bootstrap_store_info` 赋值。
+而 `rdzv_info` 在 `DynamicRendezvousHandler.next_rendezvous` 中生成。
+在 `next_rendezvous` 中 `RendezvousStoreInfo` 里的 master 信息取决于 `self._this_node`， 它来自于 `_NodeDescGenerator.generate` 的返回
+```python
+_NodeDesc(local_addr or socket.getfqdn(), os.getpid(), local_id)
+```
+这里的 `local_addr` 来自于启动命令的 `--local-addr` 参数，所以如果未使用该参数时，`MASTER_ADDR` 由 `socket.getfqdn()` 得到，即本机域名。`MASTER_PORT` 为在 `next_rendezvous` 启动 store server 分配到的端口.
+
+注意，这里的新 store 信息会通过已有的 store 在 `RendezvousStoreInfo.build` 进行同步，所有 group 内的节点都会获得该信息。
 
 **启动流程**:
 
@@ -442,112 +657,24 @@ agent 的弹性能力体现在 `_invoke_run` 中，`_invoke_run` 会循环检测
 
 以上原因导致主流的实现都使用 GPU 进程重启方式应对故障，实现容错和弹性。当然如果从探索角度看的话这已经不是一个新的话题，早几年就已经有相关的论文。
 
+## rendezvous version
 
-## rendezvous
+在最近的几个版本中，`rendevous` 模块有一些比较大的变化，所以导致启动行为有写不一样，这里做一个简单对比。
 
-`rendezvous`, 法语词，字面意思的约会，读音“夯dēi勿”， 用于分布式节点间协同，简单说就是节点间如何找到彼此，协商各自的 rank 等信息。
-
-```python
-# torch/distributed/elastic/rendezvous/__init__.py
-
-from .registry import _register_default_handlers
-
-_register_default_handlers()
-```
-
-可用的 rendezvous backend 是静态定义的，当前版本支持：`etcd`, `etcd-v2`, `c10d`, `static`，初始化化时注册到 `handler_registry` 中，通过 `rdzv_registry.get_rendezvous_handler` 获取对应的 handler.
-
-```python
-# torch/distributed/elastic/rendezvous/registry.py
-
-def _register_default_handlers() -> None:
-    handler_registry.register("etcd", _create_etcd_handler)
-    handler_registry.register("etcd-v2", _create_etcd_v2_handler)
-    handler_registry.register("c10d", _create_c10d_handler)
-    handler_registry.register("static", _create_static_handler)
-
-def _create_static_handler(params: RendezvousParameters) -> RendezvousHandler:
-    from . import static_tcp_rendezvous
-
-    return static_tcp_rendezvous.create_rdzv_handler(params)
-
-def _create_c10d_handler(params: RendezvousParameters) -> RendezvousHandler:
-    from .c10d_rendezvous_backend import create_backend
-
-    backend, store = create_backend(params)
-
-    return create_handler(store, backend, params)
-```
-
-这里主要看 `c10d` 的实现，`c10d` 的 tcp 版本通过 `TCPStore` 实现了 rendezvous，`TCPStore` 就是 pytorch 中重要的 kv 存储实现，在 `init_process_group` 等多个场景中都有使用。
-
-```python
-# torch/distributed/elastic/rendezvous/c10d_rendezvous_backend.py
-
-def create_backend(params: RendezvousParameters) -> tuple[C10dRendezvousBackend, Store]:
-    if store_type == "file":
-        store = _create_file_store(params)
-    elif store_type == "tcp":
-        store = _create_tcp_store(params)
-    backend = C10dRendezvousBackend(store, params.run_id)
-
-    return backend, store
-
-def _create_tcp_store(params: RendezvousParameters) -> TCPStore:
-    host, port = parse_rendezvous_endpoint(params.endpoint, default_port=DEFAULT_PORT)
-
-    store = TCPStore(
-        host,
-        port,
-        is_master=is_server,
-        multi_tenant=True,
-        timeout=timedelta(seconds=read_timeout),
-    )
-
-    return store
-```
-
-划重点：用户参数中传递的 endpoint 对应的 host 和 port 会启动 `TCPStore` 服务端。
-
-区别于 `static` backend, 使用 `c10d` 创建的 `rendezvous` 是动态 `DynamicRendezvousHandler`, 可以想见，它支持动态地进行节点协同，即在完成首次 rendezvous 后，可以动态的添加节点，删除节点，重新同步节点间的信息。
+### v2.6.0 & v2.7.0
 
 ```python
 # torch/distributed/elastic/rendezvous/dynamic_rendezvous.py
 
-def create_handler(store: Store, backend: RendezvousBackend, params: RendezvousParameters) -> DynamicRendezvousHandler:
-    return DynamicRendezvousHandler.from_backend(...)
-
 class DynamicRendezvousHandler(RendezvousHandler):
-    _node_desc_generator = _NodeDescGenerator()
-
-    @classmethod
-    def from_backend(...):
-        node = cls._node_desc_generator.generate(local_addr)
-
-        return cls(node, settings, backend.name, store, state_holder)
-
-    def __init__(...):
-        self._this_node = node
-        self._bootstrap_store_info: Optional[RendezvousStoreInfo] = None
-
     def next_rendezvous(self) -> RendezvousInfo:
         try:
             rank, world_size = self._get_world()
             store = self._get_store()
 
-        if os.getenv("TORCH_DISABLE_SHARE_RDZV_TCP_STORE", "0") == "1":
-            bootstrap_store_info = RendezvousStoreInfo.build(
-                rank, store, local_addr=self._this_node.addr
-            )
-            return RendezvousInfo(
-                store,
-                rank,
-                world_size,
-                bootstrap_store_info,
-            )
-
-        # This will only be hit when TCPStore sharing is enabled.
         if self._bootstrap_store_info is None:
+            # To avoid race in get_free_port because we release the port after the call,
+            # we want to create a TCPStore server soon afterwards.
             server_port = 0
             if rank == 0:
                 self._shared_tcp_store_server = self._create_tcp_store_server(
@@ -567,26 +694,13 @@ class DynamicRendezvousHandler(RendezvousHandler):
             world_size,
             self._bootstrap_store_info,  # type: ignore[assignment]
         )
-
-class _NodeDescGenerator:
-    def generate(self, local_addr: Optional[str] = None) -> _NodeDesc:
-        return _NodeDesc(local_addr or socket.getfqdn(), os.getpid(), local_id)
-
 ```
-
-可以看到 `rendezvous` 的结果通过 `RendezvousInfo` 进行了封装，其中包含了 `rank` 和 `world_size` 信息。
-
-其中 RendezvousInfo 包含两个 TCPStore：
-
-* `store` 是使用参数 rdzv endpoint 创建的 TCPStore;
-* `_bootstrap_store_info` 中 master 存储了通过 store 交换回来的 addr 为 rank-0 地址，port 为 _create_tcp_store_server 创建的新的 TCPStore 的端口；
 
 ```python
 # torch/distributed/elastic/rendezvous/api.py
 
 @dataclass
 class RendezvousStoreInfo:
-
     @staticmethod
     def build(
         rank: int,
@@ -596,15 +710,10 @@ class RendezvousStoreInfo:
     ) -> "RendezvousStoreInfo":
         if rank == 0:
             addr = local_addr or socket.getfqdn()
+            # When TCPStore is not shared, we fallback to get_free_port.
             port = server_port or get_free_port()
-            store.set(
-                RendezvousStoreInfo.MASTER_ADDR_KEY,
-                addr.encode(encoding="UTF-8"),  # type: ignore[arg-type]
-            )
-            store.set(
-                RendezvousStoreInfo.MASTER_PORT_KEY,
-                str(port).encode(encoding="UTF-8"),  # type: ignore[arg-type]
-            )
+            store.set(RendezvousStoreInfo.MASTER_ADDR_KEY, addr.encode(encoding="UTF-8"))
+            store.set(RendezvousStoreInfo.MASTER_PORT_KEY, str(port).encode(encoding="UTF-8"))
 
         addr = store.get(RendezvousStoreInfo.MASTER_ADDR_KEY).decode(encoding="UTF-8")
         port = int(
@@ -613,12 +722,115 @@ class RendezvousStoreInfo:
         return RendezvousStoreInfo(master_addr=addr, master_port=port)
 ```
 
-* rank 为 0 的 “主节点” 会将自己的地址和端口信息存储到 `store` 中，所有节点会从 `store` 中获取新的 master 地址和端口信息即 rank 0 的信息存储在 RendezvousStoreInfo 中并返回；
-* 每次执行都可能更新信息，每次调用 `next_rendezvous` 都会返回新的 `RendezvousInfo`，返回新的 `master` 地址和端口;
-* 在弹性容错逻辑中，`_restart_workers` 会通过 `_initialize_workers` 调用 `_rendezvous` 来重新刷新 rank 等信息，RendezvousInfo 中的 master_addr/master_port 信息将会被使用；
+在最新的两个版本中，接收通过 `local_addr` 指定本机地址，都通过 `RendezvousStoreInfo.build` 同步到 `master_addr` 和 `master_port` 信息。
+
+### v2.5.1
+
+```python
+# torch/distributed/elastic/rendezvous/dynamic_rendezvous.py
+
+class DynamicRendezvousHandler(RendezvousHandler):
+    def next_rendezvous(self) -> RendezvousInfo:
+        try:
+            rank, world_size = self._get_world()
+            store = self._get_store()
+
+        if self._bootstrap_store_info is None:
+            if isinstance(self._store, dist.TCPStore):
+                addr = self._store.host
+                port = self._store.port
+                self._bootstrap_store_info = RendezvousStoreInfo(
+                    master_addr=addr, master_port=port
+                )
+                if rank == 0:
+                    self._shared_tcp_store_server = self._store
+            else:
+                # If the store is not type of TCPStore start TCPStore server, which requries
+                # bootstrapping info across ranks
+                self._bootstrap_store_info = RendezvousStoreInfo.build(
+                    rank, store, local_addr=self._this_node.addr
+                )
+                if rank == 0:
+                    self._shared_tcp_store_server = self._create_tcp_store_server(
+                        self._bootstrap_store_info
+                    )
+
+        return RendezvousInfo(
+            store,
+            rank,
+            world_size,
+            self._bootstrap_store_info,  # type: ignore[assignment]
+        )
+```
+
+```python
+# torch/distributed/elastic/rendezvous/api.py
+
+@dataclass
+class RendezvousStoreInfo:
+    @staticmethod
+    def build(
+        rank: int, store: Store, local_addr: Optional[str]
+    ) -> "RendezvousStoreInfo":
+        if rank == 0:
+            addr = local_addr or socket.getfqdn()
+            port = _get_free_port()
+            store.set(RendezvousStoreInfo.MASTER_ADDR_KEY, addr.encode(encoding="UTF-8"))
+            store.set(RendezvousStoreInfo.MASTER_PORT_KEY, str(port).encode(encoding="UTF-8"))
+
+        addr = store.get(RendezvousStoreInfo.MASTER_ADDR_KEY).decode(encoding="UTF-8")
+        port = int(
+            store.get(RendezvousStoreInfo.MASTER_PORT_KEY).decode(encoding="UTF-8")
+        )
+        return RendezvousStoreInfo(master_addr=addr, master_port=port)
+```
+
+在 v2.5.1 版本中，当原 store 为 TCPStore 时，会直接构造并返回 RendezvousStoreInfo，不再创建新的 store.
+
+### v2.4.1
+
+```python
+# torch/distributed/elastic/rendezvous/dynamic_rendezvous.py
+
+class DynamicRendezvousHandler(RendezvousHandler):
+    def next_rendezvous(self) -> RendezvousInfo:
+        try:
+            rank, world_size = self._get_world()
+            store = self._get_store()
+
+        bootstrap_store_info = RendezvousStoreInfo.build(rank, store)
+        return RendezvousInfo(
+            store,
+            rank,
+            world_size,
+            bootstrap_store_info,
+        )
+```
+
+
+```python
+# torch/distributed/elastic/rendezvous/api.py
+
+@dataclass
+class RendezvousStoreInfo:
+    @staticmethod
+    def build(rank: int, store: Store) -> "RendezvousStoreInfo":
+        if rank == 0:
+            addr = socket.getfqdn()
+            port = _get_free_port()
+            store.set(RendezvousStoreInfo.MASTER_ADDR_KEY, addr.encode(encoding="UTF-8"))
+            store.set(RendezvousStoreInfo.MASTER_PORT_KEY, str(port).encode(encoding="UTF-8"))
+
+        addr = store.get(RendezvousStoreInfo.MASTER_ADDR_KEY).decode(encoding="UTF-8")
+        port = int(store.get(RendezvousStoreInfo.MASTER_PORT_KEY).decode(encoding="UTF-8"))
+        return RendezvousStoreInfo(master_addr=addr, master_port=port)
+```
+
+在 v2.4.1 版本中，统一通过
+`RendezvousStoreInfo.build` 同步 master 信息，master 的 addr 通过 socket.getfqdn() 获取，无法指定。
 
 # Reference
 
 - [torchrun (Elastic Launch)](https://pytorch.org/docs/stable/elastic/run.html)
+- [pytorch github](https://github.com/pytorch/pytorch)
 
-commit: 0da8127f77f9bf05ba204ea7659cb15ec85e88a7
