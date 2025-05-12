@@ -30,7 +30,7 @@ jobs:
       - name: Setup mdbook-katex
         uses: magicgh/mdbook-katex-action@v1.1.0
         with:
-          version: '0.5.9'
+          version: '0.2.10'
           #version: 'latest'
 
       - run: mdbook build
