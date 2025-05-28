@@ -39,7 +39,7 @@ curl https://localhost:8000/v1/chat/completions \
   }'
 ```
 
-**openai sdk 访问**
+**openai SDK 访问**
 
 ```python
 from openai import OpenAI
@@ -350,7 +350,6 @@ class LLM:
 
 具体如何获取推理结果，需要看 `LLMEngine` 的实现。
 
-## Engine
 
 ## AsyncLLMEngine
 
@@ -435,6 +434,9 @@ class AsyncLLM(EngineClient):
         return queue
 ```
 
+> 父类 `EngineClient` 本质是 Engine interface.
+
+
 AsyncLLM (V1 版本的 AsyncLLMEngine) 是一个异步的 LLM，系统的核心组件，它的初始化过程启动了主要组件：
 
 * EngineCoreClient + Executor
@@ -444,40 +446,46 @@ AsyncLLM (V1 版本的 AsyncLLMEngine) 是一个异步的 LLM，系统的核心�
 
 分析 `generate()` 调用流程
 
+异步处理 output : `_run_output_handler`
+
+```python
+outputs = engine_core.get_output_async()
+output_processor.process_outputs(outputs)
+engine_core.abort_requests_async()
+```
+
+异步处理 input : `add_request`
+
+```python
+request = processor.process_inputs(...)
+output_processor.add_request(request, queue)
+engine_core.add_request_async(request)
+```
+
+> generate() 返回的是 AsyncGenerator，调用者需要迭代获得 RequestOutput，如 `OpenAIServingChat.create_chat_completion` 中的实现
+
+其中包括 3 个对象及其调用
+
+* `processor` 调用 `process_inputs`
+* `output_processor` 调用 `add_request` 和 `process_outputs`
+* `engine_core` 调用 `get_output_async`, `add_request_async` 和 `abort_requests_async`
+
+下面依次分析这些对象。
+
+
+## EngineCore
+
+首先来看 engine_core，主要关注以下 3 个方法
+
 ```
 engine_core.get_output_async()
-output_processor.process_outputs()
 engine_core.abort_requests_async()
-
-processor.process_inputs()
-output_processor.add_request()
 engine_core.add_request_async()
 ```
 
-```
-"""
-Main function called by the API server to kick off a request
-    * 1) Making an AsyncStream corresponding to the Request.
-    * 2) Processing the Input.
-    * 3) Adding the Request to the Detokenizer.
-    * 4) Adding the Request to the EngineCore (separate process).
+### EngineCoreClient
 
-A separate output_handler loop runs in a background AsyncIO task, 
-pulling outputs from EngineCore and putting them into the 
-per-request AsyncStream.
-
-The caller of generate() iterates the returned AsyncGenerator,
-returning the RequestOutput back to the caller.
-"""
-```
-
-## EngineCoreClient
-
-```
-engine_core.get_output_async()
-engine_core.abort_requests_async()
-engine_core.add_request_async()
-```
+`AsyncLLM.engine_core` 由 `EngineCoreClient.make_client` 创建，根据不同配置返回不同实现.
 
 ```python
 # vllm/v1/engine/core_client.py
@@ -508,6 +516,19 @@ class InprocClient(EngineCoreClient):
         if len(request_ids) > 0:
             self.engine_core.abort_requests(request_ids)
 
+```
+
+EngineCoreClient 的第一种实现把 EngineCore 作为成员实例化，主要在 v0 版本中采用
+
+* InprocClient: In process EngineCore (for V0-style LLMEngine use)
+
+V1 版本通过 MPClient 实现了 sync 和 async 两个版本，
+
+* SyncMPClient: ZMQ + background proc EngineCore (for LLM)
+* AsyncMPClient: ZMQ + background proc EngineCore w/ asyncio (for AsyncLLM)
+
+```python
+# vllm/v1/engine/core_client.py
 
 class MPClient(EngineCoreClient):
     def __init__(..., vllm_config, executor_class, ...):
@@ -521,26 +542,10 @@ class MPClient(EngineCoreClient):
             target_fn=EngineCoreProc.run_engine_core,
             process_kwargs={"vllm_config": vllm_config, "executor_class": executor_class, })
 
-
-class SyncMPClient(MPClient):
-    ...
-
-class AsyncMPClient(MPClient):
-    ...
-```
-
-EngineCoreClient 的 3 种实现 EngineCore 
-
-* InprocClient: In process EngineCore (for V0-style LLMEngine use)
-* SyncMPClient: ZMQ + background proc EngineCore (for LLM)
-* AsyncMPClient: ZMQ + background proc EngineCore w/ asyncio (for AsyncLLM)
-
-核心实现逻辑由 BackgroundProcHandle 启动 `EngineCoreProc.run_engine_core` 来实现。
-
-```python
-
 class SyncMPClient(MPClient):
     def __init__(self, vllm_config, executor_class, ...):
+        self.outputs_queue = queue.Queue()
+
         def process_outputs_socket():
             while True:
                 (frame, ) = output_socket.recv_multipart(copy=False)
@@ -560,9 +565,7 @@ class SyncMPClient(MPClient):
 
     def abort_requests(self, request_ids: List[str]) -> None:
         self._send_input(EngineCoreRequestType.ABORT, request_ids)
-```
 
-```python
 class AsyncMPClient(MPClient):
     async def _start_output_queue_task(self):
         self.outputs_queue = asyncio.Queue()
@@ -591,11 +594,30 @@ class AsyncMPClient(MPClient):
 
 ```
 
-SyncMPClient/AsyncMPClient 的实现
+
+SyncMPClient/AsyncMPClient 的实现基本一致，
 
 1. `add_request/add_request_async` 通过 input_socket 向 mq 中发送消息；
-2. while 循环从 output_socket 中获取消息，放入 outputs_queue 中；
-3. `get_output/get_output_async` 从 outputs_queue 中得到消息；
+2. `process_outputs_socket` 中 while 循环从 output_socket 中获取消息，decode 后放入 outputs_queue 中；
+3. `get_output/get_output_async` 从 outputs_queue 中返回消息；
+
+`process_outputs_socket` 在 sync 版本中使用线程实现，async 版本中使用协程实现。
+
+### EngineCore
+
+核心逻辑 `EngineCoreProc.run_engine_core` 则由 BackgroundProcHandle 启动子进程实现。
+
+```python
+# vllm/v1/utils.py
+
+class BackgroundProcHandle:
+    def __init__( self, input_path, output_path, process_name, target_fn: Callable, process_kwargs):
+        context = get_mp_context()
+        reader, writer = context.Pipe(duplex=False)
+
+        self.proc = context.Process(target=target_fn, kwargs=process_kwargs)
+        self.proc.start()
+```
 
 
 ```python
@@ -692,44 +714,59 @@ class EngineCoreProc(EngineCore):
                 socket.send_multipart((buffer, ), copy=False)
 ```
 
-`run_engine_core` 调用 run_busy_loop，启动 while 循环, 
+`run_engine_core` 调用 `run_busy_loop`，启动 while 循环, 
 
-1. 从 input_queue 中获取 EngineCoreRequest
-2. 调用 _handle_client_request 将新请求放入 scheduler 中调度；
-3. 调用 step 处理请求: 调用 scheduler 的 schedule 获取调度信息，调用 executor 的 execute_model 处理请求；
-4. 最后将 EngineCoreOutputs 发送到 output_queue 中
+1. 从 `input_queue` 中获取请求 EngineCoreRequest;
+2. 调用 _handle_client_request 和 step_fn 处理请求；
+3. 将结果 EngineCoreOutputs 发送到 output_queue 中;
 
+其中，
+1. _handle_client_request 调用 `scheduler.add_request` 放入新请求；
+2. step 处理请求: 
+    1. 调用 `scheduler.schedule` 获取调度结果;
+    2. 调用 `executor.execute_model` 处理请求（调度结果）;
+    3. 调用 `scheduler.update_from_output` 获取处理结果；
 
-```
-    def step_with_batch_queue(self) -> Optional[EngineCoreOutputs]:
-        """Schedule and execute batches with the batch queue.
-        Note that if nothing to output in this step, None is returned.
+下面依次分析 `scheduler` 和 `executor` 的实现。
 
-        The execution flow is as follows:
-        1. Try to schedule a new batch if there are unscheduled requests
-        and the job queue is not full. If a new batch is scheduled, directly
-        return an empty engine core output. In other words, we won't check
-        and return model outputs before the batch queue is full.
-        2. If there is no new scheduled batch, meaning that the batch queue
-        is full or no other requests can be scheduled, we block until the first
-        batch in the job queue is finished.
-        3. Update the scheduler from the output.
-        """
-```
-
-    """
-    MPClient: base client for multi-proc EngineCore.
-        EngineCore runs in a background process busy loop, getting
-        new EngineCoreRequests and returning EngineCoreOutputs
-
-        * pushes EngineCoreRequests via input_socket
-        * pulls EngineCoreOutputs via output_socket
-    
-        * AsyncMPClient subclass for AsyncLLM usage
-        * SyncMPClient subclass for LLM usage
-    """
 
 ## Scheduler
+
+Scheduler 作为 EngineCore 成员被初始化，关注以下调用：
+```python
+scheduler.add_request()
+scheduler.schedule()
+scheduler.update_from_output()
+```
+
+分析 Scheduler 之前先看下 Request 记录的信息, 可以把它看作 dataclass，其中还包含一些处理过程中的动态信息。
+
+```python
+# vllm/v1/request.py 
+
+class Request:
+    def __init__(self, request_id, prompt, prompt_token_ids, ...):
+        self.prompt = prompt
+        self.prompt_token_ids = prompt_token_ids
+        self.num_prompt_tokens = len(self.prompt_token_ids)
+        self._output_token_ids: List[int] = []
+        self._all_token_ids: List[int] = self.prompt_token_ids.copy()
+        self.spec_token_ids: List[int] = []
+        self.num_computed_tokens = 0
+
+    @property
+    def num_tokens(self) -> int:
+        return len(self._all_token_ids)
+
+    @property
+    def num_tokens_with_spec(self) -> int:
+        return len(self._all_token_ids) + len(self.spec_token_ids)
+
+    def append_output_token_ids(self, token_ids) -> None:
+        self._output_token_ids.extend(token_ids)
+        self._all_token_ids.extend(token_ids)
+```
+
 
 ```python
 # vllm/v1/core/scheduler.py
@@ -849,13 +886,48 @@ class Scheduler:
         return EngineCoreOutputs(outputs=outputs,...)
 ```
 
-schedule 返回 `SchedulerOutput` 包含两个列表，
+`scheduelr.add_request` 比较简单，就是把请求放入 waiting deqeue 中。
+
+调度部分相对复杂且迭代比较快，这里主要关注 v1 版本的核心实现。
+
+`scheduelr.schedule` 返回 `SchedulerOutput` 包含两个列表，
 
 * `scheduled_new_reqs` 来自 waiting queue，即处理新请求
 * `scheduled_cached_reqs` 来自 running queue 和 resumed requests，即继续处理正在处理中的请求
 
+以 waiting queue 为例看调度过程：
 
-new_running: 由 `_check_stop` 实现
+1. 处理 waiting queue 中的 0 号请求；
+2. 通过 `kv_cache_manager.get_computed_blocks` 计算 `num_computed_tokens` 包括 cached；
+3. 尝试通过 `kv_cache_manager.allocate_slots` 分配 slots，成功则意味着可调度；
+4. 将请求从 waiting queue 中移除，放入 running queue 中；
+
+这里涉及 `KVCacheManager` 的部分在后面讨论。
+
+关于调度算法,
+```
+# NOTE(woosuk) on the scheduling algorithm:
+# There's no "decoding phase" nor "prefill phase" in the scheduler.
+# Each request just has the num_computed_tokens and
+# num_tokens_with_spec. num_tokens_with_spec =
+# len(prompt_token_ids) + len(output_token_ids) + len(spec_token_ids).
+# At each step, the scheduler tries to assign tokens to the requests
+# so that each request's num_computed_tokens can catch up its
+# num_tokens_with_spec. This is general enough to cover
+# chunked prefills, prefix caching, speculative decoding,
+# and the "jump decoding" optimization in the future.
+```
+
+`scheduelr.update_from_output` 处理 Executor 执行的结果。
+
+这些结果应该包含在 running queue 中，所以 `update_from_output` 把结果更新到 `request` 中，
+1. 从 `model_runner_output.sampled_token_ids` 中包含生成的 token ids；
+2. 从 running queue 中取出 request 获取对应的生成结果 generated_token_ids;
+3. 依次从 generated_token_ids 中取出 token id，调用 `request.append_output_token_ids` 更新到 request 中；
+4. 通过 `_check_stop` 判断是否停止调度，停止则调用 `_free_request` 释放 request；
+5. 最后将未 stop 的 request 作为新的 running queue；
+
+其中 `_check_stop` 判断的请求将结束调度，包括
 
 * num_tokens_scheduled == 0 : 本次未调度的
 * request.num_tokens >= self.max_model_len
@@ -864,51 +936,15 @@ new_running: 由 `_check_stop` 实现
 * last_token_id in sampling_params.stop_token_ids
 
 
-Executor 执行的结果通过 `update_from_output` 更新到 `request` 中，
-具体而言，从 `model_runner_output.sampled_token_ids` 中取出 `request` 对应的  `output_token_ids`，
-通过 `request.append_output_token_ids(output_token_id)` 更新到 `request` 中。
-
-
-```python
-# vllm/v1/request.py 
-
-class Request:
-    def __init__(self, request_id, prompt, prompt_token_ids, ...):
-        self.prompt = prompt
-        self.prompt_token_ids = prompt_token_ids
-        self.num_prompt_tokens = len(self.prompt_token_ids)
-        self._output_token_ids: List[int] = []
-        self._all_token_ids: List[int] = self.prompt_token_ids.copy()
-        self.spec_token_ids: List[int] = []
-        self.num_computed_tokens = 0
-
-    @property
-    def num_tokens(self) -> int:
-        return len(self._all_token_ids)
-
-    @property
-    def num_tokens_with_spec(self) -> int:
-        return len(self._all_token_ids) + len(self.spec_token_ids)
-
-    def append_output_token_ids(self, token_ids) -> None:
-        self._output_token_ids.extend(token_ids)
-        self._all_token_ids.extend(token_ids)
-```
-
-        # NOTE(woosuk) on the scheduling algorithm:
-        # There's no "decoding phase" nor "prefill phase" in the scheduler.
-        # Each request just has the num_computed_tokens and
-        # num_tokens_with_spec. num_tokens_with_spec =
-        # len(prompt_token_ids) + len(output_token_ids) + len(spec_token_ids).
-        # At each step, the scheduler tries to assign tokens to the requests
-        # so that each request's num_computed_tokens can catch up its
-        # num_tokens_with_spec. This is general enough to cover
-        # chunked prefills, prefix caching, speculative decoding,
-        # and the "jump decoding" optimization in the future.
-
 ## Executor
 
-用法
+Excutor 是真正驱动进程执行 GPU 计算的模块。
+从 EngineCore 的使用上可以看出，
+
+* 首先是选择具体的 Executor 类实现，进行默认初始化 `__init__`
+* 然后是 initialize 初始化 Executor
+* 最后是 execute_model 执行模型返回结果
+
 
 ```python
 # AsyncLLM
@@ -922,17 +958,10 @@ self.model_executor.initialize(kv_cache_configs)
 output = self.model_executor.execute_model(scheduler_output)
 ```
 
-Excutor 是真正驱动进程执行 GPU 计算的模块。
-从 EngineCore 的使用上可以看出，
-
-* 首先是选择具体的 Executor 类实现，进行默认初始化 `__init__`
-* 然后是 initialize 初始化 Executor
-* 最后是 execute_model 执行模型返回结果
-
 
 ### ExecutorBase
 
-当 ExecutorBase 初始化的时候，会执行 _init_executor，这和 scheduler 中调用的 initialize 不是同一个函数。
+当 ExecutorBase 初始化 `__init__` 的时候，会执行 `_init_executor`，这和 scheduler 中调用的 initialize 不是同一个函数。
 
 * `_init_executor` 根据不同是实现执行 `Worker` 的 `init_worker`, `init_device`, `load_model`.
 * `initialize` 会执行 `Worker` 的 `initialize_cache`, `compile_or_warm_up_model`.
@@ -945,6 +974,9 @@ Excutor 是真正驱动进程执行 GPU 计算的模块。
 class ExecutorBase(ABC):
     def __init__(self, vllm_config: VllmConfig) -> None:
         self._init_executor()
+
+    def initialize_cache(self, num_gpu_blocks: int, num_cpu_blocks) -> None:
+        self.collective_rpc("initialize_cache", args=(num_gpu_blocks, num_cpu_blocks))
 
 class DistributedExecutorBase(ExecutorBase):
     def execute_model(self, execute_model_req: ExecuteModelRequest,) -> List[SamplerOutput]:
@@ -980,8 +1012,9 @@ class Executor(ExecutorBase):
     ) -> Union[ModelRunnerOutput, Future[ModelRunnerOutput]]:
         output = self.collective_rpc("execute_model", args=(scheduler_output, ))
         return output[0]
-
 ```
+
+主要的 executor 有 RayDistributedExecutor, MultiprocExecutor, UniProcExecutor, ExecutorWithExternalLauncher.
 
 ### RayDistributedExecutor
 
@@ -1030,6 +1063,7 @@ class RayDistributedExecutor(DistributedExecutorBase):
         return outputs[0]
 
     def _run_workers(self, method, *args, **kwargs,) -> Any:
+        ray_workers = self.workers
         ray_worker_outputs = [worker.execute_method.remote(method, ...) for worker in ray_workers]
 
         if async_run_tensor_parallel_workers_only:
@@ -1045,10 +1079,12 @@ V0 版本的 RayDistributedExecutor 在 `__init__/_init_excutor` 中
 
 1. 启动 ray 集群，然后再集群中启动 RayWorkerWrapper 实现的 worker
 2. 在 worker 中执行 `adjust_rank` 和 `update_environment_variables` 方法
-3. 在 worker 中执行 `init_worker`, init_device 和 `load_model` 方法
+3. 在 worker 中执行 `init_worker`, `init_device` 和 `load_model` 方法
 
 RayDistributedExecutor 中在 worker 中执行的方法通过 `_run_workers` 方法提供，其中支持异步和同步的能力。
-在 DistributedExecutorBase 中，`collective_rpc` 即等价于 `_run_workers` 方法。
+因为它继承自 Executor，`collective_rpc` 即等价于 `_run_workers` 方法, 这里的层级实现关系略乱。
+
+Ray 里通过 `ray.remote` 执行函数，通过 `ray.get` 获取结果。
 
 ### MultiprocExecutor
 
@@ -1064,6 +1100,20 @@ class MultiprocExecutor(Executor):
         for rank in range(self.world_size):
             worker = WorkerProc.make_worker_process(self.vllm_config, ...)
             self.workers.append(worker)
+
+    def collective_rpc(self, method, ...) -> List[Any]:
+        if isinstance(method, str):
+            send_method = method
+        else:
+            send_method = cloudpickle.dumps(method, protocol=pickle.HIGHEST_PROTOCOL)
+
+        self.rpc_broadcast_mq.enqueue((send_method, args, kwargs))
+
+        responses = [None] * self.world_size
+        for w in self.workers:
+            status, result = w.worker_response_mq.dequeue(timeout=dequeue_timeout)
+            responses[w.rank] = result
+        return responses
 
 class WorkerProc:
     def __init__(self, vllm_config, local_rank, rank, ...):
@@ -1097,8 +1147,17 @@ class WorkerProc:
             self.worker_response_mq.enqueue((SUCCESS, output))
 ```
 
-UniProcExecutor
-ExecutorWithExternalLauncher
+`_init_executor` 通过 `WorkerProc.make_worker_process` 创建并启动 worker 进程:
+1. 在初始化时调用 worker 本身的方法 `init_device` 和 `load_model`;
+2. worker 进程启动后在 `worker_busy_loop` 中，通过 MessageQueue 作为进程间通信的通道, 
+不断从 `rpc_broadcast_mq.dequeue` 获取方法名和参数，不断执行;
+3. 执行结果通过 `worker_response_mq.enqueue` 同样放入 MessageQueue;
+
+调用 `collective_rpc` 时，即把调用参数放入 excutor 的 `rpc_broadcast_mq.enqueue`, 然后从 `worker_response_mq.dequeue` 获取执行结果.
+
+MultiprocExecutor 中 `initialize` 通过 `collective_rpc` 执行 `initialize_cache` 和 `compile_or_warm_up_model`.
+
+### UniProcExecutor ExecutorWithExternalLauncher
 
 ```python
 # vllm/executor/uniproc_executor.py
@@ -1117,26 +1176,34 @@ class UniProcExecutor(ExecutorBase):
 class ExecutorWithExternalLauncher(UniProcExecutor):
 ```
 
-WorkerWrapperBase
+单进程的 executor 更为简单，函数调用执行即可，值得注意的是这里可能处理序列化问题。
 
-    """
-    This class represents one process in an executor/engine. It is responsible
-    for lazily initializing the worker and handling the worker's lifecycle.
-    We first instantiate the WorkerWrapper, which remembers the worker module
-    and class name. Then, when we call `update_environment_variables`, and the
-    real initialization happens in `init_worker`.
-    """
+```python
+# vllm/utils.py
 
-        """
-        Initialize the worker wrapper with the given vllm_config and rpc_rank.
-        Note: rpc_rank is the rank of the worker in the executor. In most cases,
-        it is also the rank of the worker in the distributed group. However,
-        when multiple executors work together, they can be different.
-        e.g. in the case of SPMD-style offline inference with TP=2,
-        users can launch 2 engines/executors, each with only 1 worker.
-        All workers have rpc_rank=0, but they have different ranks in the TP
-        group.
-        """
+def run_method(obj: Any, method, args, kwargs) -> Any:
+    if isinstance(method, bytes):
+        func = partial(cloudpickle.loads(method), obj)
+    elif isinstance(method, str):
+        func = getattr(obj, method)
+    else:
+        func = partial(method, obj)  # type: ignore
+    return func(*args, **kwargs)
+```
+
+## Worker
+
+如 excutor 中的分析，重点关注 worker 的以下函数：
+
+* init_worker, init_device, load_model
+* initialize_cache, compile_or_warm_up_model
+* execute_model
+
+Worker 的实现依赖于 excutor，Ray 的 worker 使用 RayWorkerWrapper 构造，它继承自 WorkerWrapperBase，由 ray cluster 调度进程实现。
+
+MultiprocExecutor 中已经包含了 WorkerProc 实现的进程，而 WorkerProc 依赖 WorkerWrapperBase 构造 worker。
+
+UniProcExecutor 则直接通过 WorkerWrapperBase 构造 worker.
 
 ```python
 # vllm/worker/worker_base.py
@@ -1153,8 +1220,199 @@ class WorkerWrapperBase:
 
     def execute_method(self, method: Union[str, bytes], *args, **kwargs):
         return run_method(target, method, args, kwargs)
+```
+
+这说明不同 excutor 的 worker 构造都指向 WorkerWrapperBase，而 worker 的具体实现则由 `vllm_config.parallel_config.worker_cls` 配置, 并支持自定义的实现。
+
+```python
+# vllm/platforms/cuda.py
+
+class CudaPlatformBase(Platform):
+    @classmethod
+    def check_and_update_config(cls, vllm_config: VllmConfig) -> None:
+        if parallel_config.worker_cls == "auto":
+            parallel_config.worker_cls = "vllm.v1.worker.gpu_worker.Worker"
+```
+
+在 GPU 场景下，worker 的实现为 `vllm.v1.worker.gpu_worker.Worker`.
+
+```python
+# vllm/v1/worker/gpu_worker.py
+
+class Worker(WorkerBase):
+
+    def init_device(self):
+        self.device = torch.device(f"cuda:{self.local_rank}")
+        torch.cuda.set_device(self.device)
+
+        self.model_runner: GPUModelRunner = GPUModelRunner(self.vllm_config, self.device)
+
+    def load_model(self) -> None:
+        self.model_runner.load_model()
+
+    def initialize_from_config(self, kv_cache_config: KVCacheConfig) -> None:
+        self.model_runner.initialize_kv_cache(kv_cache_config)
+
+    def compile_or_warm_up_model(self) -> None:
+        for size in sorted(warmup_sizes, reverse=True):
+            logger.info("Compile and warming up model for size %d", size)
+            self.model_runner._dummy_run(size)
+        if not self.model_config.enforce_eager:
+            self.model_runner.capture_model()
+
+    def get_model(self) -> nn.Module:
+        return self.model_runner.get_model()
+
+    @torch.inference_mode()
+    def execute_model(self, scheduler_output) -> Optional[ModelRunnerOutput]:
+        output = self.model_runner.execute_model(scheduler_output)
+        return output if self.is_driver_worker else None
+```
+
+
+## KVCacheManager
+
+```python
+kv_cache_manager.get_computed_blocks
+kv_cache_manager.allocate_slots
+```
+
+```python
+# vllm/v1/core/kv_cache_manager.py 
+
+class KVCacheManager:
+
+    def __init__(self, ...) -> None:
+        self.block_size = block_size
+        self.block_pool = BlockPool(num_gpu_blocks, enable_caching)
+
+        self.req_to_blocks: DefaultDict[str, List[KVCacheBlock]] = defaultdict(list)
+        self.req_to_block_hashes: DefaultDict[str, List[BlockHashType]] = defaultdict(list)
+
+    def get_computed_blocks(self, request: Request) -> Tuple[List[KVCacheBlock], int]:
+        computed_blocks = []
+
+        block_hashes = self.req_to_block_hashes[request.request_id]
+
+        for block_hash in block_hashes:
+            if cached_block := self.block_pool.get_cached_block(block_hash):
+                computed_blocks.append(cached_block)
+            else:
+                break
+
+        num_computed_tokens = len(computed_blocks) * self.block_size
+        return computed_blocks, num_computed_tokens
+
+    def allocate_slots(self, request: Request,) -> Optional[List[KVCacheBlock]]:
+        """Blocks layout:
+        -----------------------------------------------------------------------
+        | < computed > | < new computed > |    < new >    | < pre-allocated > |
+        -----------------------------------------------------------------------
+        |                  < required >                   |
+        --------------------------------------------------
+        |                    < full >                  |
+        ------------------------------------------------
+                                          | <new full> |
+                                          --------------
+        """
+
+        num_computed_tokens = (request.num_computed_tokens + len(new_computed_blocks) * self.block_size)
+        num_required_blocks = cdiv(num_computed_tokens + num_tokens, self.block_size)
+        req_blocks = self.req_to_blocks[request.request_id]
+
+        num_new_blocks = (num_required_blocks - len(req_blocks) - len(new_computed_blocks))
+        req_blocks.extend(new_computed_blocks)
+
+        if num_new_blocks <= 0:
+            new_blocks = []
+        else:
+            new_blocks = self.block_pool.get_new_blocks(num_new_blocks)
+            req_blocks.extend(new_blocks)
+
+        self.block_pool.cache_full_blocks(
+            request=request,
+            blocks=req_blocks,
+            block_hashes=self.req_to_block_hashes[request.request_id],
+            num_cached_blocks=num_cached_blocks,
+            num_full_blocks=num_full_blocks_after_append,
+            block_size=self.block_size,
+        )
+
+        return new_blocks
+```
+
+## BlockPool
+
+```python
+block_pool = BlockPool(num_gpu_blocks, enable_caching)
+block_pool.get_cached_block(block_hash)
+block_pool.get_new_blocks(num_new_blocks)
+block_pool.cache_full_blocks(...)
+```
+
+```python
+# vllm/v1/core/block_pool.py
+
+class BlockPool:
+    def __init__(self, num_gpu_blocks: int, enable_caching: bool):
+        self.num_gpu_blocks = num_gpu_blocks
+        self.enable_caching = enable_caching
+        self.blocks: List[KVCacheBlock] = [
+            KVCacheBlock(idx) for idx in range(num_gpu_blocks)
+        ]
+        self.free_block_queue = FreeKVCacheBlockQueue(self.blocks)
+
+        self.cached_block_hash_to_block: Dict[BlockHashType, Dict[int, KVCacheBlock]] = defaultdict(dict)
+
+    def get_cached_block(self, block_hash: BlockHashType) -> Optional[KVCacheBlock]:
+        if block_hash in self.cached_block_hash_to_block:
+            first_block_id = list(self.cached_block_hash_to_block[block_hash].keys())[0]
+            return self.cached_block_hash_to_block[block_hash][first_block_id]
+        return None
+
+    def cache_full_blocks(self, ...) -> None:
+        new_full_blocks = blocks[num_cached_blocks:num_full_blocks]
+        new_block_hashes = block_hashes[num_cached_blocks:]
+
+        if num_cached_blocks == 0:
+            prev_block_hash_value = None
+        else:
+            prev_block = blocks[num_cached_blocks - 1]
+            prev_block_hash_value = prev_block.block_hash.hash_value
+
+        for i, blk in enumerate(new_full_blocks):
+            if i < len(new_block_hashes):
+                block_hash = new_block_hashes[i]
+            else:
+                blk_idx = num_cached_blocks + i
+                start_token_idx = blk_idx * block_size
+                end_token_idx = (blk_idx + 1) * block_size
+                block_tokens = request.all_token_ids[start_token_idx:end_token_idx]
+                extra_keys, _ = generate_block_hash_extra_keys(request, start_token_idx, end_token_idx, -1)
+
+                block_hash = hash_block_tokens(prev_block_hash_value, block_tokens, extra_keys)
+                block_hashes.append(block_hash)
+
+            blk.block_hash = block_hash
+            self.cached_block_hash_to_block[block_hash][blk.block_id] = blk
+            prev_block_hash_value = block_hash.hash_value
+
+    def get_new_blocks(self, num_blocks: int) -> List[KVCacheBlock]:
+        ret: List[KVCacheBlock] = []
+        idx = 0
+        while idx < num_blocks:
+            curr_block = self.free_block_queue.popleft()
+            curr_block.incr_ref()
+            ret.append(curr_block)
+            idx += 1
+
+        return ret
+```
+
 
 ## Reference
+
+f35f8e2242db224a92a14e084d502eec67d56da9
 
 * https://platform.openai.com/docs/api-reference/chat/create
 * https://blog.vllm.ai/2025/01/27/v1-alpha-release.html
