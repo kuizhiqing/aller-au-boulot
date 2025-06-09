@@ -19,6 +19,7 @@ default-theme = "latte"
 
 [output.html.playground]
 editable = false
+copyable = true
 copy-js = true
 line-numbers = false
 

@@ -7,7 +7,6 @@
 # Open Source
 
 - [vllm](vllm/overview.md)
-  - [architecture](vllm/architecture.md)
 
 - [pytorch](pytorch/overview.md)
   - [torchrun](pytorch/torchrun.md)
